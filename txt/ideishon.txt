@@ -1,6 +1,6 @@
 
 -----al comienzo-----
-al momento de elegir la dificultad se va a añadir vb, adj o sus dependiendo de la dificultad seleccionada (o del random) 
+al momento de elegir la dificultad se va a aï¿½adir vb, adj o sus dependiendo de la dificultad seleccionada (o del random) 
 y ala hora de verificar los puntos de las palabras se analizada con la lista
 
 bolsa de fichas=array con las letras mezcladas/
@@ -37,7 +37,7 @@ puntaje de letra + casillacon premio/descuento de puntos
 -puntaje de palabras usadas
 
 -top 10 (en el menu) fecha + puntaje + nivel (dificultad
-Se podrá optar entre mostrar un único listado que incluya todos los niveles o tres listados, uno por cada nivel.
+Se podrï¿½ optar entre mostrar un ï¿½nico listado que incluya todos los niveles o tres listados, uno por cada nivel.
 
 -POSPONER=>guarda tiempo, grilla de botones(tablero), fichas usuario/maquina, fichas en la bolsa y puntaje
 
@@ -69,20 +69,8 @@ Se podrá optar entre mostrar un único listado que incluya todos los niveles o tr
 
 
 QA-----
-? pedimos nombre de usuario?
 ? chequear el tiempo?
 ? palabras del turno de la maquina?
-
-
-
-
-
-
-
-
-
-
-
 
 
 

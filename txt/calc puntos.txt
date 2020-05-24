@@ -1,0 +1,12 @@
+calcular puntos(*coord,*letras)
+
+cant,pt,pp=0
+for(i in range(len(coord))
+	pt,cant=pedir mult(color,letras[i])
+	pp+=pt
+	bloquear botones segun coordenadas
+if cant!=0
+	pp*=cant
+
+return pt
+	
