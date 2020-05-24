@@ -1,6 +1,18 @@
-
+from pattern.text.es import parse, split, lexicon, spelling
 import PySimpleGUI as sg
 sg.theme("Dark Amber")
+
+def esValida(palabra,*dif):
+    palabra=parse(palabra).split('/')
+    if palabra[1] in dif:
+        if palabra[1] =='NN':
+            if (palabra[0] in spelling) or (palabra[0] in lexicon):
+                print('\n yes', palabra[1] ,'\n')
+                return True
+        print('\n yes', palabra[1] ,'\n')
+        return True
+    print('\n nono square \n')
+    return False
 
 def Crearmenu():
     layoutM = [
