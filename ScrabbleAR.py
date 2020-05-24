@@ -29,7 +29,7 @@ def Menu():
         event, value = menu.read()
 
         if event == "Iniciar nuevo Juego" or "Continuar partida":
-            if(event == "Continuar partida guardada"):
+            if(event == "Continuar partida"):
                 print("")
                 #cargar ajustes por default
             menu.close()
