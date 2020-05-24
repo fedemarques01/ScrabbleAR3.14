@@ -1,0 +1,88 @@
+
+-----al comienzo-----
+al momento de elegir la dificultad se va a añadir vb, adj o sus dependiendo de la dificultad seleccionada (o del random) 
+y ala hora de verificar los puntos de las palabras se analizada con la lista
+
+bolsa de fichas=array con las letras mezcladas/
+bolsa de fichas=array ordenado que se accede de forma aleatoria
+
+-7 fichas c/u (maquina y jugador
+
+
+-----jugar-----
+-ingreso =>configuraciones del juego
+
+-2botones para jugar{
+	-JUGAR=>verificar si la palabra==True
+	-CAMBIAR FICHAS=> guarda las fichas en la bolsa(append) y saca nuevas(sacar fichas aleatorias) [[[maximo 3 veces]]]
+	-TERMINAR=>sacabo
+	-PASAR TURNO
+
+-lista de letras para jugador y lista para maquina (ambos con botones, y los de la maquina inaccesibles
+
+-al jugar, se pueden pedir las cordenadas y letras usadas para ordenar las coordenadas y preguntar si la palabra es valida (en caso de no serlo devolver)
+
+
+-----maquina-----
+-tiene botones pero invisibles al usuario
+
+-primera palabra valida encontrada se juega, si no hay ninguna, se pasa el turno
+
+
+
+-----otros-----
+-puntajes siempre visibles
+puntaje de letra + casillacon premio/descuento de puntos
+
+-puntaje de palabras usadas
+
+-top 10 (en el menu) fecha + puntaje + nivel (dificultad
+Se podrá optar entre mostrar un único listado que incluya todos los niveles o tres listados, uno por cada nivel.
+
+-POSPONER=>guarda tiempo, grilla de botones(tablero), fichas usuario/maquina, fichas en la bolsa y puntaje
+
+-al comienzo si existe partida previa aparece el boton CONTINUAR
+
+
+-----fin-----
+-cuando no quedan fichas para que ambos tengan 7 fichas
+-se acaba el tiempo
+-se presiona TERMINAR
+
+-se muestran fichas de la maquina
+-restar puntos dependiendo de las fichas que tengan en mano
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+QA-----
+? pedimos nombre de usuario?
+? chequear el tiempo?
+? palabras del turno de la maquina?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
