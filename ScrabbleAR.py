@@ -6,12 +6,12 @@ def esValida(palabra,*dif):
     palabra=parse(palabra).split('/')
     if palabra[1] in dif:
         if palabra[1] =='NN':
-            if (palabra[0] in spelling) or (palabra[0] in lexicon):
-                print('\n yes', palabra[1] ,'\n')
-                return True
+            if (not palabra[0] in spelling) or (not palabra[0] in lexicon):
+                print('\n nono square',palabra[1],' \n')
+                return False
         print('\n yes', palabra[1] ,'\n')
         return True
-    print('\n nono square \n')
+    print('\n nono square',palabra[1],' \n')
     return False
 
 def Crearmenu():
