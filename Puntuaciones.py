@@ -6,6 +6,8 @@ import PySimpleGUI as sg
     -si es facil crea una lista de maximo 10 elementos con los str de la dificultad facil
     -si es normal crea una lista de maximo 10 elementos con los str de la dificultad normal
     -si es dificil lo mismo pero en dificil ya se entendio"""
+
+
 def CrearLista(filtro):
     listaStr = []
 
@@ -49,5 +51,6 @@ def listaPuntuacionesAltas():
         if event == "Dificil":
             window.Element("lista").update(values=CrearLista("Dificil"))
     window.close()
+
 
 listaPuntuacionesAltas()
