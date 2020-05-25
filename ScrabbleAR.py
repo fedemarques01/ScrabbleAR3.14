@@ -1,6 +1,7 @@
 from pattern.text.es import parse, split, lexicon, spelling
 import PySimpleGUI as sg
 import os.path
+import json
 #from Puntuaciones import listaPuntuacionesAltas as listaP
 
 sg.theme("Dark Amber")
