@@ -7,11 +7,13 @@ import PySimpleGUI as sg
     -si es normal crea una lista de maximo 10 elementos con los str de la dificultad normal
     -si es dificil lo mismo pero en dificil ya se entendio"""
 
+
 def merge():
     me, mm, mh = 0, 0, 0
     l = []
-    dic={'eas':[[10], [9], [3], [0]], 'mid':[[5], [4]], 'har':[[8], [7], [2]]}
-    #dic=cargarDatos()<------------load dic   
+    dic = {'eas': [[10], [9], [3], [0]], 'mid': [
+        [5], [4]], 'har': [[8], [7], [2]]}
+    # dic=cargarDatos()<------------load dic
     m = [dic['eas'][0], dic['mid'][0], dic['har'][0]]
     for i in range(10):
         maximo = max(m)
@@ -39,6 +41,7 @@ def merge():
         m.remove(maximo)
     return l
 
+
 def CrearLista(filtro):
     listaStr = []
 
@@ -56,7 +59,7 @@ def crearVentanaPuntajes():
                     size=(70, 10), key="lista")],
         [sg.B("General", size=(11, 1)), sg.B("Facil", size=(11, 1)),
          sg.B("Normal", size=(11, 1)), sg.B("Dificil", size=(11, 1)),
-         sg.B("Salir", size=(11, 1))]
+         sg.Exit("Volver", size=(11, 1), key=('Exit'))]
     ]
 
     window = sg.Window("Tabla de puntuaciones", layoutP, keep_on_top=True)
@@ -70,8 +73,8 @@ def listaPuntuacionesAltas():
     window = crearVentanaPuntajes()
 
     while True:
-        event, values = window.read()
-        if event in (None, "Exit") or event == "Salir":
+        event, _ = window.read()
+        if event in (None, "Exit"):
             break
         if event == "General":
             window.Element("lista").update(values=merge())
@@ -84,4 +87,5 @@ def listaPuntuacionesAltas():
     window.close()
 
 
-listaPuntuacionesAltas()
+if __name__ == "__main__":
+    listaPuntuacionesAltas()

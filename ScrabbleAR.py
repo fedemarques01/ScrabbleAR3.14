@@ -2,7 +2,7 @@ from pattern.text.es import parse, split, lexicon, spelling
 import PySimpleGUI as sg
 import os.path
 import json
-#from Puntuaciones import listaPuntuacionesAltas as listaP
+from Puntuaciones import listaPuntuacionesAltas as pt
 
 sg.theme("Dark Amber")
 
@@ -43,23 +43,22 @@ def Crearmenu():
 def Menu():
     menu = Crearmenu()
     while True:
-        event, value = menu.read()
-
-        if event == "Iniciar nuevo Juego" or "Continuar partida":
-            if(event == "Continuar partida"):
+        event, _ = menu.read()
+        print(event)
+        if event in ("inicio", "continue"):
+            if(event == "continue"):
                 print("")
                 # cargar ajustes por default
             menu.close()
             # IniciarJuego?
-        if event == "Puntuaciones":
-            # listaP()
+        elif event == "puntos":
+            pt()
             print("")
-        if event == "Configuracion":
-            print("")
+        elif event == "config":
+            print("sacabo")
             #event,ajustes = crear_ventana_config().read()
-        else:
+        elif event in (None, "exit"):
             break
-    menu.close()
 
 
 Menu()
