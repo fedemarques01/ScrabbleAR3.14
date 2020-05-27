@@ -43,7 +43,9 @@ def Crearmenu():
 def Menu():
     menu = Crearmenu()
     while True:
+        menu.un_hide()
         event, _ = menu.read()
+        menu.hide()
         print(event)
         if event in ("inicio", "continue"):
             if(event == "continue"):
