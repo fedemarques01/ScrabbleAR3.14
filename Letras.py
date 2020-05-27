@@ -219,64 +219,64 @@ class Atril:
 
 #Codigo de prueba, genera una bolsa segun la dificultad dada en el constructor, imprime las fichas disponibles y cantidad total de fichas 
 # de la bolsa. 
+if __name__ == "__main__":
+    bolsa1 = Bolsa('facil')
+    fichasTotales = bolsa1.cantidad_fichas()
+
+    for i in range(fichasTotales):
+        print(bolsa1.bolsa[i].letra)
+    print('Total de fichas del nivel: facil ')
+    print(bolsa1.cantidad_fichas())
 
 
-bolsa1 = Bolsa('facil')
-fichasTotales = bolsa1.cantidad_fichas()
+    #Crea el atril del jugador y lo muestra en pantalla
+    atril1 = Atril(bolsa1)
 
-for i in range(fichasTotales):
-    print(bolsa1.bolsa[i].letra)
-print('Total de fichas del nivel: facil ')
-print(bolsa1.cantidad_fichas())
+    atril_jugador =  atril1.get_atril_string()
+    print('Atril del jugador')
+    print(atril_jugador)
 
+    #fichas en la bolsa luego de crear el primer atril
+    print('Fichas restantes')
+    print(bolsa1.cantidad_fichas())
 
-#Crea el atril del jugador y lo muestra en pantalla
-atril1 = Atril(bolsa1)
+    #Se simula una jugada, pidiendo que se escriba una palabra
+    # (no hay verificacion alguna, se asume que se usaran letras del atril y que toda palabra es valida)
 
-atril_jugador =  atril1.get_atril_string()
-print('Atril del jugador')
-print(atril_jugador)
+    print('Escriba una palabra a jugar, finalice con enter')
 
-#fichas en la bolsa luego de crear el primer atril
-print('Fichas restantes')
-print(bolsa1.cantidad_fichas())
+    palabra = input()
 
-#Se simula una jugada, pidiendo que se escriba una palabra
-# (no hay verificacion alguna, se asume que se usaran letras del atril y que toda palabra es valida)
+    #Se verifcan las letras y se eliminan del atril del jugador
+    jugada = []
+    for letra in palabra:
+        letra= letra.upper()
+        encontre = False
+        i = 0
+        arreglo = atril1.get_atril_array()
+        while (encontre == False):
+            if letra == arreglo[i].letra:
+                encontre = True
+                atril1.usar_ficha(arreglo[i])
+            else:
+                i=i+1
 
-print('Escriba una palabra a jugar, finalice con enter')
-
-palabra = input()
-
-#Se verifcan las letras y se eliminan del atril del jugador
-jugada = []
-for letra in palabra:
-    encontre = False
-    i = 0
-    arreglo = atril1.get_atril_array()
-    while (encontre == False):
-        if letra == arreglo[i].letra:
-            encontre = True
-            atril1.usar_ficha(arreglo[i])
-        else:
-            i=i+1
-
-#Atril del jugador luego de la jugada 
-atril_jugador =  atril1.get_atril_string()
-print('Atril del jugador luego de jugar')
-print(atril_jugador)
+    #Atril del jugador luego de la jugada 
+    atril_jugador =  atril1.get_atril_string()
+    print('Atril del jugador luego de jugar')
+    print(atril_jugador)
 
 
-#Se recargan fichas y se muestra el atril nuevo y 
-# la cantidad de fichas en la bolsa luego de todo el proceso
-atril1.rellenar_atril()
+    #Se recargan fichas y se muestra el atril nuevo y 
+    # la cantidad de fichas en la bolsa luego de todo el proceso
+    atril1.rellenar_atril()
 
-atril_jugador =  atril1.get_atril_string()
-print('Atril del jugador luego de recargar')
-print(atril_jugador)
+    atril_jugador =  atril1.get_atril_string()
+    print('Atril del jugador luego de recargar')
+    print(atril_jugador)
 
-print('Fichas restantes luego de recargar')
-print(bolsa1.cantidad_fichas())
+    print('Fichas restantes luego de recargar')
+    print(bolsa1.cantidad_fichas())
 
 
 
