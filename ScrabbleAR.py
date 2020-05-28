@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 import os.path
 import json
 from Puntuaciones import listaPuntuacionesAltas as pt
+from configuracion import ajustes
 
 sg.theme("Dark Amber")
 
@@ -41,6 +42,7 @@ def Crearmenu():
 
 
 def Menu():
+    config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10 minutos capo'}
     menu = Crearmenu()
     while True:
         menu.un_hide()
@@ -59,7 +61,7 @@ def Menu():
         elif event == "config":
             menu.hide()
             print("sacabo")
-            #event,ajustes = crear_ventana_config().read()
+            config = ajustes(config)
         elif event in (None, "exit"):
             break
 
