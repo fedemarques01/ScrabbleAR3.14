@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 from datetime import datetime as datetime
 import json
+from validez import validez
+import Letras
 
 sg.theme("Topanga")
 
@@ -122,16 +124,28 @@ def cargarTablero(tablero, board, datos):
 
     return tablero, board                
 
+#FCC300
+def puntos(dif,coor,letras,board):
+    if not validez(dif,coor,letras):
+        print('no no square')
 
+    pt,pp=0,1
+    for i in range(len(coor)):
+        pl=Letras.valoresLetras[letras[i]]
+        bonus=board[coor[i][0]][coor[i][1]]
+        if bonus!= "":
+            if bonus== "Lx2":
+                pl*=2
+            elif bonus == "Lx3":
+                pl*=3
+            elif bonus == "Px2":
+                pp+=1
+            elif bonus == "Px3":
+                pp+=2
+        pt+=pl
+    return pt*pp
 
 # carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
-"""def cargarPartida(tablero, backT, datos):
-
-    aux = datos["tablero"]
-    tablero, backT = cargarTablero(tablero, backT, aux)
-    
-    
-    return tablero, backT"""
 
 def Jugar(settings, event):
     
@@ -152,4 +166,10 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    Jugar({'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10 minutos capo'},None)
+    Jugar({'dif':'mid','puntosJ':0,'puntosIA':0,'time':10},None)
+    '''
+    tablero, backT = crearTablero()
+    dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
+    coor = [(0, 0), (3, 0), (4, 0), (2, 0), (5, 0)]
+    letras = ['P','R','R','E','O']
+    print(puntos(dif,coor,letras,backT))'''
