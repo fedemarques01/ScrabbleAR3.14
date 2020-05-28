@@ -57,10 +57,8 @@ def Menu():
         elif event == "puntos":
             menu.hide()
             pt()
-            print("")
         elif event == "config":
             menu.hide()
-            print("sacabo")
             config = ajustes(config)
         elif event in (None, "exit"):
             break
