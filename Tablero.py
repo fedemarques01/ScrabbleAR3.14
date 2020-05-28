@@ -96,7 +96,7 @@ def cargarTablero(tablero, board, datos):
             board[x[0]][x[1]] = "Px3"
         tablero[start_button].Update(
             "St", button_color=("#D4D4D4", "#928900"))
-
+    
     # caso contrario, recorre el tablero guardado y actualiza en base a eso
     else:
         
@@ -139,9 +139,9 @@ def puntos(dif,coor,letras,board):
             elif bonus == "Lx3":
                 pl*=3
             elif bonus == "Px2":
-                pp+=1
+                pp*=2
             elif bonus == "Px3":
-                pp+=2
+                pp*=3
         pt+=pl
     return pt*pp
 
@@ -171,14 +171,18 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    #Jugar({'dif':'mid','puntosJ':0,'puntosIA':0,'time':10},None)
-    
+    dic={'dif':'mid','puntosJ':0,'puntosIA':0,'time':10,'pal':[]}
+    Jugar(dic,None)
+
+    datos={"tablero": None};datos.update(dic)
     tablero, backT = crearTablero()
-    '''
+    tablero, backT = cargarTablero(tablero, backT, datos)
+    
     dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
     coor = [(0, 0), (3, 0), (4, 0), (2, 0), (5, 0)]
     letras = ['P','R','R','E','O']
     print(puntos(dif,coor,letras,backT))
+
     '''
     for dato in backT:
-        print(dato)
+        print(dato)'''
