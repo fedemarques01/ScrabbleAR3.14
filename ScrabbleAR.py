@@ -1,4 +1,5 @@
 from pattern.text.es import parse, split, lexicon, spelling
+from random import randint
 import PySimpleGUI as sg
 import os.path
 import json
@@ -40,9 +41,19 @@ def Crearmenu():
 
     return window
 
+def setDif(dificultad):
+    if(dificultad=='eas'):
+        return ['NN', 'JJ', 'VB']
+    elif(dificultad=='mid'):
+        return ['NN', 'VB']
+    elif(dificultad=='har'):
+        i=randint(0,2)
+        dif=['NN', 'JJ', 'VB']
+        return dif[i]
+
 
 def Menu():
-    config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10'}
+    config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10','pal':[]}
     menu = Crearmenu()
     while True:
         menu.un_hide()
@@ -53,7 +64,8 @@ def Menu():
                 print("")
                 # cargar ajustes por default
             menu.close()
-            # IniciarJuego?
+            config['pal']=setDif(config['dif'])
+            # Tablero.Jugar(config)
         elif event == "puntos":
             menu.hide()
             pt()
