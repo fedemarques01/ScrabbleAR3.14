@@ -52,13 +52,16 @@ def Menu():
             menu.close()
             # IniciarJuego?
         elif event == "puntos":
+            menu.hide()
             pt()
             print("")
         elif event == "config":
             print("sacabo")
             #event,ajustes = crear_ventana_config().read()
         elif event in (None, "exit"):
+
             break
+        menu.un_hide()
 
 
 Menu()
