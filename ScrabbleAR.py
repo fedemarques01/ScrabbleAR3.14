@@ -61,7 +61,6 @@ def Menu():
             print("sacabo")
             #event,ajustes = crear_ventana_config().read()
         elif event in (None, "exit"):
-
             break
 
 
