@@ -1,6 +1,5 @@
 -----FALTA-----
-CPU
-BOARD
+CPU+
 TIME        PREGUNTAR
 PUNTAJE
 

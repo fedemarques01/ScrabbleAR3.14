@@ -48,4 +48,4 @@ def ajustes(config):
     return config
 
 if __name__ == "__main__":
-    ajustes(config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':10})
+    ajustes(config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':10,'pal':[]})

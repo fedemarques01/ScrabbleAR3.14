@@ -1,4 +1,5 @@
 from pattern.text.es import parse, split, lexicon, spelling
+import PySimpleGUI as p
 
 # aqui empieza lo bueno
 def lineal(coor, n):
@@ -24,19 +25,19 @@ def esValida(palabra, *dif):
     palabra = parse(palabra).split('/')
     if palabra[1] in dif:
         if palabra[1] == 'NN':
-            if (not palabra[0] in spelling) or (not palabra[0] in lexicon):
-                print('\n nono square', palabra[1], ' \n')
+            if (not palabra[0] in spelling) and (not palabra[0] in lexicon):
+                #print('nono square'+ palabra[1])
                 return False
-        print('\n existe', palabra[1], '\n')
+        #print('existe'+ palabra[1])
         return True
-    print('\n nono existe', palabra[1], ' \n')
+    p.popup(' nono existe'+ palabra[1])
     return False
 
 def formarPalabra(dic):
     #buscar si se puede evitar el orden post lambda siguiente ordenando una lista de 
     # valores en base a las claves del diccionario <-----------------------------------
     s=''
-    for i in range(len(coor)):
+    for i in range(len(dic)):
         s+=dic[i][1]
     return s
 
@@ -48,7 +49,7 @@ def validez(dif,coor,letras):
     #verifico si todas las letras estan en una fila/columna y las ordeno
     aux = tieneOrden(aux)
     if aux==[]:
-        print('no posee orden')
+        p.popup('no posee orden')
         return False
 
     #armo la palabra con las letras ordenadas
@@ -60,7 +61,7 @@ def validez(dif,coor,letras):
     if(esValida(palabra, *dif)):
         return True
     else:
-        print('no existe')
+        p.popup('no existe')
         return False
 
 
