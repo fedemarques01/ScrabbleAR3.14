@@ -42,7 +42,7 @@ def Crearmenu():
 
 
 def Menu():
-    config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10 minutos capo'}
+    config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10'}
     menu = Crearmenu()
     while True:
         menu.un_hide()
