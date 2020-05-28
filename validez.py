@@ -17,7 +17,7 @@ def tieneOrden(dic):
         return sorted(dic.items(), key=lambda cor: cor[0][1])
     if(lineal(coor, 1)):
         return sorted(dic.items(), key=lambda cor: cor[0][0])
-    return {}
+    return []
 
 
 def esValida(palabra, *dif):
@@ -47,7 +47,7 @@ def validez(dif,coor,letras):
 
     #verifico si todas las letras estan en una fila/columna y las ordeno
     aux = tieneOrden(aux)
-    if aux=={}:
+    if aux==[]:
         print('no posee orden')
         return False
 
