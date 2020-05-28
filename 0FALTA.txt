@@ -1,5 +1,5 @@
 -----FALTA-----
-IA
+CPU
 CONFIG
 BOARD
 TIME        PREGUNTAR
