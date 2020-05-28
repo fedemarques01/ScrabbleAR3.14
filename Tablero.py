@@ -21,10 +21,11 @@ def crearTablero():
         [sg.B("Terminar", size=(13, 1), key="Exit")],
         [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-")]],
                   title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
-        [sg.Text("Dificultad: ", key="-dif-")],
-        [sg.Text("Tu puntaje: 0", key="-pJug-")],
-        [sg.Text("Puntaje CPU: 0", key="-pCPU-")]
+        [sg.Text(text="Dificultad: ",size=(13,3) ,key="-dif-")],
+        [sg.Text(text="Tu puntaje: 0",size=(13,3) ,key="-pJug-")],
+        [sg.Text(text="Puntaje CPU: 0",size=(13,3) ,key="-pCPU-")]
     ]
+
     # col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra
     colBoard = [[sg.Text("CPU:")]]
 
@@ -57,9 +58,14 @@ def crearTablero():
 # carga todos los botones del tablero, el ya guardado en caso de una partida guardada
 
 
-def cargarTablero(tablero, board, tabla):
+def cargarTablero(tablero, board, datos):
     # si es None, no hay partida guardada entonces carga la lista de tuplas por cada casilla especial
+    tabla = datos['tablero']
+    tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
+    tablero['-pCPU-'].Update(('Puntaje CPU: '+ str(datos['puntosIA'])).format())
+    tablero['-dif-'].Update(('Dificultad: '+ datos['dif']).format())
     if(tabla == None):
+
         triple_letter = [(1, 5), (1, 9), (5, 1), (5, 5), (5, 9),
                          (5, 13), (9, 1), (9, 5), (9, 9), (9, 13), (13, 5), (13, 9)]
         double_letter = [(0, 3), (0, 11), (2, 6), (2, 8), (3, 0), (3, 7), (3, 14), (6, 2), (6, 6), (6, 8), (6, 12), (
@@ -71,62 +77,64 @@ def cargarTablero(tablero, board, tabla):
         start_button = (7, 7)
 
         for x in triple_letter:
-            tablero.FindElement(x).update(
+            tablero[x].Update(
                 "Lx3", button_color=("#D4D4D4", "#8A1111"))
             board[x[0]][x[1]] = "Lx3"
         for x in double_letter:
-            tablero.FindElement(x).update(
+            tablero[x].Update(
                 "Lx2", button_color=("#D4D4D4", "#79118A"))
             board[x[0]][x[1]] = "Lx2"
         for x in double_word:
-            tablero.FindElement(x).update(
+            tablero[x].Update(
                 "Px2", button_color=("#D4D4D4", "#8A1155"))
             board[x[0]][x[1]] = "Px2"
         for x in triple_word:
-            tablero.FindElement(x).update(
+            tablero[x].Update(
                 "Px3", button_color=("#D4D4D4", "#0F6F6C"))
             board[x[0]][x[1]] = "Px3"
-        tablero.FindElement(start_button).update(
+        tablero[start_button].Update(
             "St", button_color=("#D4D4D4", "#928900"))
+
     # caso contrario, recorre el tablero guardado y actualiza en base a eso
     else:
-        backT = tabla
+        
+        board = tabla
         for i in range(len(tabla)):
             for j in range(len(tabla[i])):
                 if(tabla[i][j] == ""):
                     continue
                 elif(tabla[i][j] == "Lx3"):
-                    tablero.FindElement((i, j)).update(
+                    tablero[(i, j)].Update(
                         "Lx3", button_color=("#D4D4D4", "#8A1111"))
                 elif(tabla[i][j] == "Lx2"):
-                    tablero.FindElement((i, j)).update(
+                    tablero[(i, j)].Update(
                         "Lx2", button_color=("#D4D4D4", "#79118A"))
                 elif(tabla[i][j] == "Px2"):
-                    tablero.FindElement((i, j)).update(
+                    tablero[(i, j)].Update(
                         "Px2", button_color=("#D4D4D4", "#8A1155"))
                 elif(tabla[i][j] == "Px3"):
-                    tablero.FindElement((i, j)).update(
+                    tablero[(i, j)].Update(
                         "Lx2", button_color=("#D4D4D4", "#0F6F6C"))
                 else:
-                    tablero.FindElement((i, j)).update(tabla[i][j], button_color=(
+                    tablero[(i, j)].Update(tabla[i][j], button_color=(
                         "#FCC300", "#CD3500"))  # color y valor de la letra que ya estaba
+    
 
-    return tablero, backT
+    return tablero, board                
+
 
 
 # carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
-def cargarPartida(tablero, backT, datos):
-    tablero, backT = cargarTablero(tablero, backT, datos["tablero"])
-    tablero.FindElement("-pJug-").update("Tu puntaje: "+ datos["puntosJ"])
-    tablero.FindElement("-pCPU-").update("Tu puntaje: "+ datos["puntosIA"])
-    tablero.FindElement("-dif-").update("Tu puntaje: "+ datos["dificultad"])
+"""def cargarPartida(tablero, backT, datos):
+
+    aux = datos["tablero"]
+    tablero, backT = cargarTablero(tablero, backT, aux)
     
-    return tablero, backT
+    
+    return tablero, backT"""
 
 def Jugar(settings, event):
-    event = None
     
-
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
     datos = {"tablero": None}
@@ -139,9 +147,9 @@ def Jugar(settings, event):
         # sino datos tendra los settings que elijio el jugador o los por defecto
         datos.update(settings)
 
-    tablero, backT = cargarPartida(tablero, backT, datos)
+    tablero, backT = cargarTablero(tablero, backT, datos)
     event, _ = tablero.read()
 
 
 if __name__ == "__main__":
-    Jugar()
+    Jugar({'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10 minutos capo'},None)
