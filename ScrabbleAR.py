@@ -45,7 +45,6 @@ def Menu():
     while True:
         menu.un_hide()
         event, _ = menu.read()
-        menu.hide()
         print(event)
         if event in ("inicio", "continue"):
             if(event == "continue"):
@@ -54,9 +53,11 @@ def Menu():
             menu.close()
             # IniciarJuego?
         elif event == "puntos":
+            menu.hide()
             pt()
             print("")
         elif event == "config":
+            menu.hide()
             print("sacabo")
             #event,ajustes = crear_ventana_config().read()
         elif event in (None, "exit"):
