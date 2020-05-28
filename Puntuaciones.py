@@ -21,28 +21,35 @@ def merge(dic):
         maximo = max(m)
         #print('m',m)
         #print(maximo)
+        
+        if(maximo[0] == 0):
+            #print(i+1,': ---')
+            l.append(str(str(i+1)+': '+'---------------     --------  --'))
+            continue
+
         try:
-            if(maximo[0] == 0):
-                #print(i+1,': ---')
-                l.append(str(str(i+1)+': '+'-'))
-                continue
-            
-            elif(maximo[0] == dic['har'][mh][0]):
+            if(maximo[0] == dic['har'][mh][0]):
                 mh += 1
                 m.append(dic['har'][mh]+['Hard'])
-
-            elif(maximo[0] == dic['mid'][mm][0]):
-                mm += 1
-                m.append(dic['mid'][mm]+['Medi'])
-
-            elif(maximo[0] == dic['eas'][me][0]):
-                me += 1
-                m.append(dic['eas'][me]+['Easy'])
-
         except IndexError:  # excepcion out of range => append 0
             m.append([0])
-            #print(i,': ',maximo)
-        l.append(str(str(i+1)+': '+str(maximo[0])+' '+maximo[1]+' '+maximo[2]))
+
+        try:
+            if(maximo[0] == dic['mid'][mm][0]):
+                mm += 1
+                m.append(dic['mid'][mm]+['Medi'])
+        except IndexError:  # excepcion out of range => append 0
+            m.append([0])
+
+        try:
+            if(maximo[0] == dic['eas'][me][0]):
+                me += 1
+                m.append(dic['eas'][me]+['Easy'])
+        except IndexError:  # excepcion out of range => append 0
+            m.append([0])
+
+        #print(i+1,': ',maximo)
+        l.append(str(str(i+1)+': '+maximo[1]+'    '+maximo[2]+' -   '+str(maximo[0])))
         m.remove(maximo)
     return l
 
@@ -51,9 +58,9 @@ def CrearLista(filtro,dic):
     listaStr = []
     for i in range(1, 11):
         try:
-            algo = str(str(i)+': '+str(dic[filtro][i-1][0])+' '+dic[filtro][i-1][1])
+            algo = str(str(i)+': '+dic[filtro][i-1][1]+' -  '+str(dic[filtro][i-1][0]))
         except IndexError:
-            algo = str(str(i)+": -----")
+            algo = str(str(i)+": ----------------  -----")
         finally:
             listaStr.append(algo)
     return listaStr
