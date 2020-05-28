@@ -60,7 +60,7 @@ class Bolsa:
 
      def agregar_bolsa(self, ficha, cantidad):
         
-         for i in range(cantidad):
+         for _ in range(cantidad):
              self.bolsa.append(ficha)
 
      def initialize_bolsa(self,nivel):
@@ -186,7 +186,7 @@ class Atril:
 
     def initialize(self):
         
-         for i in range(7):
+         for _ in range(7):
              self.agregar_al_atril()
 
 
