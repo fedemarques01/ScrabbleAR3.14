@@ -37,7 +37,7 @@ def formarPalabra(dic):
     # valores en base a las claves del diccionario <-----------------------------------
     s=''
     for i in range(len(coor)):
-        s+=aux[i][1]
+        s+=dic[i][1]
     return s
 
 def validez(dif,coor,letras):
