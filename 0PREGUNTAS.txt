@@ -3,5 +3,15 @@ ok capo
 
 
 -----preguntas-----
-spelling good?
-tablero de botones o graph?
+~tablero de botones o graph?~ botones
+spelling+lexicon good?
+
+? chequear el tiempo?
+idea para chequeo de tiempo:
+reloj = sg.Window("reloj o que se yo",layout random,auto_close_duration= TiempoDeJuego)
+_,_ = reloj.read()?
+
+while True and reloj != None:
+hay que probarlo. pero parece funcionar.
+? palabras del turno de la maquina?
+

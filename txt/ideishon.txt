@@ -65,18 +65,3 @@ Se podr� optar entre mostrar un �nico listado que incluya todos los niveles 
 
 
 
-
-
-
-QA-----
-? chequear el tiempo?
-idea para chequeo de tiempo:
-reloj = sg.Window("reloj o que se yo",layout random,auto_close_duration= TiempoDeJuego)
-_,_ = reloj.read()?
-
-while True and reloj != None:
-hay que probarlo. pero parece funcionar.
-? palabras del turno de la maquina?
-
-
-
