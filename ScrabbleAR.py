@@ -35,7 +35,7 @@ def Crearmenu():
     if(os.path.isfile("Guardado.json")):
         layoutM += [[sg.B("Continuar partida", size=(36, 1), key="continue")]]
 
-    window = sg.Window("ScrabbleAR - Menu", layoutM, finalize=True)
+    window = sg.Window("ScrabbleAR - Menu", layoutM)
 
     return window
 
@@ -54,7 +54,6 @@ def Menu():
             menu.close()
             # IniciarJuego?
         elif event == "puntos":
-            menu.hide()
             pt()
             print("")
         elif event == "config":
@@ -63,7 +62,6 @@ def Menu():
         elif event in (None, "exit"):
 
             break
-        menu.un_hide()
 
 
 Menu()
