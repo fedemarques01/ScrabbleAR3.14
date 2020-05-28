@@ -164,13 +164,21 @@ def Jugar(settings, event):
     tablero, backT = cargarTablero(tablero, backT, datos)
     while True:
         event, _ = tablero.read()
+        print(event)
+        if event in (None,'Exit'):
+            break
+    tablero.close()
 
 
 if __name__ == "__main__":
-    Jugar({'dif':'mid','puntosJ':0,'puntosIA':0,'time':10},None)
-    '''
+    #Jugar({'dif':'mid','puntosJ':0,'puntosIA':0,'time':10},None)
+    
     tablero, backT = crearTablero()
+    '''
     dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
     coor = [(0, 0), (3, 0), (4, 0), (2, 0), (5, 0)]
     letras = ['P','R','R','E','O']
-    print(puntos(dif,coor,letras,backT))'''
+    print(puntos(dif,coor,letras,backT))
+    '''
+    for dato in backT:
+        print(dato)
