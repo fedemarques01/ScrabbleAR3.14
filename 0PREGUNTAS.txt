@@ -4,7 +4,7 @@ ok capo
 
 -----preguntas-----
 ~tablero de botones o graph?~ botones
-spelling+lexicon good?
+~spelling+lexicon good?~ YES
 
 ? chequear el tiempo?
 idea para chequeo de tiempo:

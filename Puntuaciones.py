@@ -26,22 +26,23 @@ def merge(dic):
                 #print(i+1,': ---')
                 l.append(str(str(i+1)+': '+'-'))
                 continue
-            elif(maximo[0] == dic['eas'][me][0]):
-                me += 1
-                m.append(dic['eas'][me]+['Easy'])
+            
+            elif(maximo[0] == dic['har'][mh][0]):
+                mh += 1
+                m.append(dic['har'][mh]+['Hard'])
 
             elif(maximo[0] == dic['mid'][mm][0]):
                 mm += 1
                 m.append(dic['mid'][mm]+['Medi'])
 
-            elif(maximo[0] == dic['har'][mh][0]):
-                mh += 1
-                m.append(dic['har'][mh]+['Hard'])
+            elif(maximo[0] == dic['eas'][me][0]):
+                me += 1
+                m.append(dic['eas'][me]+['Easy'])
 
         except IndexError:  # excepcion out of range => append 0
             m.append([0])
             #print(i,': ',maximo)
-        l.append(str(str(i+1)+': '+str(maximo[0])+' '+maximo[2]+' '+maximo[1]))
+        l.append(str(str(i+1)+': '+str(maximo[0])+' '+maximo[1]+' '+maximo[2]))
         m.remove(maximo)
     return l
 
