@@ -148,7 +148,8 @@ def Jugar(settings, event):
         datos.update(settings)
 
     tablero, backT = cargarTablero(tablero, backT, datos)
-    event, _ = tablero.read()
+    while True:
+        event, _ = tablero.read()
 
 
 if __name__ == "__main__":
