@@ -148,7 +148,7 @@ def puntos(dif,coor,letras,board):
 # carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
 
 def Jugar(settings, event):
-    sg.theme("DarkBrown")
+    sg.theme("Topanga")
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
     datos = {"tablero": None}
