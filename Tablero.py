@@ -3,9 +3,18 @@ from datetime import datetime as datetime
 import json
 from validez import validez
 import Letras
+from guardarPuntos import Guardar as Gp
 
 sg.theme("Topanga")
 
+def Terminar(letras,dif,puntos): #resta los puntos y llama a guardar.py
+                                                                       #FALTA actualizar los atriles de la cpu
+    resta=0
+    for i in letras:
+        resta+=Letras.valoresLetras[letras[i]]
+    puntos-=resta
+    Gp(dif,puntos)
+    pass
 
 def crearTablero():
     col = fil = 15
@@ -31,8 +40,8 @@ def crearTablero():
     # col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra
     colBoard = [[sg.Text("CPU:")]]
 
-    colBoard += [[sg.B("?", size=(2, 1), pad=(0, 0), disabled=True)
-                  for i in range(fichas)]for j in range(1)]
+    colBoard += [[sg.B("?",key=('-'+str(i)), size=(2, 1), pad=(0, 0), disabled=True)
+                  for i in range(fichas)]]
 
     colBoard += [[sg.Text("")]]
 
@@ -173,7 +182,7 @@ def Jugar(settings, event):
 if __name__ == "__main__":
     dic={'dif':'mid','puntosJ':0,'puntosIA':0,'time':10,'pal':[]}
     Jugar(dic,None)
-
+    '''
     datos={"tablero": None};datos.update(dic)
     tablero, backT = crearTablero()
     tablero, backT = cargarTablero(tablero, backT, datos)
@@ -183,6 +192,6 @@ if __name__ == "__main__":
     letras = ['P','R','R','E','O']
     print(puntos(dif,coor,letras,backT))
 
-    '''
+    
     for dato in backT:
         print(dato)'''

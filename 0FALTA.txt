@@ -1,5 +1,5 @@
 -----FALTA-----
-TERMINAR (MOSTRAR FICHAS DE CPU+RESTAR PUNTOS+GUARDAR PUNTAJE)
+TERMINAR (#FALTA actualizar los atriles de la cpu)
 CPU+
 TIME        PREGUNTAR
 
