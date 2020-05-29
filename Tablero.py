@@ -148,7 +148,7 @@ def puntos(dif,coor,letras,board):
 # carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
 
 def Jugar(settings, event):
-    
+    sg.theme("DarkBrown")
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
     datos = {"tablero": None}
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     tablero, backT = cargarTablero(tablero, backT, datos)
     
     dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
-    coor = [(0, 0), (3, 1), (4, 0), (2, 0), (5, 0)]
+    coor = [(0, 0), (3, 0), (4, 0), (2, 0), (5, 0)]
     letras = ['P','R','R','E','O']
     print(puntos(dif,coor,letras,backT))
 

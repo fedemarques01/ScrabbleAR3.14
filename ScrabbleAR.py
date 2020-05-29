@@ -5,6 +5,7 @@ import os.path
 import json
 from Puntuaciones import listaPuntuacionesAltas as pt
 from configuracion import ajustes
+import Tablero
 
 sg.theme("Dark Amber")
 
@@ -62,10 +63,9 @@ def Menu():
         if event in ("inicio", "continue"):
             if(event == "continue"):
                 print("")
-                # cargar ajustes por default
             menu.close()
             config['pal']=setDif(config['dif'])
-            # Tablero.Jugar(config)
+            Tablero.Jugar(config,event)
         elif event == "puntos":
             menu.hide()
             pt()
