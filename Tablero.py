@@ -1,6 +1,7 @@
 import PySimpleGUI as sg
-from datetime import datetime as datetime
 import json
+from datetime import datetime as datetime
+from random import randint
 from validez import validez
 import Letras
 from guardarPuntos import Guardar as Gp
@@ -28,7 +29,7 @@ def crearTablero():
     backT = [["" for i in range(col)] for i in range(fil)]
     # ColM es la columna donde se encuentra la informacion de la partida junto a otros comentarios y los botones para terminar y guardar la partida
     colM = [
-        [sg.B("Guardar", size=(13, 1), key="-save-")],
+        [sg.B("Guardar", size=(13, 1), key="-save-",disabled=True)],
         [sg.B("Terminar", size=(13, 1), key="Exit")],
         [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-")]],
                   title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
@@ -67,7 +68,11 @@ def crearTablero():
 
     return tablero, backT
 # carga todos los botones del tablero, el ya guardado en caso de una partida guardada
+def ActualizarAtril(tablero,lista):
+    for i in range(0,len(lista)):
+        tablero[str(i)].update(lista[i].get_letra())
 
+    return tablero    
 
 def cargarTablero(tablero, board, datos):
     # si es None, no hay partida guardada entonces carga la lista de tuplas por cada casilla especial
@@ -75,6 +80,7 @@ def cargarTablero(tablero, board, datos):
     tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
     tablero['-pCPU-'].Update(('Puntaje CPU: '+ str(datos['puntosIA'])).format())
     tablero['-dif-'].Update(('Dificultad: '+ datos['dif']).format())
+    tablero = ActualizarAtril(tablero, datos['atrilJ'].get_atril_array())
     if(tabla == None):
 
         triple_letter = [(1, 5), (1, 9), (5, 1), (5, 5), (5, 9),
@@ -160,27 +166,51 @@ def Jugar(settings, event):
     sg.theme("Topanga")
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
-    datos = {"tablero": None}
+    PrimeraJugada = True
     print("me mori")
     if(event == "continue"):
         arch = open("Guardado.json", "r")
         # si existe una partida guardada datos tendra el backT de la partida anterior en tablero, y los settings de la partida anterior
-        datos.update(json.load(arch))
+        datos = (json.load(arch))
+        PrimeraJugada = False
     else:
         # sino datos tendra los settings que elijio el jugador o los por defecto
+        datos = {"tablero": None,'bolsa':Letras.Bolsa(settings['dif'])}
         datos.update(settings)
-
+        #añado los atriles generados a partir de la bolsa que esta al crear el diccionario
+        datos.update({'atrilJ': Letras.Atril(datos['bolsa']),'atrilCPU':Letras.Atril(datos['bolsa'])})
+          
     tablero, backT = cargarTablero(tablero, backT, datos)
-    while True:
-        event, _ = tablero.read()
-        print(event)
-        if event in (None,'Exit'):
-            break
+    if(PrimeraJugada):
+        if(randint(0,1) == 0):
+            sg.popup('Empiezas tu!')
+            while True:
+                event, _ = tablero.read()
+                print(event)
+                if event == (7,7):
+                    print("por favor no te rompas")
+                elif event in (None,'Exit'):
+                    break    
+
+                
+        else:
+            while True:
+                event, _ = tablero.read()
+                print(event)
+                if event == (7,7):
+                    print("por favor no te rompas")
+                elif event in (None,'Exit'):
+                    break
+            sg.popup("Empieza la CPU")
+            #Primera jugada pc
+        tablero['-save-'].update(disabled=False)    
+
     tablero.close()
 
 
+
 if __name__ == "__main__":
-    dic={'dif':'mid','puntosJ':0,'puntosIA':0,'time':10,'pal':[]}
+    dic={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[]}
     Jugar(dic,None)
     '''
     datos={"tablero": None};datos.update(dic)

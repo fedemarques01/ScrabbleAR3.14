@@ -55,7 +55,7 @@ class Bolsa:
      def __init__(self, nivel):
        
          self.bolsa = []
-         self.dificultad = ['facil', 'media', 'dificil']
+         self.dificultad = ['easy', 'medium', 'hard']
          self.initialize_bolsa(nivel)
 
      def agregar_bolsa(self, ficha, cantidad):
