@@ -43,18 +43,18 @@ def Crearmenu():
     return window
 
 def setDif(dificultad):
-    if(dificultad=='eas'):
+    if(dificultad=='easy'):
         return ['NN', 'JJ', 'VB']
-    elif(dificultad=='mid'):
+    elif(dificultad=='medium'):
         return ['NN', 'VB']
-    elif(dificultad=='har'):
+    elif(dificultad=='hard'):
         i=randint(0,2)
         dif=['NN', 'JJ', 'VB']
         return dif[i]
 
 
 def Menu():
-    config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':'10','pal':[]}
+    config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':'10','pal':[]}
     menu = Crearmenu()
     while True:
         menu.un_hide()

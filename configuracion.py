@@ -17,12 +17,8 @@ def crearPantalla(config):
 
 def dific(dific,time):
     time=int(time)
-    if(dific=='easy'):
-        return 'eas',time
-    if(dific=='medium'):
-        return 'mid',time
-    if(dific=='hard'):
-        return 'har',time
+    if dific in('easy','medium','hard'):
+        return dific,time
     return None,time
 
 def ajustes(config):
@@ -48,4 +44,4 @@ def ajustes(config):
     return config
 
 if __name__ == "__main__":
-    ajustes(config={'dif':'mid','puntosJ':0,'puntosIA':0,'time':10,'pal':[]})
+    ajustes(config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[]})
