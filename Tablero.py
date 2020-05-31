@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import json
 from datetime import datetime as datetime
-from random import randint
+from random import getrandbits
 from validez import validez
 import Letras
 from guardarPuntos import Guardar as Gp
@@ -182,7 +182,7 @@ def Jugar(settings, event):
           
     tablero, backT = cargarTablero(tablero, backT, datos)
     if(PrimeraJugada):
-        if(randint(0,1) == 0):
+        if(getrandbits(1)):
             sg.popup('Empiezas tu!')
             while True:
                 event, _ = tablero.read()
@@ -192,8 +192,9 @@ def Jugar(settings, event):
                 elif event in (None,'Exit'):
                     break    
 
-                
         else:
+            sg.popup("Empieza la CPU")
+            #Esto esta para ver el tablero nada mas, la idea es sacarlo despues
             while True:
                 event, _ = tablero.read()
                 print(event)
@@ -201,7 +202,6 @@ def Jugar(settings, event):
                     print("por favor no te rompas")
                 elif event in (None,'Exit'):
                     break
-            sg.popup("Empieza la CPU")
             #Primera jugada pc
         tablero['-save-'].update(disabled=False)    
 
