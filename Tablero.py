@@ -167,7 +167,7 @@ def Jugar(settings, event):
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
     PrimeraJugada = True
-    print("me mori")
+    #print("me mori")
     if(event == "continue"):
         arch = open("Guardado.json", "r")
         # si existe una partida guardada datos tendra el backT de la partida anterior en tablero, y los settings de la partida anterior
@@ -192,7 +192,6 @@ def Jugar(settings, event):
                 elif event in (None,'Exit'):
                     break    
 
-                
         else:
             while True:
                 event, _ = tablero.read()
