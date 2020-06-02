@@ -8,14 +8,16 @@ from guardarPuntos import Guardar as Gp
 
 sg.theme("Topanga")
 
-def Terminar(letras,dif,puntos): #resta los puntos y llama a guardar.py
-                                                                       #FALTA actualizar los atriles de la cpu
+def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a guardar.py
+    for i in range(0,7):
+        tablero['-'+str(i)].update(atrilCPU[i].get_letra())           #FALTA actualizar los atriles de la cpu
     resta=0
     for i in letras:
-        resta+=Letras.valoresLetras[letras[i]]
+        resta+=i.get_valor()
     puntos-=resta
     Gp(dif,puntos)
-    pass
+    sg.popup('perdiste mostro')
+    exit()
 
 def crearTablero():
     col = fil = 15
@@ -189,8 +191,10 @@ def Jugar(settings, event):
                 print(event)
                 if event == (7,7):
                     print("por favor no te rompas")
-                elif event in (None,'Exit'):
+                elif event ==None:
                     break    
+                elif event == 'Exit':
+                    Terminar(datos['atrilJ'].get_atril_array(),settings['dif'],settings['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
 
         else:
             sg.popup("Empieza la CPU")
@@ -210,6 +214,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
+    letras = ['P','R','R','E','O']
     dic={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[]}
     Jugar(dic,None)
     '''
