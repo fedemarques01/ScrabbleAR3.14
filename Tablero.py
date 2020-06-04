@@ -17,7 +17,7 @@ def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a gu
         tablero['-'+str(i)].update(atrilCPU[i])           #FALTA actualizar los atriles de la cpu
     resta=0
     for i in letras:
-        resta+=Letras.valoresLetras(i)
+        resta+= Letras.valoresLetras[i]
     puntos-=resta
     Gp(dif,puntos)
     sg.popup('Perdiste mostro')
@@ -154,7 +154,7 @@ def cargarTablero(tablero, board, datos):
                         "Lx2", button_color=("#D4D4D4", "#0F6F6C"))
                 else:
                     tablero[(i, j)].Update(tabla[i][j], button_color=(
-                        "#FCC300", "#CD3500"))  # color y valor de la letra que ya estaba
+                        "#FCC300", "#E94E00"))  # color y valor de la letra que ya estaba
     
 
     return tablero, board
@@ -165,20 +165,24 @@ def ActualizarAtril(tablero,lista):
 
     return tablero                    
 
-def modificarTablero(tablero,board,Atril,letras,coord,color,CPU=True):
+def modificarTablero(tablero,board,Atril,letras,coord,Jug=True):
     for i in range(0,len(coord)):
-        tablero[coord[i]].update(button_color=("#FCC300",color),disabled_button_color=("#FCC300",color),disabled=True)
-        board[coord[0][0]][coord[0][1]] = letras[i]
+        board[coord[0][0]][coord[0][1]] = letras[i]        
+        if(Jug):
+            tablero[coord[i]].update(button_color=("#FCC300","#E94E00"),disabled_button_color=("#FCC300","#E94E00"),disabled=True)
+        else:       
+            tablero[coord[i]].update(letras[i], button_color=("#FCC300",'#208020'),disabled_button_color=("#FCC300",'#208020'),disabled=True)
+
         Atril.usar_ficha(letras[i])
     Atril.rellenar_atril()
     #print(Atril.get_atril_string())
-    if(not CPU):
+    if(Jug):
         tablero = ActualizarAtril(tablero,Atril.get_atril_array())
 
     return tablero,board,Atril
 
-def puntos(dif,coor,letras,board,CPU=True):
-    if(CPU):
+def puntos(dif,coor,letras,board,Jug=True):
+    if(Jug):
         v=validez(dif,coor,letras)
         if v in (0,1):
             return v
@@ -276,7 +280,7 @@ def Jugar(settings, event):
                         datos['puntosJ'] += punt
                         tablero["-comment-"].update(("Sumaste " + str(punt) + " puntos").format())
                         tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
-                        tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord,"#E94E00")
+                        tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord)
                         print(datos['puntosJ'])
                         break 
                 #le devuelvo las fichas al jugador si ya ingreso alguna    
@@ -288,13 +292,16 @@ def Jugar(settings, event):
                     
         else:
             sg.popup("Empieza la CPU")
+            tablero["-comment-"].update(("La CPU esta pensando").format())
             letras=CPU.CPUmain(datos['atrilCPU'].get_atril_array(),datos['pal'])
             coor=[]
             for i in range(len(letras)):
                 coor.append((7,7+i))
             print(coor,letras)
-            puntos(datos['pal'],coor,letras,backT,False)
-            modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,'#208020',False)
+            tablero["-comment-"].update(("La CPU suma " + str(punt) + " puntos").format())
+            tablero['-pCPU-'].Update(('Puntos CPU: '+ str(datos['puntosCPU'])).format())
+            datos['puntosCPU'] += puntos(datos['pal'],coor,letras,backT,False)
+            tablero,backT = modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,False)
         if(event != None):    
             tablero['-save-'].update(disabled=False)    
     
