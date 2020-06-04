@@ -6,7 +6,11 @@ from validez import validez
 import Letras
 from guardarPuntos import Guardar as Gp
 
-
+def GuardarPartida(datos):
+    datos['bolsa'] = datos['bolsa'].convertirAstring()
+    with open("Guardado.json","w") as arch:
+        json.dump(arch, datos)
+    exit()    
 
 def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a guardar.py
     for i in range(0,7):
@@ -69,13 +73,8 @@ def crearTablero():
     tablero = sg.Window("ScrabbleAR - Juego", frontT, finalize=True)
 
     return tablero, backT
-# carga todos los botones del tablero, el ya guardado en caso de una partida guardada
-def ActualizarAtril(tablero,lista):
-    for i in range(0,len(lista)):
-        tablero[str(i)].update(lista[i].get_letra(),disabled=False)
 
-    return tablero    
-
+# carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa,etc)
 def cargarTablero(tablero, board, datos):
     # si es None, no hay partida guardada entonces carga la lista de tuplas por cada casilla especial
     tabla = datos['tablero']
@@ -140,9 +139,25 @@ def cargarTablero(tablero, board, datos):
                         "#FCC300", "#CD3500"))  # color y valor de la letra que ya estaba
     
 
-    return tablero, board                
+    return tablero, board
 
-#FCC300
+def ActualizarAtril(tablero,lista):
+    for i in range(0,len(lista)):
+        tablero[str(i)].update(lista[i].get_letra(),disabled=False)
+
+    return tablero                    
+
+def modificarTablero(tablero,board,Atril,letras,coord,color):
+    for i in range(0,len(coord)):
+        tablero[coord[i]].update(button_color=("#FCC300",color),disabled_button_color=("#FCC300",color),disabled=True)
+        board[coord[0][0]][coord[0][1]] = letras[i]
+        Atril.usar_ficha(letras[i])
+    Atril.rellenar_atril()
+    #print(Atril.get_atril_string())
+    tablero = ActualizarAtril(tablero,Atril.get_atril_array())
+
+    return tablero,board,Atril
+
 def puntos(dif,coor,letras,board):
     v=validez(dif,coor,letras)
     if v in (0,1):
@@ -164,24 +179,10 @@ def puntos(dif,coor,letras,board):
         pt+=pl
     return pt*pp
 
-# carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
-
 def devolverFichas(tablero,coord,board):
     for i in coord:   
         tablero[i].update(board[i[0]][i[1]], disabled=False)
-    return tablero    
-
-
-def modificarTablero(tablero,board,Atril,letras,coord,color):
-    for i in range(0,len(coord)):
-        tablero[coord[i]].update(button_color=("#FCC300",color),disabled_button_color=("#FCC300",color),disabled=True)
-        board[coord[0][0]][coord[0][1]] = letras[i]
-        Atril.usar_ficha(letras[i])
-    Atril.rellenar_atril()
-    #print(Atril.get_atril_string())
-    tablero = ActualizarAtril(tablero,Atril.get_atril_array())
-
-    return tablero,board,Atril     
+    return tablero         
 
 def Jugar(settings, event):
     claveA = []
@@ -191,11 +192,11 @@ def Jugar(settings, event):
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
     PrimeraJugada = True
-    #print("me mori")
     if(event == "continue"):
-        arch = open("Guardado.json", "r")
+        
         # si existe una partida guardada datos tendra el backT de la partida anterior en tablero, y los settings de la partida anterior
-        datos = (json.load(arch))
+        with open("Guardado.json", "r") as arch:
+            datos = json.load(arch)
         PrimeraJugada = False
     else:
         # sino datos tendra los settings que elijio el jugador o los por defecto
@@ -261,6 +262,8 @@ def Jugar(settings, event):
                 elif event == "-back-" and listCoord != []:       
                     tablero = devolverFichas(tablero,listCoord,backT)
                     tablero = ActualizarAtril(tablero,datos['atrilJ'].get_atril_array())
+                    listLetra = []
+                    listCoord = [] 
                     
         else:
             sg.popup("Empieza la CPU")
@@ -275,11 +278,54 @@ def Jugar(settings, event):
             #Primera jugada pc
         if(event != None):    
             tablero['-save-'].update(disabled=False)    
-
+    
+    listLetra = []
+    listCoord = [] 
     while True:
         event, _ = tablero.read()
-        if event in (None,"Exit"):
-            break
+        print(event)
+
+        if event in (None,'Exit'):
+            if(event == 'Exit'):
+                Terminar(datos['atrilJ'].get_atril_array(),datos['dif'],datos['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
+            break  
+        #me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
+        elif(event in claveA):
+            aux = event
+        elif len(event) == 2 and aux != "":
+            listCoord.append(event)
+            listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
+            tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
+            tablero[aux].update(disabled=True)
+            aux = ""
+        elif event == "-check-" and listCoord != []:
+            punt = puntos(datos['pal'],listCoord,listLetra,backT)
+            if(punt <= 1):
+                if(punt == 1):
+                    tablero["-comment-"].update("La palabra no es valida, pruebe una palabra distinta".format())
+                else:
+                    tablero["-comment-"].update("Las fichas se colocaron erroneamente en el tablero,pruebe colocarlas una al lado de otra o una debajo de otra".format())                        
+                tablero = devolverFichas(tablero,listCoord,backT)
+                tablero = ActualizarAtril(tablero,datos['atrilJ'].get_atril_array())
+            else:
+                datos['puntosJ'] += punt
+                tablero["-comment-"].update(("Sumaste " + str(punt) + " puntos").format())
+                tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
+                tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord,"#E94E00")
+                print(datos['puntosJ'])
+            listLetra = []
+            listCoord = []     
+        #le devuelvo las fichas al jugador si ya ingreso alguna    
+        elif event == "-back-" and listCoord != []:       
+            tablero = devolverFichas(tablero,listCoord,backT)
+            tablero = ActualizarAtril(tablero,datos['atrilJ'].get_atril_array())
+            listLetra = []
+            listCoord = []
+        elif event == "-save-":
+            datos['tablero'] = backT
+            sg.popup("La partida se ha guardado")
+            #GuardarPartida(datos)
+
     tablero.close()    
 
 
