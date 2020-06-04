@@ -237,14 +237,14 @@ def Jugar(settings, event):
                     if(punt == 0):
                         tablero["-comment-"].update("La palabra no es valida, ingrese las letras en orden una al lado de la otra e intente de nuevo".format())
                         #devolverfichas
-                        listLetra,listCoord = []
+                        listLetra = listCoord = []
                     else:
                         datos['puntosJ'] += punt
                         tablero["-comment-"].update(("Sumaste " + str(punt) + " puntos").format())
                         tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
                         tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord)
                         print(datos['puntosJ'])
-                        listLetra,listCoord = []
+                        listLetra = listCoord = []
                         break    
 
                 elif event == 'Exit':
