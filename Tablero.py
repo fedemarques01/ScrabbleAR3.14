@@ -173,7 +173,7 @@ def modificarTablero(tablero,board,Atril,letras,coord,Jug=True):
         else:       
             tablero[coord[i]].update(letras[i], button_color=("#FCC300",'#208020'),disabled_button_color=("#FCC300",'#208020'),disabled=True)
 
-        Atril.usar_ficha(letras[i])
+        Atril.usar(letras[i])
     Atril.rellenar_atril()
     #print(Atril.get_atril_string())
     if(Jug):
@@ -298,10 +298,11 @@ def Jugar(settings, event):
             for i in range(len(letras)):
                 coor.append((7,7+i))
             print(coor,letras)
+            punt = puntos(datos['pal'],coor,letras,backT,False)
+            datos['puntosIA'] +=punt
             tablero["-comment-"].update(("La CPU suma " + str(punt) + " puntos").format())
-            tablero['-pCPU-'].Update(('Puntos CPU: '+ str(datos['puntosCPU'])).format())
-            datos['puntosCPU'] += puntos(datos['pal'],coor,letras,backT,False)
-            tablero,backT = modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,False)
+            tablero['-pCPU-'].Update(('Puntos CPU: '+ str(datos['puntosIA'])).format())
+            tablero,backT,datos['atrilCPU'] = modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,False)
         if(event != None):    
             tablero['-save-'].update(disabled=False)    
     
@@ -320,7 +321,7 @@ def Jugar(settings, event):
             aux = event
         elif len(event) == 2 and aux != "":
             listCoord.append(event)
-            listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
+            listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)])
             tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
             tablero[aux].update(disabled=True)
             aux = ""
