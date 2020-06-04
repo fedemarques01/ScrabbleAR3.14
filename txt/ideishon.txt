@@ -65,12 +65,3 @@ Se podr� optar entre mostrar un �nico listado que incluya todos los niveles 
 
 
 
-
-
-
-QA-----
-? chequear el tiempo?
-? palabras del turno de la maquina?
-
-
-

@@ -1,23 +1,15 @@
 from pattern.text.es import parse, split, lexicon, spelling
+from random import randint
 import PySimpleGUI as sg
 import os.path
 import json
 from Puntuaciones import listaPuntuacionesAltas as pt
+from Configuracion import ajustes
+import Tablero
 
 sg.theme("Dark Amber")
 
 
-def esValida(palabra, *dif):
-    palabra = parse(palabra).split('/')
-    if palabra[1] in dif:
-        if palabra[1] == 'NN':
-            if (not palabra[0] in spelling) or (not palabra[0] in lexicon):
-                print('\n nono square', palabra[1], ' \n')
-                return False
-        print('\n yes', palabra[1], '\n')
-        return True
-    print('\n nono square', palabra[1], ' \n')
-    return False
 
 
 def Crearmenu():
@@ -35,32 +27,42 @@ def Crearmenu():
     if(os.path.isfile("Guardado.json")):
         layoutM += [[sg.B("Continuar partida", size=(36, 1), key="continue")]]
 
-    window = sg.Window("ScrabbleAR - Menu", layoutM, finalize=True)
+    window = sg.Window("ScrabbleAR - Menu", layoutM)
 
     return window
 
+def setDif(dificultad):
+    if(dificultad=='easy'):
+        return ['NN', 'JJ', 'VB']
+    elif(dificultad=='medium'):
+        return ['NN', 'VB']
+    elif(dificultad=='hard'):
+        i=randint(0,2)
+        dif=['NN', 'JJ', 'VB']
+        return dif[i]
+
 
 def Menu():
+    config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':'10','pal':[]}
     menu = Crearmenu()
     while True:
         menu.un_hide()
         event, _ = menu.read()
-        menu.hide()
         print(event)
         if event in ("inicio", "continue"):
             if(event == "continue"):
                 print("")
-                # cargar ajustes por default
             menu.close()
-            # IniciarJuego?
+            config['pal']=setDif(config['dif'])
+            Tablero.Jugar(config,event)
         elif event == "puntos":
+            menu.hide()
             pt()
-            print("")
         elif event == "config":
-            print("sacabo")
-            #event,ajustes = crear_ventana_config().read()
+            menu.hide()
+            config = ajustes(config)
         elif event in (None, "exit"):
             break
 
 
-Menu()
+Menu() 
