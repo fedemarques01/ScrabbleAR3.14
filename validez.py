@@ -50,7 +50,7 @@ def validez(dif,coor,letras):
     aux = tieneOrden(aux)
     if aux==[]:
         p.popup('no posee orden')
-        return False
+        return 0
 
     #armo la palabra con las letras ordenadas
     palabra = formarPalabra(aux)
@@ -59,10 +59,10 @@ def validez(dif,coor,letras):
     #verifico si la palabra existe
     #palabra=input()
     if(esValida(palabra, *dif)):
-        return True
+        return 2
     else:
         p.popup('no existe')
-        return False
+        return 1
 
 
 
@@ -70,11 +70,13 @@ def validez(dif,coor,letras):
 if __name__ == "__main__":
    
     dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
-    coor = [(0, 0), (3, 0), (4, 0), (2, 0),(5, 0)]
-    letras = ['P','R','R','E','O']
+    coor = [(3, 0), (4, 0), (0, 0), (1, 0)]
+    letras = ['M','A','G','O']
 
     print('\n')
-    if(validez(dif,coor,letras)):
-        print('\n','todo done, master')
+    v=validez(dif,coor,letras)
+    print(v)
+    if(v>1):
+        print('todo done, master')
     else:
-        print('\n','no no square')
+        print('no no square')

@@ -143,8 +143,9 @@ def cargarTablero(tablero, board, datos):
 
 #FCC300
 def puntos(dif,coor,letras,board):
-    if not validez(dif,coor,letras):
-        return 0
+    v=validez(dif,coor,letras)
+    if v in (0,1):
+        return v
 
     pt,pp=0,1
     for i in range(len(coor)):
@@ -224,7 +225,6 @@ if __name__ == "__main__":
     
     dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
     coor = [(0, 0), (3, 0), (4, 0), (2, 0), (5, 0)]
-    letras = ['P','R','R','E','O']
     print(puntos(dif,coor,letras,backT))
 
     

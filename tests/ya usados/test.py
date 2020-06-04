@@ -5,15 +5,12 @@ def clasificar(palabra):
     print(tag(palabra, tokenize=True, encoding='utf-8'))
 
 
-palabra = 'casa'
+palabra = 'eme'
 print(suggest(palabra))
 
-if not palabra in spelling:
-    if not palabra in lexicon:
-        print('No se encuentra en pattern.es')
-    else:
-        print('La encontró en lexicon')
-        clasificar(palabra)
+if (not palabra in spelling) and( not palabra in lexicon):
+    print('nono')
+    clasificar(palabra)
 else:
-    print('La encontró en spelling')
+    print('La encontró')
     clasificar(palabra)
