@@ -168,7 +168,7 @@ def puntos(dif,coor,letras,board):
 
 def modificarTablero(tablero,board,Atril,letras,coord):
     for i in range(0,len(coord)):
-        tablero[coord[i]].update(button_color=("#FCC300","#E94E00"),disabled=True)
+        tablero[coord[i]].update(button_color=("#FCC300","#E94E00"),disabled_button_color=("#FCC300","#E94E00"),disabled=True)
         board[coord[0][0]][coord[0][1]] = letras[i]
         Atril.usar_ficha(letras[i])
     Atril.rellenar_atril()
@@ -237,11 +237,15 @@ def Jugar(settings, event):
                     if(punt == 0):
                         tablero["-comment-"].update("La palabra no es valida, ingrese las letras en orden una al lado de la otra e intente de nuevo".format())
                         #devolverfichas
+                        listLetra,listCoord = []
                     else:
                         datos['puntosJ'] += punt
                         tablero["-comment-"].update(("Sumaste " + str(punt) + " puntos").format())
+                        tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
                         tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord)
-                        print(datos['puntosJ'])    
+                        print(datos['puntosJ'])
+                        listLetra,listCoord = []
+                        break    
 
                 elif event == 'Exit':
                     Terminar(datos['atrilJ'].get_atril_array(),settings['dif'],settings['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
@@ -259,7 +263,10 @@ def Jugar(settings, event):
             #Primera jugada pc
         tablero['-save-'].update(disabled=False)    
 
-    tablero.close()
+    while True:
+        event, _ = tablero.read()
+        if event in (None,"Exit"):
+            break
 
 
 
