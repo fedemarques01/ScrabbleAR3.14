@@ -61,7 +61,7 @@ def crearTablero():
          sg.Column(colBoard)],
         [sg.Text("")],
         [sg.Text("Tus fichas:"), sg.Column(colPlayer),
-         sg.B("Comprobar", key="-fin-", size=(10, 1)
+         sg.B("Comprobar", key="-check-", size=(10, 1)
               ), sg.B("Cambiar", key="-cambiar-", size=(10, 1)),
          sg.B("Deshacer", key="-back-", size=(10, 1))]
     ]
@@ -113,6 +113,7 @@ def cargarTablero(tablero, board, datos):
             board[x[0]][x[1]] = "Px3"
         tablero[start_button].Update(
             "St", button_color=("#D4D4D4", "#928900"))
+        board[start_button[0]][start_button[1]] = "St"    
     
     # caso contrario, recorre el tablero guardado y actualiza en base a eso
     else:
@@ -165,9 +166,15 @@ def puntos(dif,coor,letras,board):
 
 # carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
 
-def modificarTablero(tablero,board,Atril,letras,coord):
+def devolverFichas(tablero,coord,board):
+    for i in coord:   
+        tablero[i].update(board[i[0]][i[1]], disabled=False)
+    return tablero    
+
+
+def modificarTablero(tablero,board,Atril,letras,coord,color):
     for i in range(0,len(coord)):
-        tablero[coord[i]].update(button_color=("#FCC300","#E94E00"),disabled_button_color=("#FCC300","#E94E00"),disabled=True)
+        tablero[coord[i]].update(button_color=("#FCC300",color),disabled_button_color=("#FCC300",color),disabled=True)
         board[coord[0][0]][coord[0][1]] = letras[i]
         Atril.usar_ficha(letras[i])
     Atril.rellenar_atril()
@@ -208,29 +215,29 @@ def Jugar(settings, event):
                 event, _ = tablero.read()
                 print(event)
 
-                if event == None:
+                if event in (None,'Exit'):
+                    if(event == 'Exit'):
+                        Terminar(datos['atrilJ'].get_atril_array(),datos['dif'],datos['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
                     break  
-
+                #me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
                 elif(event in claveA):
                     aux = event
-
+                #si ya elegi una letra solo entro al elegir st ya que en la primer jugada la letra va obligatoriamente en esa posicion
                 elif event == (7,7) and aux != "":
-                    listCoord.append(event)
-                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
-                    tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
-                    #print("por favor no te rompas")
-                    tablero[aux].update(disabled=True)
-                    aux = ""
-
+                    listCoord.append(event) #guardo en la lista de coordenadas
+                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra()) #guardo en la lista de letras
+                    tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))#deshabilito el boton y actualizo la casilla con la letra elegida
+                    tablero[aux].update(disabled=True)#deshabilito la ficha del atril que el jugador coloco
+                    aux = ""#dejo libre para seleccionar otra letra
+                #igual que el anterior, solo que evalua el que ya se haya ingresado una ficha en el st
                 elif len(event) == 2 and len(listLetra) >= 1 and aux != "":
                     listCoord.append(event)
                     listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
                     tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
-                    #print("por favor no te rompas")
                     tablero[aux].update(disabled=True)
                     aux = ""
 
-                elif event == "-fin-" and listCoord != []:
+                elif event == "-check-" and listCoord != []:
                     #print("Algo")
                     punt = puntos(datos['pal'],listCoord,listLetra,backT)
                     if(punt <= 1):
@@ -239,20 +246,22 @@ def Jugar(settings, event):
                         else:
                             tablero["-comment-"].update("Las fichas se colocaron erroneamente en el tablero,pruebe colocarlas una al lado de otra o una debajo de otra".format())
                                 
-                        #devolverfichas
-                        listLetra = listCoord = []
+                        tablero = devolverFichas(tablero,listCoord,backT)
+                        tablero = ActualizarAtril(tablero,datos['atrilJ'].get_atril_array())
+                        listLetra = []
+                        listCoord = []
                     else:
                         datos['puntosJ'] += punt
                         tablero["-comment-"].update(("Sumaste " + str(punt) + " puntos").format())
                         tablero['-pJug-'].Update(('Tu puntaje: '+ str(datos['puntosJ'])).format())
-                        tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord)
+                        tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord,"#E94E00")
                         print(datos['puntosJ'])
-                        listLetra = listCoord = []
-                        break    
-
-                elif event == 'Exit':
-                    Terminar(datos['atrilJ'].get_atril_array(),settings['dif'],settings['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
-
+                        break 
+                #le devuelvo las fichas al jugador si ya ingreso alguna    
+                elif event == "-back-" and listCoord != []:       
+                    tablero = devolverFichas(tablero,listCoord,backT)
+                    tablero = ActualizarAtril(tablero,datos['atrilJ'].get_atril_array())
+                    
         else:
             sg.popup("Empieza la CPU")
             #Esto esta para ver el tablero nada mas, la idea es sacarlo despues
@@ -264,12 +273,14 @@ def Jugar(settings, event):
                 elif event in (None,'Exit'):
                     break
             #Primera jugada pc
-        tablero['-save-'].update(disabled=False)    
+        if(event != None):    
+            tablero['-save-'].update(disabled=False)    
 
     while True:
         event, _ = tablero.read()
         if event in (None,"Exit"):
             break
+    tablero.close()    
 
 
 
