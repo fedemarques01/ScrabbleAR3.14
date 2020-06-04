@@ -61,7 +61,7 @@ def CPUahhh(l,dif,word='',*ind):
     return word
 
 def CPUmain(cosa,dif):
-    #letras=meJodeQueSeaUnObjeto(cosa)
+    letras=meJodeQueSeaUnObjeto(cosa)
     ind= CPUahhh(letras,dif)
     print('indices: ', ind)
     ind= CPUdesarmar(ind,letras)
