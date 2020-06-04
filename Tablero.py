@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 import json
 from datetime import datetime as datetime
-from random import getrandbits
+from random import getrandbits, randint
 from Validez import validez
 import Letras
 from GuardarPuntos import Guardar as Gp
@@ -159,10 +159,11 @@ def modificarTablero(tablero,board,Atril,letras,coord,color):
 
     return tablero,board,Atril
 
-def puntos(dif,coor,letras,board):
-    v=validez(dif,coor,letras)
-    if v in (0,1):
-        return v
+def puntos(dif,coor,letras,board,CPU=True):
+    if(CPU):
+        v=validez(dif,coor,letras)
+        if v in (0,1):
+            return v
 
     pt,pp=0,1
     for i in range(len(coor)):
@@ -268,15 +269,13 @@ def Jugar(settings, event):
                     
         else:
             sg.popup("Empieza la CPU")
-            #Esto esta para ver el tablero nada mas, la idea es sacarlo despues
-            while True:
-                event, _ = tablero.read()
-                print(event)
-                if event == (7,7):
-                    print("por favor no te rompas")
-                elif event in (None,'Exit'):
-                    break
-            #Primera jugada pc
+            letras=CPU.CPUmain(datos['atrilCPU'].get_atril_array(),datos['pal'])
+            coor=[]
+            for i in range(len(letras)):
+                coor.append((7,7+i))
+            print(coor,letras)
+            puntos(datos['pal'],coor,letras,backT,False)
+            modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,'#208020')
         if(event != None):    
             tablero['-save-'].update(disabled=False)    
     

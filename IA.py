@@ -20,11 +20,12 @@ def CPUformarPalabra(letras):
         s+=letras[i]
     return s
 
-def CPUverificar(letras):
+def CPUverificar(letras,dif):
     s=CPUformarPalabra(letras)
-    if(esValida(s,'NN','VB','JJ')):
+    if(esValida(s,*dif)):
         print('a',s)
         return True
+
     else:
         return False
 
@@ -42,7 +43,7 @@ def CPUarmar(l,*ind):
         s+=[l[ind[i]]]
     return s
 
-def CPUahhh(l,word='',*ind):
+def CPUahhh(l,dif,word='',*ind):
     ind=list(ind)
     if(word!=''):
         return word
@@ -51,20 +52,21 @@ def CPUahhh(l,word='',*ind):
         if CPUigual(*ind):
             if(len(ind)>2):
                 aux=CPUarmar(l,*ind)
-                if(CPUverificar(aux)):
+                if(CPUverificar(aux,dif)):
                     word=ind
                     return word
         if(len(ind)<len(l)):
-            word = CPUahhh(l,word,*ind)
+            word = CPUahhh(l,dif,word,*ind)
         ind.pop(-1)
     return word
 
-def CPUmain(cosa):
-    letras=meJodeQueSeaUnObjeto(cosa)
-    word= CPUahhh(letras)
-    #print('indices: ', word)
-    word= CPUdesarmar(word,letras)
-    return word
+def CPUmain(cosa,dif):
+    #letras=meJodeQueSeaUnObjeto(cosa)
+    ind= CPUahhh(letras,dif)
+    print('indices: ', ind)
+    ind= CPUdesarmar(ind,letras)
+    print('palabra:',letras)
+    return ind
 
 
 
@@ -74,4 +76,4 @@ if __name__ == "__main__":
     #print(letras[0:])
     #print(CPUigual(*letras))
     #print(CPUarmar(letras,1,4,5)
-    print('resultado: ',CPUmain(letras))
+    print('resultado: ',CPUmain(letras,['NN', 'JJ', 'VB']))
