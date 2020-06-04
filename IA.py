@@ -1,4 +1,12 @@
-from validez import esValida
+from Validez import esValida
+import Letras
+
+def meJodeQueSeaUnObjeto(atr):
+    lis=[]
+    for i in range(atr.get_atril_tamanio()):
+        lis.append(atr[i].get_letra())
+
+    return lis
 
 def CPUformarPalabra(letras):
     s=''
@@ -41,8 +49,16 @@ def CPUahhh(l,*ind):
         ind.pop(-1)
     pass
 
-letras = ['o','o','o','o','k','o','k']
-#print(letras[0:])
-#print(CPUigual(*letras))
-#print(CPUarmar(letras,1,4,5)
-CPUahhh(letras)
+def CPUmain(cosa):
+    letras=meJodeQueSeaUnObjeto(cosa)
+    return CPUahhh(letras)
+
+
+
+if __name__ == "__main__":
+        
+    letras = ['o','o','o','o','k','o','k']
+    #print(letras[0:])
+    #print(CPUigual(*letras))
+    #print(CPUarmar(letras,1,4,5)
+    CPUahhh(letras)
