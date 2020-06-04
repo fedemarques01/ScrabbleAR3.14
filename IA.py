@@ -7,12 +7,6 @@ def CPUdesarmar(ind,letras):
         l.append(letras[i])
     return l
 
-def meJodeQueSeaUnObjeto(atr):
-    lis=[]
-    for i in range(len(atr)):
-        lis.append(atr[i].get_letra())
-
-    return lis
 
 def CPUformarPalabra(letras):
     s=''
@@ -60,8 +54,7 @@ def CPUahhh(l,dif,word='',*ind):
         ind.pop(-1)
     return word
 
-def CPUmain(cosa,dif):
-    letras=meJodeQueSeaUnObjeto(cosa)
+def CPUmain(letras,dif):
     ind= CPUahhh(letras,dif)
     print('indices: ', ind)
     ind= CPUdesarmar(ind,letras)
