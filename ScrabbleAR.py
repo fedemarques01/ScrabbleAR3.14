@@ -4,7 +4,7 @@ import PySimpleGUI as sg
 import os.path
 import json
 from Puntuaciones import listaPuntuacionesAltas as pt
-from configuracion import ajustes
+from Configuracion import ajustes
 import Tablero
 
 sg.theme("Dark Amber")

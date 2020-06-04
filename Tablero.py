@@ -2,9 +2,10 @@ import PySimpleGUI as sg
 import json
 from datetime import datetime as datetime
 from random import getrandbits
-from validez import validez
+from Validez import validez
 import Letras
-from guardarPuntos import Guardar as Gp
+from GuardarPuntos import Guardar as Gp
+import IA as CPU
 
 def GuardarPartida(datos):
     datos['bolsa'] = datos['bolsa'].convertirAstring()
@@ -158,6 +159,10 @@ def modificarTablero(tablero,board,Atril,letras,coord,color):
 
     return tablero,board,Atril
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6dc29a9a3566cef52b3c68e09a38d26cb0fd7dbc
 def puntos(dif,coor,letras,board):
     v=validez(dif,coor,letras)
     if v in (0,1):
@@ -207,7 +212,7 @@ def Jugar(settings, event):
           
     tablero, backT = cargarTablero(tablero, backT, datos)
     if(PrimeraJugada):
-        if(True or getrandbits(1)):
+        if(False or getrandbits(1)):
             sg.popup('Empiezas tu!')
             listLetra = []
             listCoord = []
@@ -267,6 +272,7 @@ def Jugar(settings, event):
                     
         else:
             sg.popup("Empieza la CPU")
+<<<<<<< HEAD
             #Esto esta para ver el tablero nada mas, la idea es sacarlo despues
             while True:
                 event, _ = tablero.read()
@@ -281,6 +287,10 @@ def Jugar(settings, event):
     
     listLetra = []
     listCoord = [] 
+=======
+            print(CPU.CPUmain(datos['atrilCPU'].get_atril_array()))
+
+>>>>>>> 6dc29a9a3566cef52b3c68e09a38d26cb0fd7dbc
     while True:
         event, _ = tablero.read()
         print(event)
