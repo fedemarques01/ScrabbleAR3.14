@@ -159,10 +159,6 @@ def modificarTablero(tablero,board,Atril,letras,coord,color):
 
     return tablero,board,Atril
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 6dc29a9a3566cef52b3c68e09a38d26cb0fd7dbc
 def puntos(dif,coor,letras,board):
     v=validez(dif,coor,letras)
     if v in (0,1):
@@ -272,7 +268,6 @@ def Jugar(settings, event):
                     
         else:
             sg.popup("Empieza la CPU")
-<<<<<<< HEAD
             #Esto esta para ver el tablero nada mas, la idea es sacarlo despues
             while True:
                 event, _ = tablero.read()
@@ -287,10 +282,6 @@ def Jugar(settings, event):
     
     listLetra = []
     listCoord = [] 
-=======
-            print(CPU.CPUmain(datos['atrilCPU'].get_atril_array()))
-
->>>>>>> 6dc29a9a3566cef52b3c68e09a38d26cb0fd7dbc
     while True:
         event, _ = tablero.read()
         print(event)
