@@ -33,7 +33,7 @@ def CPUahhh(l,*ind):
     for i in range(len(l)):
         ind.append(i)
         if CPUigual(*ind):
-            if(len(ind)>1):
+            if(len(ind)>2):
                 aux=CPUarmar(l,*ind)
                 CPUverificar(aux)
         if(len(ind)<len(l)):
@@ -41,7 +41,7 @@ def CPUahhh(l,*ind):
         ind.pop(-1)
     pass
 
-letras = ['a','n','d','a']
+letras = ['o','o','o','o','k','o','k']
 # print(letras[0:])
 #print(CPUigual(*letras))
 #print(CPUarmar(letras,1,4,5))
