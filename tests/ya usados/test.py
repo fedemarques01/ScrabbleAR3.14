@@ -5,7 +5,7 @@ def clasificar(palabra):
     print(tag(palabra, tokenize=True, encoding='utf-8'))
 
 
-palabra = 'eme'
+palabra = 'nd'
 print(suggest(palabra))
 
 if (not palabra in spelling) and( not palabra in lexicon):

@@ -1,34 +1,51 @@
+from validez import esValida
 
-def igual(*num):
+def CPUformarPalabra(letras):
+    s=''
+    for i in range(len(letras)):
+        s+=letras[i]
+    return s
+
+def CPUverificar(letras):
+    s=CPUformarPalabra(letras)
+    if(esValida(s,'NN','VB','JJ')):
+        print(s)
+        return True
+    else:
+        return False
+
+
+def CPUigual(*num):
     num = list(num)
     for i in range(len(num)-1):
         if num[i] in num[i+1:]:
             return False
     return True
 
-def armar(l,*ind):
+def CPUarmar(l,*ind):
     s=[]
     for i in range(len(ind)):
         s+=[l[ind[i]]]
     return s
 
-def ahhh(l,*ind):
+def CPUahhh(l,*ind):
     ind=list(ind)
     for i in range(len(l)):
         ind.append(i)
-        if igual(*ind):
-            aux=armar(l,*ind)
-            print(aux)
+        if CPUigual(*ind):
+            if(len(ind)>1):
+                aux=CPUarmar(l,*ind)
+                CPUverificar(aux)
         if(len(ind)<len(l)):
-            ahhh(l,*ind)
+            CPUahhh(l,*ind)
         ind.pop(-1)
     pass
 
-letras = ['a','b','c','d']
+letras = ['a','n','d','a']
 # print(letras[0:])
-#print(igual(*letras))
-#print(armar(letras,1,4,5))
-ahhh(letras)
+#print(CPUigual(*letras))
+#print(CPUarmar(letras,1,4,5))
+CPUahhh(letras)
 
 
 
