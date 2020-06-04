@@ -30,12 +30,6 @@ valoresLetras= {"A": 1,
                  "Z": 10,
                  "#": 0}  
 
-
-
-def get_valor(letra,valoresLetras):
-        
-    return valoresLetras[letra]
-
 class Bolsa:
 
      def __init__(self, nivel):
