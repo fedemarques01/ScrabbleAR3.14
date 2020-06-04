@@ -30,7 +30,6 @@ def esValida(palabra, *dif):
                 return False
         #print('existe'+ palabra[1])
         return True
-    p.popup(' nono existe'+ palabra[1])
     return False
 
 def formarPalabra(dic):
@@ -49,7 +48,7 @@ def validez(dif,coor,letras):
     #verifico si todas las letras estan en una fila/columna y las ordeno
     aux = tieneOrden(aux)
     if aux==[]:
-        p.popup('no posee orden')
+        p.popup('No posee orden')
         return 0
 
     #armo la palabra con las letras ordenadas
@@ -61,7 +60,7 @@ def validez(dif,coor,letras):
     if(esValida(palabra, *dif)):
         return 2
     else:
-        p.popup('no existe')
+        p.popup('No existe')
         return 1
 
 

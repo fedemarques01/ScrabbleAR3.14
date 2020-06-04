@@ -16,7 +16,7 @@ def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a gu
         resta+=i.get_valor()
     puntos-=resta
     Gp(dif,puntos)
-    sg.popup('perdiste mostro')
+    sg.popup('Perdiste mostro')
     exit()
 
 def crearTablero():
@@ -33,7 +33,7 @@ def crearTablero():
     colM = [
         [sg.B("Guardar", size=(13, 1), key="-save-",disabled=True)],
         [sg.B("Terminar", size=(13, 1), key="Exit")],
-        [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-")]],
+        [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-",background_color="#190901")]],
                   title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
         [sg.Text(text="Dificultad: ",size=(13,3) ,key="-dif-")],
         [sg.Text(text="Tu puntaje: 0",size=(13,3) ,key="-pJug-")],
@@ -41,7 +41,7 @@ def crearTablero():
     ]
 
     # col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra
-    colBoard = [[sg.Text("CPU:")]]
+    colBoard = [[sg.Text("CPU:"),sg.Text(font=("Times New Roman",17),text="                            S C R A B B L E A R ",justification="right")]]
 
     colBoard += [[sg.B("?",key=('-'+str(i)), size=(2, 1), pad=(0, 0), disabled=True)
                   for i in range(fichas)]]
@@ -217,7 +217,7 @@ def Jugar(settings, event):
                 elif event == (7,7) and aux != "":
                     listCoord.append(event)
                     listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
-                    tablero[event].update(listLetra[-1])
+                    tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
                     #print("por favor no te rompas")
                     tablero[aux].update(disabled=True)
                     aux = ""
@@ -225,16 +225,20 @@ def Jugar(settings, event):
                 elif len(event) == 2 and len(listLetra) >= 1 and aux != "":
                     listCoord.append(event)
                     listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
-                    tablero[event].update(listLetra[-1])
+                    tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
                     #print("por favor no te rompas")
                     tablero[aux].update(disabled=True)
                     aux = ""
 
-                elif event == "-fin-":
+                elif event == "-fin-" and listCoord != []:
                     #print("Algo")
                     punt = puntos(datos['pal'],listCoord,listLetra,backT)
-                    if(punt == 0):
-                        tablero["-comment-"].update("La palabra no es valida, ingrese las letras en orden una al lado de la otra e intente de nuevo".format())
+                    if(punt <= 1):
+                        if(punt == 1):
+                            tablero["-comment-"].update("La palabra no es valida, pruebe una palabra distinta".format())
+                        else:
+                            tablero["-comment-"].update("Las fichas se colocaron erroneamente en el tablero,pruebe colocarlas una al lado de otra o una debajo de otra".format())
+                                
                         #devolverfichas
                         listLetra = listCoord = []
                     else:
