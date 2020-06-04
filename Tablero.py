@@ -8,17 +8,16 @@ from GuardarPuntos import Guardar as Gp
 import IA as CPU
 
 def GuardarPartida(datos):
-    datos['bolsa'] = datos['bolsa'].convertirAstring()
     with open("Guardado.json","w") as arch:
         json.dump(arch, datos)
     exit()    
 
 def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a guardar.py
     for i in range(0,7):
-        tablero['-'+str(i)].update(atrilCPU[i].get_letra())           #FALTA actualizar los atriles de la cpu
+        tablero['-'+str(i)].update(atrilCPU[i])           #FALTA actualizar los atriles de la cpu
     resta=0
     for i in letras:
-        resta+=i.get_valor()
+        resta+=Letras.valoresLetras(i)
     puntos-=resta
     Gp(dif,puntos)
     sg.popup('Perdiste mostro')
@@ -144,18 +143,19 @@ def cargarTablero(tablero, board, datos):
 
 def ActualizarAtril(tablero,lista):
     for i in range(0,len(lista)):
-        tablero[str(i)].update(lista[i].get_letra(),disabled=False)
+        tablero[str(i)].update(lista[i],disabled=False)
 
     return tablero                    
 
-def modificarTablero(tablero,board,Atril,letras,coord,color):
+def modificarTablero(tablero,board,Atril,letras,coord,color,CPU=True):
     for i in range(0,len(coord)):
         tablero[coord[i]].update(button_color=("#FCC300",color),disabled_button_color=("#FCC300",color),disabled=True)
         board[coord[0][0]][coord[0][1]] = letras[i]
         Atril.usar_ficha(letras[i])
     Atril.rellenar_atril()
     #print(Atril.get_atril_string())
-    tablero = ActualizarAtril(tablero,Atril.get_atril_array())
+    if(not CPU)
+        tablero = ActualizarAtril(tablero,Atril.get_atril_array())
 
     return tablero,board,Atril
 
@@ -220,7 +220,8 @@ def Jugar(settings, event):
 
                 if event in (None,'Exit'):
                     if(event == 'Exit'):
-                        Terminar(datos['atrilJ'].get_atril_array(),datos['dif'],datos['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
+                        Terminar(datos['atrilJ'].get_atril_array(),
+                        datos['dif'],datos['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
                     break  
                 #me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
                 elif(event in claveA):
@@ -228,14 +229,14 @@ def Jugar(settings, event):
                 #si ya elegi una letra solo entro al elegir st ya que en la primer jugada la letra va obligatoriamente en esa posicion
                 elif event == (7,7) and aux != "":
                     listCoord.append(event) #guardo en la lista de coordenadas
-                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra()) #guardo en la lista de letras
+                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)]) #guardo en la lista de letras
                     tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))#deshabilito el boton y actualizo la casilla con la letra elegida
                     tablero[aux].update(disabled=True)#deshabilito la ficha del atril que el jugador coloco
                     aux = ""#dejo libre para seleccionar otra letra
                 #igual que el anterior, solo que evalua el que ya se haya ingresado una ficha en el st
                 elif len(event) == 2 and len(listLetra) >= 1 and aux != "":
                     listCoord.append(event)
-                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
+                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)])
                     tablero[event].update(listLetra[-1],disabled=True,disabled_button_color=("#FCC300","#E94E00"))
                     tablero[aux].update(disabled=True)
                     aux = ""
@@ -275,7 +276,7 @@ def Jugar(settings, event):
                 coor.append((7,7+i))
             print(coor,letras)
             puntos(datos['pal'],coor,letras,backT,False)
-            modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,'#208020')
+            modificarTablero(tablero,backT,datos['atrilCPU'],letras,coor,'#208020',False)
         if(event != None):    
             tablero['-save-'].update(disabled=False)    
     
