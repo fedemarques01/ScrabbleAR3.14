@@ -6,7 +6,7 @@ from validez import validez
 import Letras
 from guardarPuntos import Guardar as Gp
 
-sg.theme("Topanga")
+
 
 def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a guardar.py
     for i in range(0,7):
@@ -62,7 +62,7 @@ def crearTablero():
         [sg.Text("")],
         [sg.Text("Tus fichas:"), sg.Column(colPlayer),
          sg.B("Comprobar", key="-fin-", size=(10, 1)
-              ), sg.B("Pasar", key="-cambiar-", size=(10, 1)),
+              ), sg.B("Cambiar", key="-cambiar-", size=(10, 1)),
          sg.B("Deshacer", key="-back-", size=(10, 1))]
     ]
 
@@ -72,7 +72,7 @@ def crearTablero():
 # carga todos los botones del tablero, el ya guardado en caso de una partida guardada
 def ActualizarAtril(tablero,lista):
     for i in range(0,len(lista)):
-        tablero[str(i)].update(lista[i].get_letra())
+        tablero[str(i)].update(lista[i].get_letra(),disabled=False)
 
     return tablero    
 
@@ -143,6 +143,8 @@ def cargarTablero(tablero, board, datos):
 
 #FCC300
 def puntos(dif,coor,letras,board):
+    print(coor)
+    print(letras)
     if not validez(dif,coor,letras):
         return 0
 
@@ -164,7 +166,21 @@ def puntos(dif,coor,letras,board):
 
 # carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa)
 
+def modificarTablero(tablero,board,Atril,letras,coord):
+    for i in range(0,len(coord)):
+        tablero[coord[i]].update(button_color=("#FCC300","#E94E00"),disabled=True)
+        board[coord[0][0]][coord[0][1]] = letras[i]
+        Atril.usar_ficha(letras[i])
+    Atril.rellenar_atril()
+    print(Atril.get_atril_string())
+    tablero = ActualizarAtril(tablero,Atril.get_atril_array())
+
+    return tablero,board,Atril     
+
 def Jugar(settings, event):
+    claveA = []
+    for i in range(7):
+        claveA.append(str(i))    
     sg.theme("Topanga")
     tablero, backT = crearTablero()
     # creo un diccionario con los datos de la partida instanciando un tablero vacio por defecto
@@ -184,15 +200,49 @@ def Jugar(settings, event):
           
     tablero, backT = cargarTablero(tablero, backT, datos)
     if(PrimeraJugada):
-        if(getrandbits(1)):
+        if(True or getrandbits(1)):
             sg.popup('Empiezas tu!')
+            listLetra = []
+            listCoord = []
+            aux = ""
             while True:
                 event, _ = tablero.read()
                 print(event)
-                if event == (7,7):
+
+                if event == None:
+                    break  
+
+                elif(event in claveA):
+                    aux = event
+
+                elif event == (7,7) and aux != "":
+                    listCoord.append(event)
+                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
+                    tablero[event].update(listLetra[-1])
                     print("por favor no te rompas")
-                elif event ==None:
-                    break    
+                    tablero[aux].update(disabled=True)
+                    aux = ""
+
+                elif len(event) == 2 and len(listLetra) >= 1 and aux != "":
+                    listCoord.append(event)
+                    listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
+                    tablero[event].update(listLetra[-1])
+                    print("por favor no te rompas")
+                    tablero[aux].update(disabled=True)
+                    aux = ""
+
+                elif event == "-fin-":
+                    print("Algo")
+                    punt = puntos(datos['pal'],listCoord,listLetra,backT)
+                    if(punt == 0):
+                        tablero["-comment-"].update("La palabra no es valida, ingrese las letras en orden una al lado de la otra e intente de nuevo".format())
+                        #devolverfichas
+                    else:
+                        datos['puntosJ'] += punt
+                        tablero["-comment-"].update(("Sumaste " + str(punt) + " puntos").format())
+                        tablero,backT,datos['atrilJ'] = modificarTablero(tablero,backT,datos['atrilJ'],listLetra,listCoord)
+                        print(datos['puntosJ'])    
+
                 elif event == 'Exit':
                     Terminar(datos['atrilJ'].get_atril_array(),settings['dif'],settings['puntosJ'],tablero,datos['atrilCPU'].get_atril_array())
 
@@ -214,8 +264,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    letras = ['P','R','R','E','O']
-    dic={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[]}
+    dic={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':['NN','JJ','VB']}
     Jugar(dic,None)
     '''
     datos={"tablero": None};datos.update(dic)

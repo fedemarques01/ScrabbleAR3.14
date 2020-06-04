@@ -202,7 +202,12 @@ class Atril:
 
     def usar_ficha(self, ficha):
         #Quita la ficha del atril, para ser cambiada o jugada
-        self.atril.remove(ficha)
+        for i in self.atril:
+            if(i.get_letra() == ficha):
+                print(i.get_letra())
+                print (i)
+                self.atril.remove(i)
+                break
 
     def get_atril_espaciosVacios(self):
         #Cantidad de fichas que faltan en el atril
