@@ -23,6 +23,24 @@ def Terminar(letras,dif,puntos,tablero,atrilCPU): #resta los puntos y llama a gu
     sg.popup('Perdiste mostro')
     exit()
 
+def casillas(lentra,board):
+    coor=[]
+    while(lentra!=len(coor)):
+        coor=[]
+        n=randint(0,7)
+        if(getrandbits(1)):
+            for i in range(lentra):
+                coor[i].append(n,n+i)
+                if(board[coor[i][0]][coor[i][1]]):
+                    continue
+        else:
+            for i in range(lentra):
+                coor[i].append(n+1,n)
+                if(board[coor[i][0]][coor[i][1]]):
+                    continue
+
+    return coor
+    
 def crearTablero():
     col = fil = 15
     """
@@ -154,7 +172,7 @@ def modificarTablero(tablero,board,Atril,letras,coord,color,CPU=True):
         Atril.usar_ficha(letras[i])
     Atril.rellenar_atril()
     #print(Atril.get_atril_string())
-    if(not CPU)
+    if(not CPU):
         tablero = ActualizarAtril(tablero,Atril.get_atril_array())
 
     return tablero,board,Atril
