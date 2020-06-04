@@ -265,7 +265,7 @@ def Jugar(settings, event):
                     
         else:
             sg.popup("Empieza la CPU")
-            CPU.CPUmain(datos['atrilCPU'].get_atril_array())
+            print(CPU.CPUmain(datos['atrilCPU'].get_atril_array()))
 
     while True:
         event, _ = tablero.read()
