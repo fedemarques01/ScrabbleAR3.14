@@ -171,7 +171,7 @@ def modificarTablero(tablero,board,Atril,letras,coord):
         board[coord[0][0]][coord[0][1]] = letras[i]
         Atril.usar_ficha(letras[i])
     Atril.rellenar_atril()
-    print(Atril.get_atril_string())
+    #print(Atril.get_atril_string())
     tablero = ActualizarAtril(tablero,Atril.get_atril_array())
 
     return tablero,board,Atril     
@@ -218,7 +218,7 @@ def Jugar(settings, event):
                     listCoord.append(event)
                     listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
                     tablero[event].update(listLetra[-1])
-                    print("por favor no te rompas")
+                    #print("por favor no te rompas")
                     tablero[aux].update(disabled=True)
                     aux = ""
 
@@ -226,12 +226,12 @@ def Jugar(settings, event):
                     listCoord.append(event)
                     listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)].get_letra())
                     tablero[event].update(listLetra[-1])
-                    print("por favor no te rompas")
+                    #print("por favor no te rompas")
                     tablero[aux].update(disabled=True)
                     aux = ""
 
                 elif event == "-fin-":
-                    print("Algo")
+                    #print("Algo")
                     punt = puntos(datos['pal'],listCoord,listLetra,backT)
                     if(punt == 0):
                         tablero["-comment-"].update("La palabra no es valida, ingrese las letras en orden una al lado de la otra e intente de nuevo".format())
