@@ -57,10 +57,12 @@ def crearTablero():
         [sg.B("Terminar", size=(13, 1), key="Exit")],
         [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-",background_color="#190901")]],
                   title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
-        [sg.Text(text="Dificultad: ",size=(13,3) ,key="-dif-")],
-        [sg.Text(text="Tu puntaje: 0",size=(13,3) ,key="-pJug-")],
-        [sg.Text(text="Puntaje CPU: 0",size=(13,3) ,key="-pCPU-")]
-    ]
+        [sg.Frame(layout=[[sg.Text('00:00:00', size=(13, 1), font=('Helvetica', 10), justification='center', key='text',background_color="#190901")]],
+        title="Tiempo", title_color="Orange", background_color="Black")],          
+        [sg.Text(text="Dificultad: ",size=(13,1) ,key="-dif-")],
+        [sg.Text(text="Tu puntaje: 0",size=(13,1) ,key="-pJug-")],
+        [sg.Text(text="Puntaje CPU: 0",size=(13,1) ,key="-pCPU-")]
+        ]
 
     # col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra
     colBoard = [[sg.Text("CPU:"),sg.Text(font=("Times New Roman",17),text="                            S C R A B B L E A R ",justification="right")]]
@@ -154,7 +156,7 @@ def cargarTablero(tablero, board, datos):
                         "Lx2", button_color=("#D4D4D4", "#0F6F6C"))
                 else:
                     tablero[(i, j)].Update(tabla[i][j], button_color=(
-                        "#FCC300", "#E94E00"))  # color y valor de la letra que ya estaba
+                        "#FCFF41", "#3D2929"))  # color y valor de la letra que ya estaba
     
 
     return tablero, board
