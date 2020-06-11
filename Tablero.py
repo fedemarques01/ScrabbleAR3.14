@@ -238,7 +238,7 @@ def cambiar(tablero, atril):
         if event == None:
             exit()
         elif len(event) == 1:
-            letras.append(atril[int(event)])
+            letras.append(atril.get_atril_array()[int(event)])
             tablero[event].update(disabled=True)
             pos.append(event)
         elif event == '-back-':
@@ -247,19 +247,21 @@ def cambiar(tablero, atril):
             tablero[pos[-1]].update(disabled=False)
             letras.pop()
             pos.pop()
-        elif event == '-end-':
+        elif event == '-check-':
             break
     # si seleccioné letras entonces saco las fichas del atril y agarro nuevas, actualizando el atril visual
+    booleano = False
     if letras != []:
         for i in letras:
             atril.usar(i)
-        atril.cambiar_fichas(letras)
+        atril.cambiar_Fichas(letras)
         tablero = ActualizarAtril(tablero, atril.get_atril_array())
         print(atril.get_atril_array())
+        booleano = True
     tablero['-save-'].update(disabled=False)
     tablero['Exit'].update(disabled=False)
     tablero['-cambiar-'].update(disabled=False)
-    return tablero, atril, (letras == [])
+    return tablero, atril,booleano
 
 
 def Jugar(settings, event):
@@ -287,6 +289,7 @@ def Jugar(settings, event):
             datos['bolsa']), 'atrilCPU': Letras.Atril(datos['bolsa'])})
 
     tablero, backT = cargarTablero(tablero, backT, datos)
+    turnoPC = False
     if(PrimeraJugada):
         # determina quien comienza si el jugador o la pc
         turnoPC = not getrandbits(1)
@@ -314,7 +317,8 @@ def Jugar(settings, event):
                                           str(datos['puntosIA'])).format())
                 tablero, backT, datos['atrilCPU'] = modificarTablero(
                     tablero, backT, datos['atrilCPU'], letras, coor, False)
-                turnoPC = False    
+                turnoPC = False
+                break    
 
             event, _ = tablero.read()
             print(event)
@@ -381,8 +385,12 @@ def Jugar(settings, event):
                 tablero = devolverFichas(tablero, listCoord, backT)
                 tablero, datos['atrilJ'], changed = cambiar(
                     tablero, datos['atrilJ'])
+                tablero['-comment-'].update(
+                    'Ponga una ficha en ST para comenzar la partida'.format())
+                tablero['-save-'].update(disabled=True)    
                 if(changed):
                     turnoPC = True
+                    break
 
                 # le devuelvo las fichas al jugador si ya ingreso alguna
             elif event == "-back-" and listCoord != []:
@@ -455,7 +463,9 @@ def Jugar(settings, event):
         elif event == '-cambiar-':
                     tablero = devolverFichas(tablero, listCoord, backT)
                     tablero, datos['atrilJ'], changed = cambiar(
-                        tablero, datos['atrilJ'])    
+                        tablero, datos['atrilJ'])
+                    tablero['-comment-'].update(
+                    ''.format())    
                     if(changed):
                         turnoPC = True    
     tablero.close()
