@@ -198,11 +198,22 @@ class Atril:
         while self.get_atril_espaciosVacios() > 0 and self.bolsa.cantidad_Fichas() > 0:
             self.agregar_al_atril()
 
+    def cambiar_Fichas(self,lista):
+
+        self.rellenar_atril()
+        for i in range(0,len(lista)):
+            self.bolsa.agregar_bolsa(letra[i], 1)
+        random.shuffle(self.bolsa.bolsa)
+
+
+
+
 #Codigo de prueba, genera una bolsa segun la dificultad dada en el constructor, imprime lass disponibles y cantidad total des 
 # de la bolsa. 
 if __name__ == "__main__":
     bolsa1 = Bolsa('easy')
     fichasTotales = bolsa1.cantidad_Fichas()
+    
 
     for i in range(fichasTotales):
         print(bolsa1.bolsa[i])
@@ -230,27 +241,13 @@ if __name__ == "__main__":
     print('cantidad Fichas restantes')
     print(bolsa1.cantidad_Fichas())
 
+    print("Ingrese las fichas a jugar/cambiar")
     palabra = input()
 
     #Se verifcan las letras y se eliminan del atril del jugador
-    jugada = []
+    lista_cambiar = []
     for letra in palabra:
         letra= letra.upper()
-        encontre = False
-        i = 0
-        arreglo = atril1.get_atril_array()
-        while (encontre == False):
-            if letra == arreglo[i].letra:
-                encontre = True
-                atril1.usar(arreglo[i])
-            else:
-                i=i+1
-
-    palabra = input()
-
-    #Se verifcan las letras y se eliminan del atril del jugador
-    jugada = []
-    for letra in palabra:
         encontre = False
         i = 0
         arreglo = atril1.get_atril_array()
@@ -258,9 +255,13 @@ if __name__ == "__main__":
             if letra == arreglo[i]:
                 encontre = True
                 atril1.usar(arreglo[i])
+                lista_cambiar.append(arreglo[i])
             else:
                 i=i+1
 
+    
+
+    
     #Atril del jugador luego de la jugada 
     atril_jugador =  atril1.get_atril_string()
     print('Atril del jugador luego de jugar')
@@ -268,8 +269,8 @@ if __name__ == "__main__":
 
 
     #Se recargans y se muestra el atril nuevo y 
-    # la cantidad des en la bolsa luego de todo el proceso
-    atril1.rellenar_atril()
+    # la cantidad de en la bolsa luego de todo el proceso
+    atril1.cambiar_Fichas(lista_cambiar)
 
     atril_jugador =  atril1.get_atril_string()
     print('Atril del jugador luego de recargar')
