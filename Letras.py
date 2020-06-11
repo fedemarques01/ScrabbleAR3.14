@@ -36,11 +36,12 @@ class Bolsa:
        
          self.bolsa = []
          self.dificultad = ['easy', 'medium', 'hard']
-         self.initialize_bolsa(nivel)
+         if nivel != '':
+            self.initialize_bolsa(nivel)
 
      def agregar_bolsa(self, letra, cantidad):
          mayus = letra.upper()
-         for i in range(cantidad):
+         for _ in range(cantidad):
              self.bolsa.append(mayus)
 
      def initialize_bolsa(self,nivel):
@@ -201,8 +202,8 @@ class Atril:
     def cambiar_Fichas(self,lista):
 
         self.rellenar_atril()
-        for i in range(0,len(lista)):
-            self.bolsa.agregar_bolsa(letra[i], 1)
+        for letra in lista:
+            self.bolsa.agregar_bolsa(letra, 1)
         random.shuffle(self.bolsa.bolsa)
 
 
