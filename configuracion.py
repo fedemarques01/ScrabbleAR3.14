@@ -20,7 +20,7 @@ def crearPantalla(config):
 
     return window
 
-def laybag(bag):
+def laybag(bag):#en los "default_values" deberian ir los datos de la bolsa por defecto
     global abc
     global s
     print(bag)
