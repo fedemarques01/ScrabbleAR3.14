@@ -28,22 +28,24 @@ def Terminar(letras, dif, puntos, tablero, atrilCPU):  # resta los puntos y llam
     exit()
 
 
-def casillas(lentra, board):
+def casillasCPU(lentra, board):
     coor = []
     while(lentra != len(coor)):
         coor = []
-        n = randint(0, 7)
+        n = randint(0, 15-lentra)
         if(getrandbits(1)):
             for i in range(lentra):
-                coor[i].append(n, n+i)
-                if(board[coor[i][0]][coor[i][1]]):
+                #print(coor,i)
+                coor.append((n, n+i))
+                if(not board[coor[i][0]][coor[i][1]] in ("Lx2","Lx3","Px2","Px3","")):
                     continue
         else:
             for i in range(lentra):
-                coor[i].append(n+1, n)
-                if(board[coor[i][0]][coor[i][1]]):
+                #print(coor,i)
+                coor.append((n+i, n))
+                if(not board[coor[i][0]][coor[i][1]] in ("Lx2","Lx3","Px2","Px3","")):
                     continue
-
+    #print('da',coor)
     return coor
 
 
@@ -317,14 +319,14 @@ def Jugar(settings, event):
         inicio = int(time.time())#tiempo comienzo 
         current_time = datos['time']*60 + 1
         while True:
-            if(turnoPC) and not clock:
+            if(turnoPC) and clock:
                 tablero["-comment-"].update(("La CPU esta pensando").format())
                 letras = CPU.CPUmain(
                     datos['atrilCPU'].get_atril_array(), datos['pal'])
                 coor = []
                 for i in range(len(letras)):
                     coor.append((7, 7+i))
-                print(coor, letras)
+                #print(coor, letras)
                 punt = puntos(datos['pal'], coor, letras, backT, False)
                 datos['puntosIA'] += punt
                 tablero["-comment-"].update(("La CPU suma " +
@@ -426,10 +428,30 @@ def Jugar(settings, event):
         clock = actualizarTimer(tablero,current_time,inicio)
         #solucion trucha para que el usuario vea el 00:00
 
-        if(turnoPC) and not clock:
-            #juega la cpu
-            #Basa aca va tu codigo
-            turnoPC = False
+        if(turnoPC) and clock:
+            tablero["-comment-"].update(("La CPU esta pensando").format())
+            letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+            coor = []
+            while(len(letras)<1):
+                #cambiameeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
+                letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+                break
+            print('\n',letras)
+
+            #alpha para darle las coor a la palabra
+            coor= casillasCPU(len(letras), backT)
+            print(coor,'\n')
+
+            #calcular puntos en base a las coordenadas y las letras
+            punt = puntos(datos['pal'], coor, letras, backT, False)
+            datos['puntosIA'] += punt
+            #CPU-puntos++
+            tablero["-comment-"].update(("La CPU suma " + str(punt) + " puntos").format())
+            tablero['-pCPU-'].Update(('Puntos CPU: ' + str(datos['puntosIA'])).format())
+            #modificarTablero.. hace eso.. modifica.. el tablero..
+            backT, datos['atrilCPU'] = modificarTablero(tablero, backT, datos['atrilCPU'], 
+            letras, coor, False)
+            turnoPC = False #pasa el turno al usuario
         event, _ = tablero.read(timeout=250)
 
         if event in (None, 'Exit') or not clock:
@@ -485,10 +507,8 @@ def Jugar(settings, event):
             GuardarPartida(datos)
         elif event == '-cambiar-':
             DevolverFichas(tablero, listCoord, backT)
-            datos['atrilJ'], changed, clock = cambiar(
-                tablero, datos['atrilJ'],current_time,inicio)
-            tablero['-comment-'].update(
-                ''.format())    
+            datos['atrilJ'], changed, clock = cambiar(tablero, datos['atrilJ'],current_time,inicio)
+            tablero['-comment-'].update(''.format())    
             if(changed):
                 turnoPC = True
 
