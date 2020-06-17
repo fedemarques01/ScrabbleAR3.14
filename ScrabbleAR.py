@@ -43,7 +43,7 @@ def setDif(dificultad):
 
 
 def Menu():
-    config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':'10','pal':[],'bolsa':[]}
+    config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':[]}
     menu = Crearmenu()
     while True:
         menu.un_hide()

@@ -110,8 +110,10 @@ def cargarTablero(tablero, board, datos):
     tabla = datos['tablero']
     tablero['-pJug-'].Update(('Tu puntaje: ' + str(datos['puntosJ'])).format())
     tablero['-pCPU-'].Update(('Puntaje CPU: ' +
-                              str(datos['puntosIA'])).format())
+                              str(datos['puntosIA'])).format())                          
     tablero['-dif-'].Update(('Dificultad: ' + datos['dif']).format())
+    if(datos['cambios'] == 0):
+        tablero['-cambiar-'].update("Pasar")
     ActualizarAtril(tablero, datos['atrilJ'].get_atril_array())
     if(tabla == None):
 
@@ -292,7 +294,7 @@ def Jugar(settings, event):
         PrimeraJugada = False
     else:
         # sino datos tendra los settings que elijio el jugador o los por defecto
-        datos = {"tablero": None}
+        datos = {"tablero": None, 'cambios': 3}
         if settings['bolsa'] == []:
             settings['bolsa'] = Letras.Bolsa(settings['dif']) 
         datos.update(settings)
@@ -400,12 +402,18 @@ def Jugar(settings, event):
                 # el jugador elije las fichas a cambiar
             elif event == '-cambiar-':
                 DevolverFichas(tablero, listCoord, backT)
-                datos['atrilJ'], changed, clock = cambiar(
-                    tablero, datos['atrilJ'] ,current_time ,inicio)
+                if(datos['cambios'] > 0):
+                    datos['atrilJ'], changed, clock = cambiar(
+                        tablero, datos['atrilJ'] ,current_time ,inicio)
+                    datos['cambios'] -= 1
+                    if(datos['cambios'] == 0):
+                        tablero['-cambiar-'].update("Pasar")    
                 tablero['-comment-'].update(
                     'Ponga una ficha en ST para comenzar la partida'.format())
-                tablero['-save-'].update(disabled=True)    
-                if(changed):
+                tablero['-save-'].update(disabled=True)
+                listLetra = []
+                listCoord = []    
+                if(changed) or datos['cambios'] == 0:
                     turnoPC = True
                     break
 
@@ -507,9 +515,15 @@ def Jugar(settings, event):
             GuardarPartida(datos)
         elif event == '-cambiar-':
             DevolverFichas(tablero, listCoord, backT)
-            datos['atrilJ'], changed, clock = cambiar(tablero, datos['atrilJ'],current_time,inicio)
-            tablero['-comment-'].update(''.format())    
-            if(changed):
+            if(datos['cambios'] > 0):
+                datos['atrilJ'], changed, clock = cambiar(tablero, datos['atrilJ'],current_time,inicio)
+                datos['cambios'] -= 1
+                if(datos['cambios'] == 0):
+                    tablero['-cambiar-'].update('Pasar')
+            tablero['-comment-'].update(''.format())
+            listLetra = []
+            listCoord = []    
+            if(changed) or datos['cambios'] == 0:
                 turnoPC = True
 
 
