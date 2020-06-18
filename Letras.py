@@ -32,11 +32,13 @@ valoresLetras= {"A": 1,
 
 class Bolsa:
 
-     def __init__(self, nivel):
+     def __init__(self, nivel=None):
        
          self.bolsa = []
          self.dificultad = ['easy', 'medium', 'hard']
-         if nivel != '':
+         if type(nivel) is list:
+            self.cargar_bolsa(nivel)
+         elif type(nivel) is str:    
             self.initialize_bolsa(nivel)
 
      def agregar_bolsa(self, letra, cantidad):
@@ -151,28 +153,34 @@ class Bolsa:
          #Retorna la cantidad des restantes
          return len(self.bolsa)
 
+     def get_bolsa(self):
+         #retorna la bolsa
+         return self.bolsa
+     def cargar_bolsa(self,lista):
+         #crea la bolsa a partir de una lista de letras
+         self.bolsa = lista        
+
 class Atril:
     """
     
     """
-    def __init__(self, bolsa):
+    def __init__(self, bolsa,letras=[]):
        
         self.atril = []
         self.bolsa = bolsa
-        self.initialize()
-
-
+        if letras == []:
+            self.initialize()
+        else:
+            self.cargar_atril(letras,bolsa)    
 
     def initialize(self):
         
         for _ in range(7):
             self.agregar_al_atril()
 
-
     def agregar_al_atril(self):
        
         self.atril.append(self.bolsa.tomar_bolsa())
-
 
     def get_atril_string(self):
         #Devuelve el atril en forma de string
@@ -206,7 +214,10 @@ class Atril:
             self.bolsa.agregar_bolsa(letra, 1)
         random.shuffle(self.bolsa.bolsa)
 
-
+    def cargar_atril(self,lista,bolsa):
+        #crea un atril a partir de una lista de letras y una bolsa 
+        self.atril = lista
+        self.bolsa = bolsa    
 
 
 #Codigo de prueba, genera una bolsa segun la dificultad dada en el constructor, imprime lass disponibles y cantidad total des 

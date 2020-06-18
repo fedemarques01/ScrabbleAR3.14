@@ -1,5 +1,6 @@
 from pattern.text.es import parse, split, lexicon, spelling
 from random import randint
+from os import remove
 import PySimpleGUI as sg
 import os.path
 import json
@@ -50,8 +51,14 @@ def Menu():
         event, _ = menu.read()
         print(event)
         if event in ("inicio", "continue"):
-            if(event == "continue"):
-                print("")
+            if(event == 'inicio' and os.path.isfile('Guardado.json')):
+                event2, _ = sg.Window('ADVERTENCIA',
+                  [[sg.T('Si inicias una nueva partida se borrara la guardada, seguro que quieres continuar?')],
+                  [sg.B('OK'), sg.B('Cancel') ]]).read(close=True)
+                if event2 == 'OK':
+                    remove('Guardado.json')
+                else:
+                    continue    
             menu.close()
             config['pal']=setDif(config['dif'])
             Tablero.Jugar(config,event)

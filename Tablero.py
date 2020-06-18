@@ -10,8 +10,11 @@ import IA as CPU
 
 
 def GuardarPartida(datos):
+    datos['bolsa'] = datos['bolsa'].get_bolsa()
+    datos['atrilJ'] = datos['atrilJ'].get_atril_array()
+    datos['atrilCPU'] = datos['atrilCPU'].get_atril_array()
     with open("Guardado.json", "w") as arch:
-        json.dump(arch, datos)
+        json.dump(datos, arch)
     exit()
 
 
@@ -119,7 +122,7 @@ def cargarTablero(tablero, board, datos):
         triple_letter = [(1, 5), (1, 9), (5, 1), (5, 5), (5, 9),
                          (5, 13), (9, 1), (9, 5), (9, 9), (9, 13), (13, 5), (13, 9)]
         double_letter = [(0, 3), (0, 11), (2, 6), (2, 8), (3, 0), (3, 7), (3, 14), (6, 2), (6, 6), (6, 8), (6, 12), (
-            7, 3), (7, 11), (8, 2), (8, 6), (8, 8), (8, 12), (11, 0), (11, 7), (11, 14), (12, 6), (12, 9), (14, 3), (14, 11)]
+            7, 3), (7, 11), (8, 2), (8, 6), (8, 8), (8, 12), (11, 0), (11, 7), (11, 14), (12, 6), (12, 8), (14, 3), (14, 11)]
         double_word = [(1, 1), (2, 2), (3, 3), (4, 4), (1, 13), (2, 12), (3, 11), (4, 10),
                        (13, 1), (12, 2), (11, 3), (10, 4), (10, 10), (11, 11), (12, 12), (13, 13)]
         triple_word = [(0, 0), (0, 7), (0, 14), (7, 0),
@@ -167,8 +170,9 @@ def cargarTablero(tablero, board, datos):
                     tablero[(i, j)].Update(
                         "Lx2", button_color=("#D4D4D4", "#0F6F6C"))
                 else:
-                    tablero[(i, j)].Update(tabla[i][j], button_color=(
-                        "#FCFF41", "#3D2929"))  # color y valor de la letra que ya estaba
+                    tablero[(i, j)].Update(tabla[i][j],button_color=(
+                        "#FCFF41", "#3D2929"),disabled_button_color=(
+                        "#FCFF41", "#3D2929"),disabled=True)  # color y valor de la letra que ya estaba
 
     return board
 
@@ -256,9 +260,9 @@ def cambiar(tablero, atril,current_time,inicio):
         for i in letras:
             atril.usar(i)
         atril.cambiar_Fichas(letras)
-        ActualizarAtril(tablero, atril.get_atril_array())
         print(atril.get_atril_array())
         booleano = True
+    ActualizarAtril(tablero, atril.get_atril_array())    
     tablero['-save-'].update(disabled=False)
     tablero['Exit'].update(disabled=False)
     tablero['-cambiar-'].update(disabled=False)
@@ -277,6 +281,7 @@ def actualizarTimer(tablero,current_time,inicio):
     tablero['-timer-'].update('{:02d}:{:02d}'.format(mins, secs))
     return boolean
 
+
 def Jugar(settings, event):
     claveA = []
     for i in range(7):
@@ -290,6 +295,11 @@ def Jugar(settings, event):
         # si existe una partida guardada datos tendra el backT de la partida anterior en tablero, y los settings de la partida anterior
         with open("Guardado.json", "r") as arch:
             datos = json.load(arch)
+        datos['bolsa'] = Letras.Bolsa(datos['bolsa'])
+        datos['atrilJ'] = Letras.Atril(datos['bolsa'])
+        datos['atrilCPU'] = Letras.Atril(datos['bolsa'])
+        tablero['-save-'].update(disabled=True)
+        tablero['-comment-'].update('Bienvenido de nuevo!'.format())
         PrimeraJugada = False
     else:
         # sino datos tendra los settings que elijio el jugador o los por defecto
@@ -320,9 +330,17 @@ def Jugar(settings, event):
         inicio = int(time.time())#tiempo comienzo 
         current_time = datos['time']*60 + 1
         while True:
+            time.sleep(2)
+            if(datos['bolsa'].cantidad_Fichas() == 0):
+                tablero["-comment-"].update(
+                            "La bolsa no tiene mas fichas".format())
+                Terminar(datos['atrilJ'].get_atril_array(),
+                             datos['dif'], datos['puntosJ'], tablero, datos['atrilCPU'].get_atril_array())                
             if(turnoPC) and clock:
                 tablero["-comment-"].update(("La CPU esta pensando").format())
+                
                 letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+                time.sleep(2)
                 if(len(letras)<1):
                     for i in datos['atrilCPU'].get_atril_array():
                         datos['atrilCPU'].usar(i)
@@ -346,6 +364,7 @@ def Jugar(settings, event):
                 backT, datos['atrilCPU'] = modificarTablero(
                     tablero, backT, datos['atrilCPU'], letras, coor, False)
                 turnoPC = False
+                event = ''
                 break
             clock = actualizarTimer(tablero,current_time,inicio)    
             event, _ = tablero.read(timeout=250)
@@ -371,7 +390,7 @@ def Jugar(settings, event):
                 tablero[aux].update(disabled=True)
                 aux = ""  # dejo libre para seleccionar otra letra
             # igual que el anterior, solo que evalua el que ya se haya ingresado una ficha en el st
-            elif len(event) == 2 and len(listLetra) >= 1 and aux != "":
+            elif type(event) is tuple and len(listLetra) >= 1 and aux != "":
                 listCoord.append(event)
                 listLetra.append(
                     datos['atrilJ'].get_atril_array()[int(aux)])
@@ -422,8 +441,7 @@ def Jugar(settings, event):
                 listLetra = []
                 listCoord = []    
                 if(changed) or datos['cambios'] == 0:
-                    turnoPC = True
-                    break
+                    turnoPC = True               
 
                 # le devuelvo las fichas al jugador si ya ingreso alguna
             elif event == "-back-" and listCoord != []:
@@ -435,23 +453,31 @@ def Jugar(settings, event):
         if(event != None):
             tablero['-save-'].update(disabled=False)
     if not PrimeraJugada:
-        inicio = time.time()
+        inicio = int(time.time())
         current_time = datos['time']
     listLetra = []
     listCoord = []
 
     while True:
+        time.sleep(2)
         clock = actualizarTimer(tablero,current_time,inicio)
         #solucion trucha para que el usuario vea el 00:00
-
+        if(datos['bolsa'].cantidad_Fichas() == 0):
+            tablero["-comment-"].update(
+                            "La bolsa no tiene mas fichas".format())
+            Terminar(datos['atrilJ'].get_atril_array(),
+                        datos['dif'], datos['puntosJ'], tablero, datos['atrilCPU'].get_atril_array())
         if(turnoPC) and clock:
             tablero["-comment-"].update(("La CPU esta pensando").format())
+            
             letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
             coor = []
+            time.sleep(2)
             if(len(letras)<1):
                 for i in datos['atrilCPU'].get_atril_array():
                         datos['atrilCPU'].usar(i)
                 datos['atrilCPU'].cambiar_Fichas(letras)
+                tablero["-comment-"].update(("La CPU ha decidido pasar su turno").format())
                 turnoPC = False
                 continue
             print('\n',letras)
@@ -480,7 +506,7 @@ def Jugar(settings, event):
         # me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
         elif(event in claveA):
             aux = event
-        elif len(event) == 2 and aux != "":
+        elif type(event) is tuple and aux != "":
             listCoord.append(event)
             listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)])
             tablero[event].update(
@@ -509,6 +535,7 @@ def Jugar(settings, event):
                     tablero, backT, datos['atrilJ'], listLetra, listCoord, "#E94E00")
                 print(datos['puntosJ'])
                 turnoPC = True
+                
             listLetra = []
             listCoord = []
         # le devuelvo las fichas al jugador si ya ingreso alguna
