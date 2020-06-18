@@ -46,6 +46,9 @@ class Bolsa:
          for _ in range(cantidad):
              self.bolsa.append(mayus)
 
+     def mezclar_bolsa(self):
+         random.shuffle(self.bolsa)
+
      def initialize_bolsa(self,nivel):
                
          if nivel == self.dificultad[0]:        
@@ -143,7 +146,7 @@ class Bolsa:
              self.agregar_bolsa("Y", 1)
              self.agregar_bolsa("Z", 1)
              #self.agregar_bolsa("#", 2)
-         random.shuffle(self.bolsa)
+         self.mezclar_bolsa()
 
      def tomar_bolsa(self):
          #Toma la primera de la bolsa y la elimina de la misma. Se usa para cambiars o la recarga del atril (con un ciclo)

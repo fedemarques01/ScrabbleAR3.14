@@ -1,6 +1,6 @@
 import PySimpleGUI as ps
 from Letras import Bolsa
-from random import randint
+from random import randint, random
 
 abc=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Z','Y']
 s=[]
@@ -31,7 +31,7 @@ def laybag(bag):#en los "default_values" deberian ir los datos de la bolsa por d
             laybag += [[ps.InputCombo(s,default_value=(randint(1,10)),size=(3,0),key=(abc[i+fila]))for i in range(len(abc)//5)]]
     except IndexError:
         laybag += [[ps.T(i,size=(4,0))for i in abc[-2:]]]
-        laybag += [[ps.InputCombo(s,default_value=(randint(1,10)),size=(1,0),key=(i))for i in abc[-2:]]]
+        laybag += [[ps.InputCombo(s,default_value=(randint(1,10)),size=(3,0),key=(i))for i in abc[-2:]]]
     finally:
         laybag += [[ps.B('Guardar',key=('-save-')),ps.B('Volver',key=('Exit'))]]
     winbag = ps.Window("Modificar Bolsa", laybag)
@@ -44,6 +44,7 @@ def dific(dific,time):
     return None,time
 
 def modBolsa(bag):
+    print(bag.get_bolsa())
     winbag =laybag(bag)
     while True:
         e,v = winbag.read()
@@ -56,6 +57,7 @@ def modBolsa(bag):
             for i in range(len(k)):
                 #print(k[i][0],k[i][1])
                 bag.agregar_bolsa(k[i][0],int(k[i][1]))
+            bag.mezclar_bolsa()
     winbag.Close()
     return bag
 
@@ -77,6 +79,8 @@ def ajustes(config):
                 config['dif']=d
                 config['time']=time
         elif eve == '-bag-':
+            if(config['bolsa']==[]):
+                config['bolsa']=Bolsa(config['dif'])
             config['bolsa']= modBolsa(config['bolsa'])
         elif eve in (None, "-exit"):
             break
@@ -84,7 +88,8 @@ def ajustes(config):
     return config
 
 if __name__ == "__main__":
-    baga=Bolsa('medium')
+    #baga=Bolsa('medium')
+    baga=[]
     config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':baga}
     ajustes(config)
     print(config['bolsa'])
