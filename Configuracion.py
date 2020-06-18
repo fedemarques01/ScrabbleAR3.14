@@ -1,9 +1,10 @@
 import PySimpleGUI as ps
 from Letras import Bolsa
+from random import randint
 
-abc=['a','b','c','d','e','f','g','h','i','j','k','l','m','n','ñ','o','p','q','r','s','t','u','v','w','x','y','z']
+abc=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Z','Y']
 s=[]
-for i in range(1,61):
+for i in range(1,21):
     s.append(str(i))
 
 def crearPantalla(config):
@@ -15,7 +16,6 @@ def crearPantalla(config):
         [ps.Button("modificar la bolsa (no lo hagas)", key=('-bag-'))],
         [ps.B("Guardar", size=(17, 1), key="-save"),ps.Exit("Volver", size=(10, 1), key="-exit")]
     ]
-
     window = ps.Window("ScrabbleAR - Menu", layoutM)
 
     return window
@@ -28,10 +28,10 @@ def laybag(bag):#en los "default_values" deberian ir los datos de la bolsa por d
     try:
         for fila in range(0,len(abc),5):
             laybag += [[ps.Text(abc[i+fila],size=(4,0))for i in range(len(abc)//5)]]
-            laybag += [[ps.InputCombo(s,default_value=(5),size=(3,0))for i in range(len(abc)//5)]]
+            laybag += [[ps.InputCombo(s,default_value=(randint(1,10)),size=(3,0),key=(abc[i+fila]))for i in range(len(abc)//5)]]
     except IndexError:
         laybag += [[ps.T(i,size=(4,0))for i in abc[-2:]]]
-        laybag += [[ps.InputCombo(s,default_value=(5),size=(3,0))for i in abc[-2:]]]
+        laybag += [[ps.InputCombo(s,default_value=(randint(1,10)),size=(1,0),key=(i))for i in abc[-2:]]]
     finally:
         laybag += [[ps.B('Guardar',key=('-save-')),ps.B('Volver',key=('Exit'))]]
     winbag = ps.Window("Modificar Bolsa", laybag)
@@ -47,11 +47,15 @@ def modBolsa(bag):
     winbag =laybag(bag)
     while True:
         e,v = winbag.read()
-        print(e)
         if e in ('Exit',None):
             break
         elif e =='-save-':
             print('no quiero hacer esto')
+            bag = Bolsa()
+            k=list(v.items())
+            for i in range(len(k)):
+                #print(k[i][0],k[i][1])
+                bag.agregar_bolsa(k[i][0],int(k[i][1]))
     winbag.Close()
     return bag
 
@@ -80,4 +84,8 @@ def ajustes(config):
     return config
 
 if __name__ == "__main__":
-    ajustes(config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':[]})
+    baga=Bolsa('medium')
+    config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':baga}
+    ajustes(config)
+    print(config['bolsa'])
+
