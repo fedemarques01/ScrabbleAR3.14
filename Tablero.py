@@ -38,13 +38,13 @@ def casillasCPU(lentra, board):
                 #print(coor,i)
                 coor.append((n, n+i))
                 if(not board[coor[i][0]][coor[i][1]] in ("Lx2","Lx3","Px2","Px3","")):
-                    continue
+                    break
         else:
             for i in range(lentra):
                 #print(coor,i)
                 coor.append((n+i, n))
                 if(not board[coor[i][0]][coor[i][1]] in ("Lx2","Lx3","Px2","Px3","")):
-                    continue
+                    break
     #print('da',coor)
     return coor
 
@@ -181,7 +181,7 @@ def ActualizarAtril(tablero, lista):
 
 def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
     for i in range(0, len(coord)):
-        board[coord[0][0]][coord[0][1]] = letras[i]
+        board[coord[i][0]][coord[i][1]] = letras[i]
         if(Jug):
             tablero[coord[i]].update(button_color=(
                 "#FCC300", "#E94E00"), disabled_button_color=("#FCC300", "#E94E00"), disabled=True)
