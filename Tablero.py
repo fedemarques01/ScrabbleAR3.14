@@ -18,7 +18,7 @@ def GuardarPartida(datos):
     exit()
 
 
-def Terminar(letras, dif, puntos, tablero, atrilCPU):  # resta los puntos y llama a guardar.py
+def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):  # resta los puntos y llama a guardar.py
     for i in range(0, 7):
         tablero['-'+str(i)].update(atrilCPU[i])
     resta = 0
@@ -26,7 +26,10 @@ def Terminar(letras, dif, puntos, tablero, atrilCPU):  # resta los puntos y llam
         resta += Letras.valoresLetras[i]
     puntos -= resta
     Gp(dif, puntos)
-    sg.popup('Perdiste mostro')
+    if(puntia>=puntos):
+        sg.popup('Perdiste mostro')
+    else:
+        sg.popup('perdiste menos mostro')
     exit()
 
 
@@ -334,7 +337,7 @@ def Jugar(settings, event):
                 tablero["-comment-"].update(
                             "La bolsa no tiene mas fichas".format())
                 Terminar(datos['atrilJ'].get_atril_array(),
-                             datos['dif'], datos['puntosJ'], tablero, datos['atrilCPU'].get_atril_array())                
+                             datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())                
             if(turnoPC) and clock:
                 tablero["-comment-"].update(("La CPU esta pensando").format())
                 
@@ -371,7 +374,7 @@ def Jugar(settings, event):
             if event in (None, 'Exit') or not clock:
                 if(event == 'Exit') or not clock:
                     Terminar(datos['atrilJ'].get_atril_array(),
-                             datos['dif'], datos['puntosJ'], tablero, datos['atrilCPU'].get_atril_array())
+                             datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
                 break
             # me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
             elif(event in claveA):
@@ -465,7 +468,7 @@ def Jugar(settings, event):
             tablero["-comment-"].update(
                             "La bolsa no tiene mas fichas".format())
             Terminar(datos['atrilJ'].get_atril_array(),
-                        datos['dif'], datos['puntosJ'], tablero, datos['atrilCPU'].get_atril_array())
+                        datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
         if(turnoPC) and clock:
             tablero["-comment-"].update(("La CPU esta pensando").format())
             
@@ -500,7 +503,7 @@ def Jugar(settings, event):
         if event in (None, 'Exit') or not clock:
             if(event == 'Exit') or not clock:
                 Terminar(datos['atrilJ'].get_atril_array(
-                ), datos['dif'], datos['puntosJ'], tablero, datos['atrilCPU'].get_atril_array())
+                ), datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
             break
         # me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
         elif(event in claveA):
