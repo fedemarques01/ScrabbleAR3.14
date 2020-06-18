@@ -330,7 +330,6 @@ def Jugar(settings, event):
         inicio = int(time.time())#tiempo comienzo 
         current_time = datos['time']*60 + 1
         while True:
-            time.sleep(2)
             if(datos['bolsa'].cantidad_Fichas() == 0):
                 tablero["-comment-"].update(
                             "La bolsa no tiene mas fichas".format())
@@ -340,7 +339,7 @@ def Jugar(settings, event):
                 tablero["-comment-"].update(("La CPU esta pensando").format())
                 
                 letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
-                time.sleep(2)
+                
                 if(len(letras)<1):
                     for i in datos['atrilCPU'].get_atril_array():
                         datos['atrilCPU'].usar(i)
@@ -459,7 +458,7 @@ def Jugar(settings, event):
     listCoord = []
 
     while True:
-        time.sleep(2)
+        
         clock = actualizarTimer(tablero,current_time,inicio)
         #solucion trucha para que el usuario vea el 00:00
         if(datos['bolsa'].cantidad_Fichas() == 0):
@@ -472,7 +471,7 @@ def Jugar(settings, event):
             
             letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
             coor = []
-            time.sleep(2)
+            
             if(len(letras)<1):
                 for i in datos['atrilCPU'].get_atril_array():
                         datos['atrilCPU'].usar(i)
