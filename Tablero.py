@@ -325,8 +325,11 @@ def Jugar(settings, event):
                 tablero["-comment-"].update(("La CPU esta pensando").format())
                 letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
                 if(len(letras)<1):
-                    #cambiar las letras <--------------------------------------------------------
-                    break
+                    for i in datos['atrilCPU'].get_atril_array():
+                        datos['atrilCPU'].usar(i)
+                    datos['atrilCPU'].cambiar_Fichas(letras)
+                    turnoPC = False
+                    continue
                 coor = []
                 if(getrandbits(1)):
                     for i in range(len(letras)):
@@ -447,8 +450,11 @@ def Jugar(settings, event):
             letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
             coor = []
             if(len(letras)<1):
-                    #cambiar las letras <--------------------------------------------------------
-                    break
+                for i in datos['atrilCPU'].get_atril_array():
+                        datos['atrilCPU'].usar(i)
+                datos['atrilCPU'].cambiar_Fichas(letras)
+                turnoPC = False
+                continue
             print('\n',letras)
 
             #alpha para darle las coor a la palabra
