@@ -323,11 +323,17 @@ def Jugar(settings, event):
         while True:
             if(turnoPC) and clock:
                 tablero["-comment-"].update(("La CPU esta pensando").format())
-                letras = CPU.CPUmain(
-                    datos['atrilCPU'].get_atril_array(), datos['pal'])
+                letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+                if(len(letras)<1):
+                    #cambiar las letras <--------------------------------------------------------
+                    break
                 coor = []
-                for i in range(len(letras)):
-                    coor.append((7, 7+i))
+                if(getrandbits(1)):
+                    for i in range(len(letras)):
+                        coor.append((7, 7+i))
+                else:
+                    for i in range(len(letras)):
+                        coor.append((7+i, 7))
                 #print(coor, letras)
                 punt = puntos(datos['pal'], coor, letras, backT, False)
                 datos['puntosIA'] += punt
@@ -440,10 +446,9 @@ def Jugar(settings, event):
             tablero["-comment-"].update(("La CPU esta pensando").format())
             letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
             coor = []
-            while(len(letras)<1):
-                #cambiameeeeeeeeeeeeeeeeeeeeeeeeeeeeeee
-                letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
-                break
+            if(len(letras)<1):
+                    #cambiar las letras <--------------------------------------------------------
+                    break
             print('\n',letras)
 
             #alpha para darle las coor a la palabra

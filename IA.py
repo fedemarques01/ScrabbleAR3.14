@@ -44,7 +44,7 @@ def CPUahhh(l,dif,word='',*ind):
     for i in range(len(l)):
         ind.append(i)
         if CPUigual(*ind):
-            if(len(ind)>2):
+            if(len(ind)>1):
                 aux=CPUarmar(l,*ind)
                 if(CPUverificar(aux,dif)):
                     word=ind
