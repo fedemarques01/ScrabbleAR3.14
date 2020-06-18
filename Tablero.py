@@ -17,7 +17,6 @@ def GuardarPartida(datos):
 
 def Terminar(letras, dif, puntos, tablero, atrilCPU):  # resta los puntos y llama a guardar.py
     for i in range(0, 7):
-        # FALTA actualizar los atriles de la cpu
         tablero['-'+str(i)].update(atrilCPU[i])
     resta = 0
     for i in letras:
