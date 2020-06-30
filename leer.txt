@@ -8,6 +8,6 @@ Marques de Abrantes, Federico 16785/1
 
 Para correrse, debe:
 -Tenerse instalado Python. De preferencia una version >= 3.0
--Ttener las librerias PysimpleGUI y Pattern 
+-Tener las librerias PysimpleGUI y Pattern en sus ultimas versiones (3.6 en el caso de pattern)
 
 Para jugar basta ejecutar correr el archivo ScrabbleAr.py
