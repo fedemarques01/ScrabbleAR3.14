@@ -6,7 +6,8 @@ Fabbri, Bautista 16768/0
 Castro Flores, Arturo 17026/9
 Marques de Abrantes, Federico 16785/1
 
-Para correrse, debe tenerse instalado Python. 
-De preferencia una version >= 3.0
+Para correrse, debe:
+-Tenerse instalado Python. De preferencia una version >= 3.0
+-Ttener las librerias PysimpleGUI y Pattern 
 
-Basta con correr el archivo ScrabbleAr.py
+Para jugar basta ejecutar correr el archivo ScrabbleAr.py
