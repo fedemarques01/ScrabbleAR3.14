@@ -68,6 +68,7 @@ def Menu():
         elif event == "config":
             menu.hide()
             config = ajustes(config)
+            #print(config['bolsa'])
         elif event in (None, "exit"):
             break
 

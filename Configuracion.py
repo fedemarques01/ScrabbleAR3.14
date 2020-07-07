@@ -55,7 +55,7 @@ def modBolsa(bag):
             bag = Bolsa()
             k=list(v.items())
             for i in range(len(k)):
-                #print(k[i][0],k[i][1])
+                print(k[i][0],k[i][1])
                 bag.agregar_bolsa(k[i][0],int(k[i][1]))
             bag.mezclar_bolsa()
     winbag.Close()
