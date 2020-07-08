@@ -4,8 +4,8 @@ from os import remove
 import PySimpleGUI as sg
 import os.path
 import json
-from Puntuaciones import listaPuntuacionesAltas as pt
-from Configuracion import ajustes
+from Configuraciones.Puntuaciones import listaPuntuacionesAltas as pt
+from Configuraciones.Configuracion import ajustes
 import Tablero
 
 sg.theme("Dark Amber")
@@ -16,13 +16,13 @@ sg.theme("Dark Amber")
 def Crearmenu():
     layoutM = [
         [sg.T("ScrabbleAR", size=(16, 1), justification="center",
-              font=("Times New Roman", 25))],
+            font=("Times New Roman", 25))],
         [sg.T("       Bienvenido a ScrabbleAR!, el juego donde      ")],
         [sg.T("           hay que armar palabras para ganar         ")],
         [sg.B("Iniciar nuevo juego", size=(17, 1), key="inicio"),
-         sg.B("Configuracion", size=(17, 1), key="config")],
+        sg.B("Configuracion", size=(17, 1), key="config")],
         [sg.B("Puntuaciones", size=(17, 1), key="puntos"),
-         sg.B("Salir", size=(17, 1), key="exit")]
+        sg.B("Salir", size=(17, 1), key="exit")]
     ]
 
     if(os.path.isfile("Guardado.json")):
@@ -53,8 +53,8 @@ def Menu():
         if event in ("inicio", "continue"):
             if(event == 'inicio' and os.path.isfile('Guardado.json')):
                 event2, _ = sg.Window('ADVERTENCIA',
-                  [[sg.T('Si inicias una nueva partida se borrara la guardada, seguro que quieres continuar?')],
-                  [sg.B('OK'), sg.B('Cancel') ]]).read(close=True)
+                [[sg.T('Si inicias una nueva partida se borrara la guardada, seguro que quieres continuar?')],
+                [sg.B('OK'), sg.B('Cancel') ]]).read(close=True)
                 if event2 == 'OK':
                     remove('Guardado.json')
                 else:
