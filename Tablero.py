@@ -3,10 +3,10 @@ import json
 import time
 from datetime import datetime as datetime
 from random import getrandbits, randint
-from Validez import validez
-import Letras
-from GuardarPuntos import Guardar as Gp
-import IA as CPU
+from Funciones.Validez import validez
+from Funciones import Letras
+from Ventanas.GuardarPuntos import Guardar as Gp
+import Funciones.IA as CPU
 
 
 def GuardarPartida(datos):
@@ -23,17 +23,17 @@ def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):
     try:
         for i in range(0, 7):
             tablero['-'+str(i)].update(atrilCPU[i])
-        resta = 0
     except IndexError:
         pass    
+    resta = 0
     for i in letras:
         resta += Letras.valoresLetras[i]
-    puntos -= resta
-    Gp(dif, puntos)
+    puntos += resta
     if(puntia>=puntos):
-        sg.popup('Perdiste mostro')
+        sg.popup('Perdiste\n dificultad:',dif,' tu puntaje:',puntos,' puntaje de la cpu:',puntia)
     else:
-        sg.popup('perdiste menos mostro')
+        sg.popup('Ganaste, felicidades\n dificultad:',dif,' tu puntaje:',puntos,' puntaje de la cpu:',puntia)
+        Gp(dif, puntos)
     exit()
 
 #maneja la primer jugada de la pc de la partida, basicamente, el que la palabra vaya al ST
@@ -165,13 +165,13 @@ def CargarTablero(tablero, board, datos):
     if(tabla == None):
         #se lee un .json con las coordenadas de las casillas de especiales segun la dificultad
         if(datos['dif'] == 'easy'):
-            with open('TableroFacil.json','r') as arch:
+            with open('Tablero\TableroFacil.json','r') as arch:
                 dic = json.load(arch)
         elif datos['dif'] == 'medium':
-            with open('TableroNormal.json','r') as arch:
+            with open('Tablero\TableroNormal.json','r') as arch:
                 dic = json.load(arch)
         elif datos['dif'] == 'hard':
-            with open('TableroDificil.json','r') as arch:
+            with open('Tablero\TableroDificil.json','r') as arch:
                 dic = json.load(arch)        
         print(dic['tripleL'])
         for x in dic['tripleL']:
@@ -516,7 +516,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    dic = {'dif': 'hard', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
+    dic = {'dif': 'medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
     Jugar(dic, None)
     '''
     datos={"tablero": None};datos.update(dic)

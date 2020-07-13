@@ -1,5 +1,5 @@
 import PySimpleGUI as ps
-from Letras import Bolsa
+from Funciones.Letras import Bolsa
 from random import randint, random
 
 abc=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','Ñ','O','P','Q','R','S','T','U','V','W','X','Z','Y']

@@ -4,8 +4,8 @@ from os import remove
 import PySimpleGUI as sg
 import os.path
 import json
-from Configuraciones.Puntuaciones import listaPuntuacionesAltas as pt
-from Configuraciones.Configuracion import ajustes
+from Ventanas.Puntuaciones import listaPuntuacionesAltas as pt
+from Ventanas.Configuracion import ajustes
 import Tablero
 
 sg.theme("Dark Amber")

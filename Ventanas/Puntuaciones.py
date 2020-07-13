@@ -9,7 +9,7 @@ import json
 def CargarDatos():
     #dic = {'easy': [[10], [9], [3], [1]], 'medium': [[5], [4]], 'hard': [[8], [7], [2]]}
     dic={}
-    with open("puntaje.json", "r") as rfile:
+    with open("Ventanas\puntaje.json", "r") as rfile:
         dic = json.load(rfile)
     return dic
 

@@ -1,5 +1,5 @@
-from Validez import esValida
-import Letras
+from Funciones.Validez import esValida
+from Funciones import Letras
 
 def CPUdesarmar(ind,letras):
     l=[]

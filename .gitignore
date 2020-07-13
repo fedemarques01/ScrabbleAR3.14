@@ -5,6 +5,8 @@ validez.cpython-38.pyc
 Configuracion.cpython-38.pyc
 Puntuaciones.cpython-38.pyc
 *.cpython-38.pyc
-__pycache__\*.pyc
 Letras.cpython-38.pyc
+__pycache__\*.pyc
 __pycache__\Letras.cpython-38.pyc
+Ventanas\__pycache__
+Funciones\__pycache__
