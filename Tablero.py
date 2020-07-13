@@ -257,6 +257,7 @@ def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
 def puntos(dif, coor, letras, board, Jug=True):
     if(Jug):
         v = validez(dif, coor, letras)
+        sg.popup(v)
         if v in (0, 1):
             return v
 
