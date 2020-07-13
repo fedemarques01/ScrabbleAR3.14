@@ -64,7 +64,6 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
     backT, datos['atrilCPU'] = modificarTablero(
         tablero, backT, datos['atrilCPU'], letras, coor, False)
     turnoPC = False
-    event = ''
     clock = actualizarTimer(tablero,current_time,inicio)
     PrimeraJugada = False
 
