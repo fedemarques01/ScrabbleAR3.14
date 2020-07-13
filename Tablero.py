@@ -17,8 +17,9 @@ def GuardarPartida(datos):
         json.dump(datos, arch)
     exit()
 
-
-def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):  # resta los puntos y llama a guardar.py
+#se encarga de terminar la partida y decidir el ganador actualizando las puntuaciones
+def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):  
+    # resta los puntos y llama a guardar.py
     try:
         for i in range(0, 7):
             tablero['-'+str(i)].update(atrilCPU[i])
@@ -34,6 +35,40 @@ def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):  # resta los punto
     else:
         sg.popup('perdiste menos mostro')
     exit()
+
+#maneja la primer jugada de la pc de la partida, basicamente, el que la palabra vaya al ST
+def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
+                
+    letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+                
+    if(len(letras)<1):
+        for i in datos['atrilCPU'].get_atril_array():
+            datos['atrilCPU'].usar(i)
+        datos['atrilCPU'].cambiar_Fichas(letras)
+        turnoPC = False
+        pass
+    coor = []
+    if(getrandbits(1)):
+        for i in range(len(letras)):
+            coor.append((7, 7+i))
+    else:
+        for i in range(len(letras)):
+            coor.append((7+i, 7))
+            #print(coor, letras)
+    punt = puntos(datos['pal'], coor, letras, backT, False)
+    datos['puntosIA'] += punt
+    tablero["-comment-"].update(("La palabra de la CPU vale " +
+                                    str(punt) + " puntos").format())
+    tablero['-pCPU-'].Update(('Puntos CPU: ' +
+                            str(datos['puntosIA'])).format())
+    backT, datos['atrilCPU'] = modificarTablero(
+        tablero, backT, datos['atrilCPU'], letras, coor, False)
+    turnoPC = False
+    event = ''
+    clock = actualizarTimer(tablero,current_time,inicio)
+    PrimeraJugada = False
+
+    return datos,backT,clock,turnoPC,PrimeraJugada
 
 
 def casillasCPU(lentra, board):
@@ -56,11 +91,11 @@ def casillasCPU(lentra, board):
     #print('da',coor)
     return coor
 
-
+#Todo el setup de la intefaz del juego, la creacion de la ventana tablero en su maximo esplendor
 def crearTablero():
     col = fil = 15
     """
-    col,fil y fichas son constantes que se usan a la hora de definir las proporciones del tablero y las fiachas por estante de jugador
+    col,fil y fichas son constantes que se usan a la hora de definir las proporciones del tablero y las fichas por estante de jugador
     BackT es el tablero pero en back end, usado a la hora de ver el contenido de las casillas
     y es actualizado cuando se verifica una palabra
     """
@@ -111,49 +146,61 @@ def crearTablero():
 
     return tablero,backT
 
-# carga todos los ajustes de la partida(puntaje,dificultad,botones especiales,bolsa,etc)
+#Muestra las nuevas fichas del jugador o las habilita en caso de que puedan ser usadas de nuevo
+def ActualizarAtril(tablero, lista):
+    for i in range(0, len(lista)):
+        tablero[str(i)].update(lista[i], disabled=False)
 
-def cargarTablero(tablero, board, datos):
+#Carga todos los datos de una partida ya sea una anterior o una nueva
+def CargarTablero(tablero, board, datos):
     # si es None, no hay partida guardada entonces carga la lista de tuplas por cada casilla especial
     tabla = datos['tablero']
     tablero['-pJug-'].Update(('Tu puntaje: ' + str(datos['puntosJ'])).format())
     tablero['-pCPU-'].Update(('Puntaje CPU: ' +
-                              str(datos['puntosIA'])).format())                          
+                        str(datos['puntosIA'])).format())                          
     tablero['-dif-'].Update(('Dificultad: ' + datos['dif']).format())
     if(datos['cambios'] == 0):
         tablero['-cambiar-'].update("Pasar")
     ActualizarAtril(tablero, datos['atrilJ'].get_atril_array())
     if(tabla == None):
-
-        triple_letter = [(1, 5), (1, 9), (5, 1), (5, 5), (5, 9),
-                         (5, 13), (9, 1), (9, 5), (9, 9), (9, 13), (13, 5), (13, 9)]
-        double_letter = [(0, 3), (0, 11), (2, 6), (2, 8), (3, 0), (3, 7), (3, 14), (6, 2), (6, 6), (6, 8), (6, 12), (
-            7, 3), (7, 11), (8, 2), (8, 6), (8, 8), (8, 12), (11, 0), (11, 7), (11, 14), (12, 6), (12, 8), (14, 3), (14, 11)]
-        double_word = [(1, 1), (2, 2), (3, 3), (4, 4), (1, 13), (2, 12), (3, 11), (4, 10),
-                       (13, 1), (12, 2), (11, 3), (10, 4), (10, 10), (11, 11), (12, 12), (13, 13)]
-        triple_word = [(0, 0), (0, 7), (0, 14), (7, 0),
-                       (7, 14), (14, 0), (14, 7), (14, 14)]
-        start_button = (7, 7)
-
-        for x in triple_letter:
-            tablero[x].Update(
-                "Lx3", button_color=("#D4D4D4", "#8A1111"))
+        #se lee un .json con las coordenadas de las casillas de especiales segun la dificultad
+        if(datos['dif'] == 'easy'):
+            with open('TableroFacil.json','r') as arch:
+                dic = json.load(arch)
+        elif datos['dif'] == 'medium':
+            with open('TableroNormal.json','r') as arch:
+                dic = json.load(arch)
+        elif datos['dif'] == 'hard':
+            with open('TableroDificil.json','r') as arch:
+                dic = json.load(arch)        
+        print(dic['tripleL'])
+        for x in dic['tripleL']:
+            tablero[(x[0],x[1])].Update(
+                "Lx3", button_color=("#e8c204", "#13866c"))
             board[x[0]][x[1]] = "Lx3"
-        for x in double_letter:
-            tablero[x].Update(
-                "Lx2", button_color=("#D4D4D4", "#79118A"))
+        for x in dic['doubleL']:
+            tablero[(x[0],x[1])].Update(
+                "Lx2", button_color=("#e8c204", "#63025d"))
             board[x[0]][x[1]] = "Lx2"
-        for x in double_word:
-            tablero[x].Update(
-                "Px2", button_color=("#D4D4D4", "#8A1155"))
+        for x in dic['doubleW']:
+            tablero[(x[0],x[1])].Update(
+                "Px2", button_color=("#e8c204", "#9E1180"))
             board[x[0]][x[1]] = "Px2"
-        for x in triple_word:
-            tablero[x].Update(
-                "Px3", button_color=("#D4D4D4", "#0F6F6C"))
+        for x in dic['tripleW']:
+            tablero[(x[0],x[1])].Update(
+                "Px3", button_color=("#e8c204", "#63021e"))
             board[x[0]][x[1]] = "Px3"
-        tablero[start_button].Update(
-            "St", button_color=("#D4D4D4", "#928900"))
-        board[start_button[0]][start_button[1]] = "St"
+        for x in dic['castigo3']:
+            tablero[(x[0],x[1])].Update(
+                "-3", button_color=("#e8c204", "#632802"))
+            board[x[0]][x[1]] = "-3"
+        for x in dic['castigo5']:
+            tablero[(x[0],x[1])].Update(
+                "-5", button_color=("#e8c204", "#1c0263"))
+            board[x[0]][x[1]] = "-5"    
+        tablero[(7,7)].Update(
+            "St", button_color=("#e8c204", "#000000"))
+        board[7][7] = "St"
 
     # caso contrario, recorre el tablero guardado y actualiza en base a eso
     else:
@@ -165,29 +212,30 @@ def cargarTablero(tablero, board, datos):
                     continue
                 elif(tabla[i][j] == "Lx3"):
                     tablero[(i, j)].Update(
-                        "Lx3", button_color=("#D4D4D4", "#8A1111"))
+                        "Lx3", button_color=("#e8c204", "#13866c"))
                 elif(tabla[i][j] == "Lx2"):
                     tablero[(i, j)].Update(
-                        "Lx2", button_color=("#D4D4D4", "#79118A"))
+                        "Lx2", button_color=("#e8c204", "#63025d"))
                 elif(tabla[i][j] == "Px2"):
                     tablero[(i, j)].Update(
-                        "Px2", button_color=("#D4D4D4", "#8A1155"))
+                        "Px2", button_color=("#e8c204", "#9E1180"))
                 elif(tabla[i][j] == "Px3"):
                     tablero[(i, j)].Update(
-                        "Lx2", button_color=("#D4D4D4", "#0F6F6C"))
+                        "Px3", button_color=("#e8c204", "#63021e"))
+                elif(tabla[i][j] == "-3"):
+                    tablero[(i, j)].Update(
+                        "-3", button_color=("#e8c204", "#632802"))
+                elif(tabla[i][j] == "-5"):
+                    tablero[(i, j)].Update(
+                        "-5", button_color=("#e8c204", "#1c0263"))        
                 else:
                     tablero[(i, j)].Update(tabla[i][j],button_color=(
-                        "#FCFF41", "#3D2929"),disabled_button_color=(
-                        "#FCFF41", "#3D2929"),disabled=True)  # color y valor de la letra que ya estaba
+                        "#FCFF41", "#870303"),disabled_button_color=(
+                        "#FCFF41", "#870303"),disabled=True)  # color y valor de la letra que ya estaba
 
     return board
 
-
-def ActualizarAtril(tablero, lista):
-    for i in range(0, len(lista)):
-        tablero[str(i)].update(lista[i], disabled=False)
-
-
+#modifica el contenido del tablero de juego al verificar una palabra o devolver las fichas
 def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
     for i in range(0, len(coord)):
         board[coord[i][0]][coord[i][1]] = letras[i]
@@ -202,7 +250,7 @@ def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
     Atril.rellenar_atril()
     # print(Atril.get_atril_string())
     if(Jug):
-         ActualizarAtril(tablero, Atril.get_atril_array())
+        ActualizarAtril(tablero, Atril.get_atril_array())
 
     return board, Atril
 
@@ -229,15 +277,15 @@ def puntos(dif, coor, letras, board, Jug=True):
         pt += pl
     return pt*pp
 
-
+#habilita las casillas que tenian fichas y las libera para ser reutilizadas
 def DevolverFichas(tablero, coord, board):
     for i in coord:
         tablero[i].update(board[i[0]][i[1]], disabled=False)
 
-
+#Todas las operaciones que se efectuan para que el jugador cambie una o mas fichas
 def cambiar(tablero, atril,current_time,inicio):
     tablero['-comment-'].update(
-        'Seleccione las fichas que desea cambiar y pulse confirmar o deshacer para volver una ficha atras o cancelar'.format())
+        'Seleccione las fichas que desea cambiar y pulse comprobar para cambiarlas o deshacer para volver una ficha atras o cancelar'.format())
     tablero['-save-'].update(disabled=True)
     tablero['Exit'].update(disabled=True)
     tablero['-cambiar-'].update(disabled=True)
@@ -274,7 +322,7 @@ def cambiar(tablero, atril,current_time,inicio):
     tablero['-cambiar-'].update(disabled=False)
     return atril,booleano,clock
 
-
+#Actualiza el tiempo restante
 def actualizarTimer(tablero,current_time,inicio):
     boolean = True
     current_time = current_time + inicio - int(time.time())
@@ -287,7 +335,7 @@ def actualizarTimer(tablero,current_time,inicio):
     tablero['-timer-'].update('{:02d}:{:02d}'.format(mins, secs))
     return boolean
 
-
+#Se encarga de hacer posible el jugar una partida de scrabble, utiliza todas las funciones previas
 def Jugar(settings, event):
     claveA = []
     for i in range(7):
@@ -317,154 +365,34 @@ def Jugar(settings, event):
         datos.update({'atrilJ': Letras.Atril(
             datos['bolsa']), 'atrilCPU': Letras.Atril(datos['bolsa'])})
 
-    backT = cargarTablero(tablero, backT, datos)
+    backT = CargarTablero(tablero, backT, datos)
     turnoPC = False
     #variables del timer
     clock = True
-    
-
-    if(PrimeraJugada):
-        # determina quien comienza si el jugador o la pc
-        turnoPC = not getrandbits(1)
-        if(turnoPC):
-            sg.popup("Empieza la CPU")
-        else:    
-            sg.popup('Empiezas tu!')
-        listLetra = []
-        listCoord = []
-        aux = ""
-        inicio = int(time.time())#tiempo comienzo 
-        current_time = datos['time']*60 + 1
-        while True:
-            if(datos['bolsa'].cantidad_Fichas() == 0):
-                tablero["-comment-"].update(
-                            "La bolsa no tiene mas fichas".format())
-                Terminar(datos['atrilJ'].get_atril_array(),
-                             datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())                
-            if(turnoPC) and clock:
-                tablero["-comment-"].update(("La CPU esta pensando").format())
-                
-                letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
-                
-                if(len(letras)<1):
-                    for i in datos['atrilCPU'].get_atril_array():
-                        datos['atrilCPU'].usar(i)
-                    datos['atrilCPU'].cambiar_Fichas(letras)
-                    turnoPC = False
-                    continue
-                coor = []
-                if(getrandbits(1)):
-                    for i in range(len(letras)):
-                        coor.append((7, 7+i))
-                else:
-                    for i in range(len(letras)):
-                        coor.append((7+i, 7))
-                #print(coor, letras)
-                punt = puntos(datos['pal'], coor, letras, backT, False)
-                datos['puntosIA'] += punt
-                tablero["-comment-"].update(("La CPU suma " +
-                                             str(punt) + " puntos").format())
-                tablero['-pCPU-'].Update(('Puntos CPU: ' +
-                                          str(datos['puntosIA'])).format())
-                backT, datos['atrilCPU'] = modificarTablero(
-                    tablero, backT, datos['atrilCPU'], letras, coor, False)
-                turnoPC = False
-                event = ''
-                break
-            clock = actualizarTimer(tablero,current_time,inicio)    
-            event, _ = tablero.read(timeout=250)
-
-            if event in (None, 'Exit') or not clock:
-                if(event == 'Exit') or not clock:
-                    Terminar(datos['atrilJ'].get_atril_array(),
-                             datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
-                break
-            # me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
-            elif(event in claveA):
-                aux = event
-            # si ya elegi una letra solo entro al elegir st ya que en la primer jugada la letra va obligatoriamente en esa posicion
-            elif event == (7, 7) and aux != "":
-            # guardo en la lista de coordenadas
-                listCoord.append(event)
-                listLetra.append(datos['atrilJ'].get_atril_array()[
-                           int(aux)])  # guardo en la lista de letras
-                # deshabilito el boton y actualizo la casilla con la letra elegida
-                tablero[event].update(
-                        listLetra[-1], disabled=True, disabled_button_color=("#FCC300", "#E94E00"))
-                # deshabilito la ficha del atril que el jugador coloco
-                tablero[aux].update(disabled=True)
-                aux = ""  # dejo libre para seleccionar otra letra
-            # igual que el anterior, solo que evalua el que ya se haya ingresado una ficha en el st
-            elif type(event) is tuple and len(listLetra) >= 1 and aux != "":
-                listCoord.append(event)
-                listLetra.append(
-                    datos['atrilJ'].get_atril_array()[int(aux)])
-                tablero[event].update(
-                    listLetra[-1], disabled=True, disabled_button_color=("#FCC300", "#E94E00"))
-                tablero[aux].update(disabled=True)
-                aux = ""
-
-            elif event == "-check-" and listCoord != []:
-                # print("Algo")
-                punt = puntos(datos['pal'], listCoord, listLetra, backT)
-                if(punt <= 1):
-                    if(punt == 1):
-                        tablero["-comment-"].update(
-                            "La palabra no es valida, pruebe una palabra distinta".format())
-                    else:
-                        tablero["-comment-"].update(
-                            "Las fichas se colocaron erroneamente en el tablero,pruebe colocarlas una al lado de otra o una debajo de otra".format())
-
-                    DevolverFichas(tablero, listCoord, backT)
-                    ActualizarAtril(
-                        tablero, datos['atrilJ'].get_atril_array())
-                    listLetra = []
-                    listCoord = []
-                else:
-                    datos['puntosJ'] += punt
-                    tablero["-comment-"].update(
-                        ("Sumaste " + str(punt) + " puntos").format())
-                    tablero['-pJug-'].Update(('Tu puntaje: ' +
-                                              str(datos['puntosJ'])).format())
-                    backT, datos['atrilJ'] = modificarTablero(
-                        tablero, backT, datos['atrilJ'], listLetra, listCoord)
-                    print(datos['puntosJ'])
-                    turnoPC = True
-                    break
-                # el jugador elije las fichas a cambiar
-            elif event == '-cambiar-':
-                DevolverFichas(tablero, listCoord, backT)
-                if(datos['cambios'] > 0):
-                    datos['atrilJ'], changed, clock = cambiar(
-                        tablero, datos['atrilJ'] ,current_time ,inicio)
-                    datos['cambios'] -= 1
-                    if(datos['cambios'] == 0):
-                        tablero['-cambiar-'].update("Pasar")    
-                tablero['-comment-'].update(
-                    'Ponga una ficha en ST para comenzar la partida'.format())
-                tablero['-save-'].update(disabled=True)
-                listLetra = []
-                listCoord = []    
-                if(changed) or datos['cambios'] == 0:
-                    turnoPC = True               
-
-                # le devuelvo las fichas al jugador si ya ingreso alguna
-            elif event == "-back-" and listCoord != []:
-                DevolverFichas(tablero, listCoord, backT)
-                ActualizarAtril(
-                    tablero, datos['atrilJ'].get_atril_array())
-                listLetra = []
-                listCoord = []            
-        if(event != None):
-            tablero['-save-'].update(disabled=False)
     if not PrimeraJugada:
         inicio = int(time.time())
         current_time = datos['time']
+    else:
+        # determina quien comienza si el jugador o la pc
+        turnoPC = not getrandbits(1)
+        inicio = int(time.time())#tiempo comienzo 
+        current_time = datos['time']*60 + 1
+        if(turnoPC):
+            sg.popup("Empieza la CPU",auto_close=True,auto_close_duration=2)
+            datos,backT,clock,turnoPC,PrimeraJugada = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)   
+        else:    
+            sg.popup('Empiezas tu!')
+    listLetra = []
+    listCoord = []
+    aux = ""
+    #en caso de errores coloque aqui el primer while de abajo    
+    
     listLetra = []
     listCoord = []
 
     while True:
-        
+        if(backT[7][7] != 'St'):
+            PrimeraJugada = False
         clock = actualizarTimer(tablero,current_time,inicio)
         #solucion trucha para que el usuario vea el 00:00
         if(datos['bolsa'].cantidad_Fichas() == 0):
@@ -473,8 +401,8 @@ def Jugar(settings, event):
             Terminar(datos['atrilJ'].get_atril_array(),
                         datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
         if(turnoPC) and clock:
-            tablero["-comment-"].update(("La CPU esta pensando").format())
-            
+            if(PrimeraJugada):
+                datos,backT,clock,turnoPC,PrimeraJugada = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio) 
             letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
             coor = []
             
@@ -495,14 +423,15 @@ def Jugar(settings, event):
             punt = puntos(datos['pal'], coor, letras, backT, False)
             datos['puntosIA'] += punt
             #CPU-puntos++
-            tablero["-comment-"].update(("La CPU suma " + str(punt) + " puntos").format())
+            tablero["-comment-"].update(("La palabra de la CPU vale " + str(punt) + " puntos").format())
             tablero['-pCPU-'].Update(('Puntos CPU: ' + str(datos['puntosIA'])).format())
             #modificarTablero.. hace eso.. modifica.. el tablero..
             backT, datos['atrilCPU'] = modificarTablero(tablero, backT, datos['atrilCPU'], 
             letras, coor, False)
             turnoPC = False #pasa el turno al usuario
-        event, _ = tablero.read(timeout=250)
 
+        event, _ = tablero.read(timeout=250)
+        #revisa si se termino el tiempo, se eligio terminar o se cerro la ventana, en los dos primeros casos termina la partida y muestra el ganador
         if event in (None, 'Exit') or not clock:
             if(event == 'Exit') or not clock:
                 Terminar(datos['atrilJ'].get_atril_array(
@@ -511,6 +440,7 @@ def Jugar(settings, event):
         # me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
         elif(event in claveA):
             aux = event
+        #pongo la letra eligida en la casilla y se guarda en la lista de letras que se usan para formar la palabra    
         elif type(event) is tuple and aux != "":
             listCoord.append(event)
             listLetra.append(datos['atrilJ'].get_atril_array()[int(aux)])
@@ -519,27 +449,37 @@ def Jugar(settings, event):
             tablero[aux].update(disabled=True)
             aux = ""
         elif event == "-check-" and listCoord != []:
-            punt = puntos(datos['pal'], listCoord, listLetra, backT)
-            if(punt <= 1):
-                if(punt == 1):
-                    tablero["-comment-"].update(
-                        "La palabra no es valida, pruebe una palabra distinta".format())
-                else:
-                    tablero["-comment-"].update(
-                        "Las fichas se colocaron erroneamente en el tablero,pruebe colocarlas una al lado de otra o una debajo de otra".format())
+            if(PrimeraJugada and not((7,7) in listCoord)):
+                sg.popup('La palabra debe tener una letra sobre el st')
                 DevolverFichas(tablero, listCoord, backT)
                 ActualizarAtril(
-                    tablero, datos['atrilJ'].get_atril_array())    
+                    tablero, datos['atrilJ'].get_atril_array())
             else:
-                datos['puntosJ'] += punt
-                tablero["-comment-"].update(("Sumaste " +
-                                             str(punt) + " puntos").format())
-                tablero['-pJug-'].Update(('Tu puntaje: ' +
-                                          str(datos['puntosJ'])).format())
-                backT, datos['atrilJ'] = modificarTablero(
-                    tablero, backT, datos['atrilJ'], listLetra, listCoord, "#E94E00")
-                print(datos['puntosJ'])
-                turnoPC = True
+                punt = puntos(datos['pal'], listCoord, listLetra, backT)
+                if(punt <= -100):
+                    if(punt == -200):
+                        tablero["-comment-"].update(
+                            "La palabra no es valida, pruebe una palabra distinta".format())
+                    else:
+                        tablero["-comment-"].update(
+                            "Las fichas se colocaron erroneamente en el tablero,pruebe colocarlas una al lado de otra o una debajo de otra".format())
+                    DevolverFichas(tablero, listCoord, backT)
+                    ActualizarAtril(
+                        tablero, datos['atrilJ'].get_atril_array())    
+                else:
+                    datos['puntosJ'] += punt
+                    if datos['puntosJ'] < 0:
+                        datos['puntosJ'] = 0
+                    tablero["-comment-"].update(("Tu palabra tiene un valor de " +
+                                            str(punt) + " puntos. \nLa CPU esta pensando.").format())
+                    tablero['-pJug-'].Update(('Tu puntaje: ' +
+                                        str(datos['puntosJ'])).format())
+                    backT, datos['atrilJ'] = modificarTablero(
+                        tablero, backT, datos['atrilJ'], listLetra, listCoord, "#E94E00")
+                    print(datos['puntosJ'])
+                    turnoPC = True
+                    sg.popup_auto_close(auto_close_duration=0.00000001)
+                    time.sleep(2)
                 
             listLetra = []
             listCoord = []
@@ -550,11 +490,13 @@ def Jugar(settings, event):
                 tablero, datos['atrilJ'].get_atril_array())
             listLetra = []
             listCoord = []
+        #guarda todos los datos de la partida y cierra el programa
         elif event == "-save-":
             datos['time'] = current_time + inicio - int(time.time())
             datos['tablero'] = backT
             sg.popup("La partida se ha guardado")
             GuardarPartida(datos)
+        #Devuelve las fichas ingresadas pero no comprobadas y le permite al usuario cambiar sus fichas    
         elif event == '-cambiar-':
             DevolverFichas(tablero, listCoord, backT)
             if(datos['cambios'] > 0):
@@ -574,7 +516,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    dic = {'dif': 'medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
+    dic = {'dif': 'hard', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
     Jugar(dic, None)
     '''
     datos={"tablero": None};datos.update(dic)
