@@ -257,8 +257,7 @@ def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
 def puntos(dif, coor, letras, board, Jug=True):
     if(Jug):
         v = validez(dif, coor, letras)
-        sg.popup(v)
-        if v in (0, 1):
+        if v in (-100, -200):
             return v
 
     pt, pp = 0, 1
@@ -274,6 +273,10 @@ def puntos(dif, coor, letras, board, Jug=True):
                 pp *= 2
             elif bonus == "Px3":
                 pp *= 3
+            elif bonus == "-3" :
+                pl -= 3
+            elif bonus == "-5" :
+                pl -= 5
         pt += pl
     return pt*pp
 
