@@ -27,4 +27,3 @@ for i in range(len(letras)):
                         for o in range(len(letras)):
                             if igual(i, j, k, l, m, n, o):
                                 print(i, j, k, l, m, n, o)
-'''
