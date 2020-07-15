@@ -8,7 +8,7 @@ from Funciones import Letras
 from Ventanas.GuardarPuntos import Guardar as Gp
 import Funciones.IA as CPU
 
-
+#Guarda todos los datos de la partida en el archivo guardado.json
 def GuardarPartida(datos):
     datos['bolsa'] = datos['bolsa'].get_bolsa()
     datos['atrilJ'] = datos['atrilJ'].get_atril_array()
@@ -106,9 +106,9 @@ def crearTablero():
         [sg.B("Guardar", size=(13, 1), key="-save-", disabled=True)],
         [sg.B("Terminar", size=(13, 1), key="Exit")],
         [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-", background_color="#190901")]],
-                  title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
+                title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
         [sg.Frame(layout=[[sg.Text('00:00:00', size=(13, 1), font=('Helvetica', 10), justification='center', key='-timer-', background_color="#190901")]],
-                  title="Tiempo", title_color="Orange", background_color="Black")],
+                title="Tiempo", title_color="Orange", background_color="Black")],
         [sg.Text(text="Dificultad: ", size=(13, 1), key="-dif-")],
         [sg.Text(text="Tu puntaje: 0", size=(13, 1), key="-pJug-")],
         [sg.Text(text="Puntaje CPU: 0", size=(13, 1), key="-pCPU-")]
@@ -116,29 +116,29 @@ def crearTablero():
 
     # col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra
     colBoard = [[sg.Text("CPU:"), sg.Text(font=("Times New Roman", 17),
-                                          text="                            S C R A B B L E A R ", justification="right")]]
+                                        text="                            S C R A B B L E A R ", justification="right")]]
 
     colBoard += [[sg.B("?", key=('-'+str(i)), size=(2, 1), pad=(0, 0), disabled=True)
-                  for i in range(fichas)]]
+                for i in range(fichas)]]
 
     colBoard += [[sg.Text("")]]
 
     colBoard += [[sg.B("", size=(3, 1), key=(m, n), pad=(0, 0))
-                  for m in range(col)] for n in range(fil)]
+                for m in range(col)] for n in range(fil)]
 
     # ColPlayer es la columna donde estan las fichas del jugador
     colPlayer = [[sg.B("", size=(3, 1), key=str(k), pad=(0, 0))
-                  for k in range(fichas)]for l in range(1)]
+                for k in range(fichas)]for l in range(1)]
 
     # layout del tablero, junta todas las columnas y añade el resto de los botones
     frontT = [
         [sg.Column(colM),
-         sg.Column(colBoard)],
+        sg.Column(colBoard)],
         [sg.Text("")],
         [sg.Text("Tus fichas:"), sg.Column(colPlayer),
-         sg.B("Comprobar", key="-check-", size=(10, 1)
-              ), sg.B("Cambiar", key="-cambiar-", size=(10, 1)),
-         sg.B("Deshacer", key="-back-", size=(10, 1))]
+        sg.B("Comprobar", key="-check-", size=(10, 1)
+            ), sg.B("Cambiar", key="-cambiar-", size=(10, 1)),
+        sg.B("Deshacer", key="-back-", size=(10, 1))]
     ]
 
     tablero = sg.Window("ScrabbleAR - Juego", frontT, finalize=True)
@@ -361,8 +361,6 @@ def Jugar(settings, event):
     else:
         # sino datos tendra los settings que elijio el jugador o los por defecto
         datos = {"tablero": None, 'cambios': 3}
-        if settings['bolsa'] == []:
-            settings['bolsa'] = Letras.Bolsa(settings['dif']) 
         datos.update(settings)
         # añado los atriles generados a partir de la bolsa que esta al crear el diccionario
         datos.update({'atrilJ': Letras.Atril(
