@@ -163,13 +163,13 @@ def CargarTablero(tablero, board, datos):
     ActualizarAtril(tablero, datos['atrilJ'].get_atril_array())
     if(tabla == None):
         #se lee un .json con las coordenadas de las casillas de especiales segun la dificultad
-        if(datos['dif'] == 'easy'):
+        if(datos['dif'] == 'Easy'):
             with open('Tablero\TableroFacil.json','r') as arch:
                 dic = json.load(arch)
-        elif datos['dif'] == 'medium':
+        elif datos['dif'] == 'Medium':
             with open('Tablero\TableroNormal.json','r') as arch:
                 dic = json.load(arch)
-        elif datos['dif'] == 'hard':
+        elif datos['dif'] == 'Hard':
             with open('Tablero\TableroDificil.json','r') as arch:
                 dic = json.load(arch)        
         print(dic['tripleL'])
@@ -519,7 +519,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    dic = {'dif': 'medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
+    dic = {'dif': 'Medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
     Jugar(dic, None)
     '''
     datos={"tablero": None};datos.update(dic)

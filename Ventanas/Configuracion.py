@@ -11,9 +11,9 @@ def crearPantalla(config):
     global s
     layoutM = [
         [ps.T("Configureishon", size=(16, 1), justification="center", font=("Times New Roman", 16))],
-        [ps.Text("Dificultad: "),ps.DropDown(("easy","medium","hard"),default_value=("medium"),size=(10,1))],
+        [ps.Text("Dificultad: "),ps.DropDown(("Easy","Medium","Hard"),default_value=("Medium"),size=(10,1))],
         [ps.Text("Tiempo de juego (en minutos): ", size=(22, 1)),ps.InputCombo((s),size=(5,1),default_value=(config['time']))],
-        [ps.Button("modificar la bolsa (no lo hagas)", key=('-bag-'))],
+        [ps.Button("Modificar la bolsa", key=('-bag-'))],
         [ps.B("Guardar", size=(17, 1), key="-save"),ps.Exit("Volver", size=(10, 1), key="-exit")]
     ]
     window = ps.Window("ScrabbleAR - Menu", layoutM)
@@ -90,7 +90,7 @@ def ajustes(config):
 if __name__ == "__main__":
     #baga=Bolsa('medium')
     baga=[]
-    config={'dif':'medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':baga}
+    config={'dif':'Medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':baga}
     ajustes(config)
     print(config['bolsa'])
 
