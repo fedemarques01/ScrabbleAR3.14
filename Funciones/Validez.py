@@ -63,8 +63,7 @@ def validez(dif,coor,letras):
 
 
 
-# main para test
-if __name__ == "__main__":
+if __name__ == "__main__": # main para testeos
    
     dif = ['NN', 'JJ', 'VB']  #<----- VB:verbo   NN:sustantivo   JJ:adjetivo
     coor = [(3, 0), (4, 0), (0, 0), (1, 0)]
