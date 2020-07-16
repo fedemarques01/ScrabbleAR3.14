@@ -159,9 +159,15 @@ class Bolsa:
     def get_bolsa(self):
         #retorna la bolsa
         return self.bolsa
+
     def cargar_bolsa(self,lista):
         #crea la bolsa a partir de una lista de letras
-        self.bolsa = lista        
+        self.bolsa = lista
+
+    def quitar_bolsa(self,letra):
+        #elimina una letra de la bolsa sin importar cuantas veces se repita
+        while letra in self.bolsa:
+            self.bolsa.remove(letra)
 
 class Atril:
     """

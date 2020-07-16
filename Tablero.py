@@ -18,7 +18,7 @@ def GuardarPartida(datos):
     exit()
 
 #se encarga de terminar la partida y decidir el ganador actualizando las puntuaciones
-def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):  
+def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU,Pletras):  
     # resta los puntos y llama a guardar.py
     try:
         for i in range(0, 7):
@@ -27,12 +27,12 @@ def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU):
         pass    
     resta = 0
     for i in letras:
-        resta += Letras.valoresLetras[i]
+        resta += Pletras[i] 
     puntos += resta
     if(puntia>=puntos):
-        sg.popup('Perdiste\n dificultad:',dif,' tu puntaje:',puntos,' puntaje de la cpu:',puntia)
+        sg.popup('Perdiste\n Dificultad:',dif,' Tu puntaje:',puntos,' Puntaje de la cpu:',puntia)
     else:
-        sg.popup('Ganaste, felicidades\n dificultad:',dif,' tu puntaje:',puntos,' puntaje de la cpu:',puntia)
+        sg.popup('Ganaste, Felicidades\n Dificultad:',dif,' Tu puntaje:',puntos,' Puntaje de la cpu:',puntia)
         Gp(dif, puntos)
     exit()
 
@@ -400,7 +400,7 @@ def Jugar(settings, event):
             tablero["-comment-"].update(
                             "La bolsa no tiene mas fichas".format())
             Terminar(datos['atrilJ'].get_atril_array(),
-                        datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
+                        datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array(),datos['letrasP'])
         if(turnoPC) and clock:
             if(PrimeraJugada):
                 datos,backT,clock,turnoPC,PrimeraJugada = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio) 
@@ -436,7 +436,7 @@ def Jugar(settings, event):
         if event in (None, 'Exit') or not clock:
             if(event == 'Exit') or not clock:
                 Terminar(datos['atrilJ'].get_atril_array(
-                ), datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array())
+                ), datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array(),datos['letrasP'])
             break
         # me fijo si el event es una de las posibles llaves de las letras y lo guardo en un auxiliar
         elif(event in claveA):
