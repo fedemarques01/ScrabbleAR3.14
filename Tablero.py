@@ -377,7 +377,7 @@ def Jugar(settings, event):
         # determina quien comienza si el jugador o la pc
         turnoPC = not getrandbits(1)
         inicio = int(time.time())#tiempo comienzo 
-        current_time = datos['time']*60 + 1
+        current_time = datos['time']*60
         if(turnoPC):
             sg.popup("Empieza la CPU",auto_close=True,auto_close_duration=2)
             datos,backT,clock,turnoPC,PrimeraJugada = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)   
