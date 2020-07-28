@@ -23,12 +23,10 @@ def tieneOrden(dic): #recive un dic con las letras y las coordenadas para verifi
 
 def esValida(palabra, *dif): #verifico si la palabra recibida es del tipo de palabra indicado en "*dif"
     palabra = parse(palabra).split('/')
-    if palabra[1] in dif: 
-        if palabra[1] == 'NN':
-            if (not palabra[0] in spelling) and (not palabra[0] in lexicon):
-                #print('nono square'+ palabra[1])
-                return False
-        #print('existe'+ palabra[1])
+    if dif[0]=='NN':
+        if (palabra[0] in spelling) and (palabra[0] in lexicon):
+                return True
+    elif palabra[1] in dif: 
         return True
     return False
 

@@ -36,13 +36,11 @@ def Crearmenu():
 
 def setDif(dificultad):
     if(dificultad=='Easy'):
-        return ['NN', 'JJ', 'VB']
-    elif(dificultad=='Medium'):
-        return ['NN', 'VB']
-    elif(dificultad=='Hard'):
-        i=randint(0,2)
-        dif=['NN', 'JJ', 'VB']
-        return dif[i]
+        return ['NN']
+    elif dificultad in ('Medium','Hard'):
+        return ['JJ', 'VB']
+    else:
+        return ['NN']
 
 """La funcion del menu, abre la ventana del menu principal desde donde el usuario puede elegir que desea hacer:
 configurar cosas, ver las puntuaciones, jugar una nueva partida o continuar una( si existe el archivo)"""
