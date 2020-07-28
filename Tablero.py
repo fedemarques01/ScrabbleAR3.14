@@ -27,12 +27,19 @@ def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU,Pletras):
         pass    
     resta = 0
     for i in letras:
-        resta += Pletras[i] 
-    puntos += resta
+        resta += Pletras[i]
+    puntos -= resta
+    resta = 0     
+    for i in atrilCPU:
+        resta += Pletras[i]    
+    if(puntos < 0):
+        puntos = 0
+    if(puntia < 0):
+        puntia = 0        
     if(puntia>=puntos):
-        sg.popup('Perdiste\n Dificultad:',dif,' Tu puntaje:',puntos,' Puntaje de la cpu:',puntia)
+        sg.popup('Perdiste\n\nDificultad: '+dif,'Tu puntaje: '+str(puntos),'Puntaje de la cpu: ' +str(puntia))
     else:
-        sg.popup('Ganaste, Felicidades\n Dificultad:',dif,' Tu puntaje:',puntos,' Puntaje de la cpu:',puntia)
+        sg.popup('Ganaste, Felicidades\n\nDificultad: '+dif,'Tu puntaje: '+str(puntos),'Puntaje de la cpu: ' +str(puntia))
         Gp(dif, puntos)
     exit()
 
@@ -353,8 +360,8 @@ def Jugar(settings, event):
         with open("Guardado.json", "r") as arch:
             datos = json.load(arch)
         datos['bolsa'] = Letras.Bolsa(datos['bolsa'])
-        datos['atrilJ'] = Letras.Atril(datos['bolsa'])
-        datos['atrilCPU'] = Letras.Atril(datos['bolsa'])
+        datos['atrilJ'] = Letras.Atril(datos['bolsa'],datos['atrilJ'])
+        datos['atrilCPU'] = Letras.Atril(datos['bolsa'],datos['atrilCPU'])
         tablero['-save-'].update(disabled=True)
         tablero['-comment-'].update('Bienvenido de nuevo!'.format())
         PrimeraJugada = False
@@ -517,7 +524,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    dic = {'dif': 'Medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':[]}
+    dic = {'dif': 'Medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':Letras.Bolsa('Medium'),'letrasP':Letras.valoresLetras}
     Jugar(dic, None)
     '''
     datos={"tablero": None};datos.update(dic)

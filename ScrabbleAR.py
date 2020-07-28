@@ -7,6 +7,7 @@ import json
 from Ventanas.Puntuaciones import listaPuntuacionesAltas as pt
 from Ventanas.Configuracion import ajustes
 import Tablero
+from Funciones import Letras
 
 sg.theme("Dark Amber")
 
@@ -46,7 +47,7 @@ def setDif(dificultad):
 """La funcion del menu, abre la ventana del menu principal desde donde el usuario puede elegir que desea hacer:
 configurar cosas, ver las puntuaciones, jugar una nueva partida o continuar una( si existe el archivo)"""
 def Menu():
-    config={'dif':'Medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':[]}
+    config={'dif':'Medium','puntosJ':0,'puntosIA':0,'time':10,'pal':[],'bolsa':Letras.Bolsa('Medium'),'letrasP': Letras.valoresLetras}
     menu = Crearmenu()
     while True:
         menu.un_hide()
