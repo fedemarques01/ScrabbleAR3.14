@@ -8,7 +8,7 @@ s=[]
 for i in range(1,61):
     s.append(str(i))
 
-def crearPantalla(config):
+def crearPantalla(config): #crea la pantalla principal de configuración
     global s
     layoutM = [
         [ps.T("Configureishon", size=(20, 1), justification="center", font=("Times New Roman", 16))],
@@ -26,6 +26,7 @@ def verif(dific,time): #verifica si la dificultad y el tiempo son validos
     if dific in('Easy','Medium','Hard'):
         return dific,time
     return None,time
+
 #La creacion de la intefaz y los procesos necesarios para modificar la bolsa
 def modBolsa():
     layout = [
@@ -85,38 +86,38 @@ def modBolsa():
 def aplicarCambios(bolsa,lista):
     dic = Letras.valoresLetras
     for aux in lista:
-        bolsa.quitar_letra(aux[0])#retiro la letra de la bolsa
+        bolsa.quitar_letra(aux[0])        #retiro la letra de la bolsa
         bolsa.agregar_bolsa(aux[0],aux[1])#añado la cantidad indicada por el jugador
-        dic[aux[0]] = aux[2]#le asigno el valor que eligio el jugador
+        dic[aux[0]] = aux[2]              #le asigno el valor que eligio el jugador
     bolsa.mezclar_bolsa()
     return bolsa,dic
 
-def ajustes(config):
+def ajustes(config): #main de configuraciones
     menuC = crearPantalla(config)
     lista = []
     while True:
         #print(config,'\n')
         eve, val = menuC.read()
         #print(val)
-        if eve == "-save":
+        if eve == "-save": #en caso de seleccionar "guardar" se verifica que los valores sean validos
             try:
-                d,time=verif(val[0],val[1])
+                d,time=verif(val[0],val[1]) #verificador de dificultad y timer
                 print(d,config['dif'],time,config['time'])
-                if(d==None):
-                    ps.popup("ingrese valores validos")
+                if(d==None): #en caso de no ser validos
+                    ps.popup("ingrese valores validos") 
                     continue
-            except ValueError:
+            except ValueError: #en caso de no ser validos
                 ps.popup("ingrese valores validos")
             else:
                 config['dif']=d
                 config['time']=time
-        elif eve == '-bag-':
+        elif eve == '-bag-': #en caso de seleccionar el modificar bolsa se abre la ventana para modificar la bolsa
             lista = modBolsa()
         elif eve in (None, "-exit"):
             break
     menuC.close()
-    config['bolsa']= Bolsa(config['dif'])
-    if lista != []:
+    config['bolsa']= Bolsa(config['dif']) 
+    if lista != []: 
         config['bolsa'],config['letrasP'] = aplicarCambios(config['bolsa'],lista) 
     return config
 
