@@ -21,7 +21,7 @@ def crearPantalla(config):
 
     return window
 
-def dific(dific,time):
+def verif(dific,time): #verifica si la dificultad y el tiempo son validos
     time=int(time)
     if dific in('Easy','Medium','Hard'):
         return dific,time
@@ -98,9 +98,10 @@ def ajustes(config):
         #print(config,'\n')
         eve, val = menuC.read()
         #print(val)
-        if eve == "-save-":
+        if eve == "-save":
             try:
-                d,time=dific(val[0],val[1])
+                d,time=verif(val[0],val[1])
+                print(d,config['dif'],time,config['time'])
                 if(d==None):
                     ps.popup("ingrese valores validos")
                     continue
