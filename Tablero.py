@@ -53,7 +53,9 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
             datos['atrilCPU'].usar(i)
         datos['atrilCPU'].cambiar_Fichas(letras)
         turnoPC = False
-        pass
+        clock = actualizarTimer(tablero,current_time,inicio)
+        tablero["-comment-"].update(("La CPU ha decidido pasar su turno,ponga su palabra sobre la casilla ST como primer jugada").format())
+        return datos,backT,clock,turnoPC 
     coor = []
     if(getrandbits(1)):
         for i in range(len(letras)):
@@ -72,9 +74,7 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
         tablero, backT, datos['atrilCPU'], letras, coor, False)
     turnoPC = False
     clock = actualizarTimer(tablero,current_time,inicio)
-    PrimeraJugada = False
-
-    return datos,backT,clock,turnoPC,PrimeraJugada
+    return datos,backT,clock,turnoPC
 
 
 def casillasCPU(lentra, board):
@@ -112,7 +112,7 @@ def crearTablero():
     colM = [
         [sg.B("Guardar", size=(13, 1), key="-save-", disabled=True)],
         [sg.B("Terminar", size=(13, 1), key="Exit")],
-        [sg.Frame(layout=[[sg.Text("Ponga una ficha en ST para comenzar la partida", size=(13, 10), key="-comment-", background_color="#190901")]],
+        [sg.Frame(layout=[[sg.Text("Coloque su primer palabra sobre la casilla ST como primer jugada", size=(13, 10), key="-comment-", background_color="#190901")]],
                 title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
         [sg.Frame(layout=[[sg.Text('00:00:00', size=(13, 1), font=('Helvetica', 10), justification='center', key='-timer-', background_color="#190901")]],
                 title="Tiempo", title_color="Orange", background_color="Black")],
@@ -387,7 +387,7 @@ def Jugar(settings, event):
         current_time = datos['time']*60
         if(turnoPC):
             sg.popup("Empieza la CPU",auto_close=True,auto_close_duration=2)
-            datos,backT,clock,turnoPC,PrimeraJugada = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)   
+            datos,backT,clock,turnoPC = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)   
         else:    
             sg.popup('Empiezas tu!')
     listLetra = []
@@ -410,33 +410,34 @@ def Jugar(settings, event):
                         datos['dif'], datos['puntosJ'],datos['puntosIA'], tablero, datos['atrilCPU'].get_atril_array(),datos['letrasP'])
         if(turnoPC) and clock:
             if(PrimeraJugada):
-                datos,backT,clock,turnoPC,PrimeraJugada = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio) 
-            letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
-            coor = []
+                datos,backT,clock,turnoPC = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)
+            else:     
+                letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+                coor = []
             
-            if(len(letras)<1):
-                for i in datos['atrilCPU'].get_atril_array():
-                        datos['atrilCPU'].usar(i)
-                datos['atrilCPU'].cambiar_Fichas(letras)
-                tablero["-comment-"].update(("La CPU ha decidido pasar su turno").format())
-                turnoPC = False
-                continue
-            print('\n',letras)
+                if(len(letras)<1):
+                    for i in datos['atrilCPU'].get_atril_array():
+                            datos['atrilCPU'].usar(i)
+                    datos['atrilCPU'].cambiar_Fichas(letras)
+                    tablero["-comment-"].update(("La CPU ha decidido pasar su turno").format())
+                    turnoPC = False
+                    continue
+                print('\n',letras)
 
-            #alpha para darle las coor a la palabra
-            coor= casillasCPU(len(letras), backT)
-            print(coor,'\n')
+                #alpha para darle las coor a la palabra
+                coor= casillasCPU(len(letras), backT)
+                print(coor,'\n')
 
-            #calcular puntos en base a las coordenadas y las letras
-            punt = puntos(datos['pal'], coor, letras, backT, False)
-            datos['puntosIA'] += punt
-            #CPU-puntos++
-            tablero["-comment-"].update(("La palabra de la CPU vale " + str(punt) + " puntos").format())
-            tablero['-pCPU-'].Update(('Puntos CPU: ' + str(datos['puntosIA'])).format())
-            #modificarTablero.. hace eso.. modifica.. el tablero..
-            backT, datos['atrilCPU'] = modificarTablero(tablero, backT, datos['atrilCPU'], 
-            letras, coor, False)
-            turnoPC = False #pasa el turno al usuario
+                #calcular puntos en base a las coordenadas y las letras
+                punt = puntos(datos['pal'], coor, letras, backT, False)
+                datos['puntosIA'] += punt
+                #CPU-puntos++
+                tablero["-comment-"].update(("La palabra de la CPU vale " + str(punt) + " puntos").format())
+                tablero['-pCPU-'].Update(('Puntos CPU: ' + str(datos['puntosIA'])).format())
+                #modificarTablero.. hace eso.. modifica.. el tablero..
+                backT, datos['atrilCPU'] = modificarTablero(tablero, backT, datos['atrilCPU'], 
+                letras, coor, False)
+                turnoPC = False #pasa el turno al usuario
 
         event, _ = tablero.read(timeout=250)
         #revisa si se termino el tiempo, se eligio terminar o se cerro la ventana, en los dos primeros casos termina la partida y muestra el ganador
@@ -517,6 +518,8 @@ def Jugar(settings, event):
             listCoord = []    
             if(changed) or datos['cambios'] == 0:
                 turnoPC = True
+                #if(PrimeraJugada):
+                #   datos,backT,clock,turnoPC = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)
 
 
 
