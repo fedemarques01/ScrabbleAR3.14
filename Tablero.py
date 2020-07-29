@@ -58,10 +58,11 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
     if(getrandbits(1)):
         for i in range(len(letras)):
             coor.append((7, 7+i))
+            print(coor, letras)
     else:
         for i in range(len(letras)):
             coor.append((7+i, 7))
-            #print(coor, letras)
+            print(coor, letras)
     punt = puntos(datos['pal'], coor, letras, backT, False)
     datos['puntosIA'] += punt
     tablero["-comment-"].update(("La palabra de la CPU vale " +
@@ -78,21 +79,48 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
 
 
 def casillasCPU(lentra, board):
-    coor = []
-    while(lentra != len(coor)):
-        coor = []
-        n = randint(0, 15-lentra)
-        if(getrandbits(1)):
-            for i in range(lentra):
-                #print(coor,i)
-                coor.append((n, n+i))
-                if(not board[coor[i][0]][coor[i][1]] in ("Lx2","Lx3","Px2","Px3","")):
+    print('--------------------------------------------')
+    print(lentra)
+    rand=randint(0,5)
+    for _ in range(1,(rand)):
+        print(rand)
+    if (getrandbits(1)):
+        for x in range(len(board[0])):
+            coor = []
+            for i in range(len(board[0])):
+                if(lentra!=len(coor)):
+                    if(board[i][x] in ("Lx2","Lx3","Px2","Px3","","-3","-5")):
+                        coor.append((i, x))
+                        '''
+                        if (board[i][x]==''):
+                            print('i')
+                        else:
+                            print(board[x][i])'''
+                    else:
+                        coor=[]
+                        continue
+                if(lentra==len(coor)):
                     break
-        else:
-            for i in range(lentra):
-                #print(coor,i)
-                coor.append((n+i, n))
-                if(not board[coor[i][0]][coor[i][1]] in ("Lx2","Lx3","Px2","Px3","")):
+            if(lentra==len(coor)):
+                    break
+    else:
+        for x in range(len(board[0])):
+            coor = []
+            for i in range(len(board[0])):
+                if(lentra!=len(coor)):
+                    if(board[x][i] in ("Lx2","Lx3","Px2","Px3","","-3","-5")):
+                        coor.append((x, i))
+                        '''
+                        if (board[x][i]==''):
+                            print('x')
+                        else:
+                            print(board[i][x])'''
+                    else:
+                        coor=[]
+                        continue
+                if(lentra==len(coor)):
+                    break
+            if(lentra==len(coor)):
                     break
     #print('da',coor)
     return coor
@@ -397,7 +425,6 @@ def Jugar(settings, event):
     
     listLetra = []
     listCoord = []
-
     while True:
         if(backT[7][7] != 'St'):
             PrimeraJugada = False
@@ -524,7 +551,7 @@ def Jugar(settings, event):
 
 
 if __name__ == "__main__":
-    dic = {'dif': 'Medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN','JJ','VB'],'bolsa':Letras.Bolsa('Medium'),'letrasP':Letras.valoresLetras}
+    dic = {'dif': 'Medium', 'puntosJ': 0, 'puntosIA': 0, 'time': 10,'pal':['NN'],'bolsa':Letras.Bolsa('Medium'),'letrasP':Letras.valoresLetras}
     Jugar(dic, None)
     '''
     datos={"tablero": None};datos.update(dic)
