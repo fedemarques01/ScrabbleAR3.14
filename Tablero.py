@@ -79,42 +79,29 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
 
 
 def casillasCPU(lentra, board):
-    print('--------------------------------------------')
-    print(lentra)
-    rand=randint(0,5)
-    for _ in range(1,(rand)):
-        print(rand)
-    if (getrandbits(1)):
-        for x in range(len(board[0])):
+    #print('--------------------------------------------')
+    #print(lentra)
+    if (getrandbits(1)): #decide si es vertical u horizontal
+        for x in range(len(board[0])): #recorre todo el tablero hasta encontrar un espacio o sin encontrarlo
             coor = []
             for i in range(len(board[0])):
-                if(lentra!=len(coor)):
+                if(lentra!=len(coor)): #en caso de lentra=len(coor) es cuando se encontro el espacio
                     if(board[i][x] in ("Lx2","Lx3","Px2","Px3","","-3","-5")):
-                        coor.append((i, x))
-                        '''
-                        if (board[i][x]==''):
-                            print('i')
-                        else:
-                            print(board[x][i])'''
+                        coor.append((i, x)) #en caso de estar libre la casilla, añadirla a la lista
                     else:
-                        coor=[]
+                        coor=[] #al no estar seguidas las casillas, se limpia la lista de coordenadas
                         continue
-                if(lentra==len(coor)):
+                if(lentra==len(coor)): #se encontro el espacio
                     break
             if(lentra==len(coor)):
                     break
-    else:
+    else: #lo mismo pero cambiando las x e i que se toman para acceder a las coordenadas del board
         for x in range(len(board[0])):
             coor = []
             for i in range(len(board[0])):
                 if(lentra!=len(coor)):
                     if(board[x][i] in ("Lx2","Lx3","Px2","Px3","","-3","-5")):
                         coor.append((x, i))
-                        '''
-                        if (board[x][i]==''):
-                            print('x')
-                        else:
-                            print(board[i][x])'''
                     else:
                         coor=[]
                         continue
