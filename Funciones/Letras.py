@@ -33,6 +33,7 @@ valoresLetras= {"A": 1,
 class Bolsa:
 
     def __init__(self, nivel=None):
+         """funcion que inicializa la bolsa de fichas"""
     
         self.bolsa = []
         self.dificultad = ['Easy', 'Medium', 'Hard']
@@ -42,15 +43,17 @@ class Bolsa:
             self.initialize_bolsa(nivel)
 
     def agregar_bolsa(self, letra, cantidad):
+         """Agrega una letra a la bolsa. Se utiliza para llenar la misma al inicio"""
         mayus = letra.upper()
         for _ in range(cantidad):
             self.bolsa.append(mayus)
 
     def mezclar_bolsa(self):
+         """Ordena de forma aleatoria las fichas en la bolsa antes de iniciar"""
         random.shuffle(self.bolsa)
 
     def initialize_bolsa(self,nivel):
-            
+            """Carga fichas a la bolsa segun el nivel de dificultad elegido para la partida""" 
         if nivel == self.dificultad[0]:        
             #bolsa nivel facil, distribucion  clasica del scrabble en espa;ol
             self.agregar_bolsa("A", 12)
@@ -149,23 +152,23 @@ class Bolsa:
         self.mezclar_bolsa()
 
     def tomar_bolsa(self):
-        #Toma la primera de la bolsa y la elimina de la misma. Se usa para cambiars o la recarga del atril (con un ciclo)
+     """Funcion que toma la primera letra de la bolsa y la elimina de la misma. Se usa para cambiar fichas o recargar el atril (con un ciclo)"""
         return self.bolsa.pop()
 
     def cantidad_Fichas(self):
-        #Retorna la cantidad des restantes
+        """Retorna la cantidad des restantes"""
         return len(self.bolsa)
 
     def get_bolsa(self):
-        #retorna la bolsa
+        """Retorna la bolsa como un dato"""
         return self.bolsa
 
     def cargar_bolsa(self,lista):
-        #crea la bolsa a partir de una lista de letras
+        """Carga la bolsa a partir de una lista de letras"""
         self.bolsa = lista
 
     def quitar_bolsa(self,letra):
-        #elimina una letra de la bolsa sin importar cuantas veces se repita
+        """Elimina una letra de la bolsa sin importar cuantas veces se repita"""
         while letra in self.bolsa:
             self.bolsa.remove(letra)
 
@@ -174,7 +177,7 @@ class Atril:
     
     """
     def __init__(self, bolsa,letras=[]):
-
+        """Funcion que inicializa el atril"""
         self.atril = []
         self.bolsa = bolsa
         if letras == []:
@@ -188,43 +191,47 @@ class Atril:
             self.agregar_al_atril()
 
     def agregar_al_atril(self):
-    
+        """Funcion que toma una ficha de la bolsa y la agrega al atril"""
         self.atril.append(self.bolsa.tomar_bolsa())
 
     def get_atril_string(self):
-        #Devuelve el atril en forma de string
+        """Devuelve el atril en forma de string"""
         return ", ".join(str(item) for item in self.atril)
 
     def get_atril_array(self):
-        #Devuelve el atril
+        """Devuelve el atril como un dato"""
         return self.atril
 
     def usar(self,letra):
-        #Quita la del atril, para ser cambiada o jugada
+        """Quita la letra seleccionada del atril, para ser cambiada o jugada"""
         self.atril.remove(letra)
 
     def get_atril_espaciosVacios(self):
-        #Cantidad des que faltan en el atril
+        """Retorna la cantidad des que faltan en el atril"""
         return 7 - len(self.atril)
 
     def get_atril_tamanio(self):
-        #Cantidad des en el atril
+        """Retorna la cantidad de fichas en el atril"""
         return len(self.atril)
 
     def rellenar_atril(self):
-        #
+        """Carga fichas en el atril hasta que no queden espacios vacios en el mismo"""
         while self.get_atril_espaciosVacios() > 0 and self.bolsa.cantidad_Fichas() > 0:
             self.agregar_al_atril()
 
     def cambiar_Fichas(self,lista):
-
+        """
+           Funcion que maneja el cambio de fichas. 
+           Recibe la lista de fichas a cambiar, rellena el atril con fichas de la bolsa,
+           agrega a la bolsa las fichas de la lista y baraja la bolsa nuevamente
+        """
         self.rellenar_atril()
         for letra in lista:
             self.bolsa.agregar_bolsa(letra, 1)
         random.shuffle(self.bolsa.bolsa)
 
     def cargar_atril(self,lista,bolsa):
-        #crea un atril a partir de una lista de letras y una bolsa 
+        """Crea un atril a partir de una lista de letras y la bolsa"""
         self.atril = lista
         self.bolsa = bolsa    
 
@@ -232,7 +239,7 @@ class Atril:
 #Codigo de prueba, genera una bolsa segun la dificultad dada en el constructor, imprime lass disponibles y cantidad total des 
 # de la bolsa. 
 if __name__ == "__main__":
-    bolsa1 = Bolsa('easy')
+    bolsa1 = Bolsa('Easy')
     fichasTotales = bolsa1.cantidad_Fichas()
     
 
