@@ -1,7 +1,5 @@
 -----FALTA-----
-IA EFICIENCY
 
-POSPONER(CARGAR/GUARDAR)  (fede esta en eso, lo juro)
 
 -----DONE-----
 CPU+
@@ -16,3 +14,5 @@ TERMINAR
 TIME
 CAMBIAR FICHAS
 TERMINAR TABLERO
+POSPONER(CARGAR/GUARDAR)  (fede esta en eso, lo juro)
+IA EFICIENCY
