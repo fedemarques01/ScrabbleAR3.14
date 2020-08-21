@@ -1,9 +1,11 @@
 from datetime import date as dt
 import json
+from Ventanas.Puntuaciones import exist
 
 def CargarDatos(): #guarda el diccionario que posee puntaje.json
     #{"easy": [[10, "10/28/2020"], [9, "09/28/2020"], [3, "03/28/2020"], [1, "01/28/2020"]], "medium": [[5, "05/28/2020"], [4, "04/28/2020"]], "hard": [[100, "05/28/2020"], [8, "07+1/28/2020"], [7, "07/28/2020"], [2, "02/28/2020"]]}
     dic={}
+    exist()
     with open("Ventanas\puntaje.json", "r") as rfile:
         dic = json.load(rfile)
     return dic

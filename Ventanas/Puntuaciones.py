@@ -1,5 +1,6 @@
 import PySimpleGUI as sg
 import json
+import os.path
 
 '''Este metodo deberia de agarrar los datos guardados y:
     -si es general hace el merge y crea una lista de maximo 10 elementos con str
@@ -7,9 +8,16 @@ import json
     -si es normal crea una lista de maximo 10 elementos con los str de la dificultad normal
     -si es dificil lo mismo pero en dificil ya se entendio'''
 
+def exist():
+    if(not os.path.isfile("Ventanas\puntaje.json")):
+        with open("Ventanas\puntaje.json", "w") as rfile:
+            dic = {'easy': [], 'medium': [], 'hard': []}
+            json.dump(dic,rfile)
+    pass
+
 def CargarDatos(): #carga los datos de puntaje.json en un diccionario
     #dic = {'easy': [[10], [9], [3], [1]], 'medium': [[5], [4]], 'hard': [[8], [7], [2]]}
-    dic={}
+    exist()
     with open("Ventanas\puntaje.json", "r") as rfile:
         dic = json.load(rfile)
     return dic
