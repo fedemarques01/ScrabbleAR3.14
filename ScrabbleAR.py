@@ -20,19 +20,30 @@ def Crearmenu():
         [sg.T("ScrabbleAR", size=(16, 1), justification="center",
             font=("Times New Roman", 25))],
         [sg.T("       Bienvenido a ScrabbleAR!, el juego donde      ")],
-        [sg.T("           hay que armar palabras para ganar         ")],
-        [sg.B("Iniciar nuevo juego", size=(17, 1), key="inicio"),
-        sg.B("Configuracion", size=(17, 1), key="config")],
-        [sg.B("Puntuaciones", size=(17, 1), key="puntos"),
-        sg.B("Salir", size=(17, 1), key="exit")]
+        [sg.T("           hay que armar palabras para ganar         ")]
     ]
     #Si hay una partida guardada, el boton para continuarla aparecera en la ventana
     if(os.path.isfile("Guardado.json")):
         layoutM += [[sg.B("Continuar partida", size=(36, 1), key="continue")]]
 
+    
+    layoutM += [[sg.B("Iniciar nuevo juego", size=(17, 1), key="inicio"),
+        sg.B("Configuracion", size=(17, 1), key="config")],
+        [sg.B("Puntuaciones", size=(17, 1), key="puntos"),
+        sg.B("Salir", size=(17, 1), key="exit")],[sg.B("¿Como jugar?", key="-info-", size=(36, 1))]]
+        
+
     window = sg.Window("ScrabbleAR - Menu", layoutM)
 
     return window
+
+def info():
+    lay=[[sg.Frame(layout=[[sg.Text("""-Para jugar, debe colocar palabras en horizontal o vertical en el tablero.\n
+-Seleccione una a una la letra que desea colocar y el lugar donde desea hacerlo. Cuando termine haga click en confirmar.\n
+-Si la palabra es válida se le sumaran los puntos correspondientes\n
+-Tenga en cuenta que segun el nivel de dificultad hay casillas de descuentos o de premio, las cuales afectan la puntuacion obtenida""",  size=(40,13), background_color="#190901")]],
+                title="Reglas", title_color="Yellow", background_color="Black", key="-block-")]]
+    return sg.Window("Rules",lay).read()
 
 def setDif(dificultad):
     if(dificultad=='Easy'):
@@ -71,6 +82,8 @@ def Menu():
             menu.hide()
             config = ajustes(config)#muestra los ajustes(ver Configuraciones.py)
             #print(config['bolsa'])
+        elif event =="-info-":
+            info()
         elif event in (None, "exit"):
             break
 
