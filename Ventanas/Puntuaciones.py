@@ -11,7 +11,7 @@ import os.path
 def exist():
     if(not os.path.isfile("Ventanas\puntaje.json")):
         with open("Ventanas\puntaje.json", "w") as rfile:
-            dic = {'easy': [], 'medium': [], 'hard': []}
+            dic = {"easy": [[10, "10/28/2020"]], "medium": [[113, "06/18/2020"]], "hard": [[218, "07+1/28/2020"],[2, "03/28/2020"]]}
             json.dump(dic,rfile)
     pass
 
