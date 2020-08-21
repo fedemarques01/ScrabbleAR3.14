@@ -62,12 +62,12 @@ def CPUahhh(l,dif,word='',*ind):
     return word
 
 def CPUmain(letras,dif): #main de la funcion que recibe el atril y el tipo de palabra valida (VB o NN por ej)
-    ind= CPUahhh(letras,dif) #envia las letras del atril y el tipo de palabra valida y devuelve los indices de las letras en el atril y en que orden se deben tomar
+    pal= CPUahhh(letras,dif) #envia las letras del atril y el tipo de palabra valida y devuelve los indices de las letras en el atril y en que orden se deben tomar
     ''' print('palabra:',letras)
-        print('indices: ', ind)
+        print('indices: ', pal)
     '''#prints para testeos
-    ind= CPUdesarmar(ind,letras) #crea la palabra reciviendo los indices y las letras
-    return ind #retorna la lista de caracteres (ordenados) que forman la palabra a colocar en el tablero
+    ind= CPUdesarmar(pal,letras) #crea la palabra reciviendo los indices y las letras
+    return pal,ind #retorna la lista de caracteres (ordenados) que forman la palabra a colocar en el tablero
 
 
 
