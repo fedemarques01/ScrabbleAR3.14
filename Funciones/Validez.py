@@ -45,7 +45,7 @@ def validez(dif,coor,letras):
     aux = tieneOrden(aux)
     if aux==[]:
         p.popup('No posee orden')
-        return -100
+        return -100,''
 
     #armo la palabra con las letras ordenadas
     palabra = formarPalabra(aux)
@@ -54,10 +54,10 @@ def validez(dif,coor,letras):
     #verifico si la palabra existe
     #palabra=input() #<-para pruebas
     if(esValida(palabra, *dif)):
-        return 2
+        return 2,palabra.upper()
     else:
         p.popup('No existe')
-        return -200
+        return -200,''
 
 
 

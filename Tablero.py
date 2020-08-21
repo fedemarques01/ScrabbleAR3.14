@@ -46,8 +46,11 @@ def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU,Pletras):
 #maneja la primer jugada de la pc de la partida, basicamente, el que la palabra vaya al ST
 def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
                 
-    letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
-                
+    palabra,letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+    if(palabra != ''):
+        datos['palabras'].append(palabra)
+        tablero.Element('-lista-').update(values=datos['palabras'])
+
     if(len(letras)<1):
         for i in datos['atrilCPU'].get_atril_array():
             datos['atrilCPU'].usar(i)
@@ -65,7 +68,7 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
         for i in range(len(letras)):
             coor.append((7+i, 7))
             print(coor, letras)
-    punt = puntos(datos['pal'], coor, letras, backT, False)
+    punt,palabra = puntos(datos['pal'], coor, letras, backT, False)
     datos['puntosIA'] += punt
     tablero["-comment-"].update(("La palabra de la CPU vale " +
                                     str(punt) + " puntos").format())
@@ -125,7 +128,7 @@ def crearTablero():
     backT = [["" for i in range(col)] for i in range(fil)]
     # ColM es la columna donde se encuentra la informacion de la partida junto a otros comentarios y los botones para terminar y guardar la partida
     colM = [
-        [sg.B("Guardar", size=(13, 1), key="-save-", disabled=True)],
+        [sg.B("Guardar", size=(13, 1), key="-save-")],
         [sg.B("Terminar", size=(13, 1), key="Exit")],
         [sg.Frame(layout=[[sg.Text("Coloque su primer palabra sobre la casilla ST como primer jugada", size=(13, 10), key="-comment-", background_color="#190901")]],
                 title="Comentarios", title_color="Yellow", background_color="Black", key="-block-")],
@@ -151,11 +154,18 @@ def crearTablero():
     # ColPlayer es la columna donde estan las fichas del jugador
     colPlayer = [[sg.B("", size=(3, 1), key=str(k), pad=(0, 0))
                 for k in range(fichas)]for l in range(1)]
-
+    #muestra el historial de palabras
+    colListBox = [
+        [sg.Text("")],
+        [sg.Text("")],
+        [sg.Frame(layout=[[sg.Listbox(values=([]),key='-lista-',size=(13,20),no_scrollbar=True,background_color="#190901")]]
+        ,title='Palabras',title_color='Yellow',background_color='Black')]
+        ]
     # layout del tablero, junta todas las columnas y añade el resto de los botones
     frontT = [
         [sg.Column(colM),
-        sg.Column(colBoard)],
+        sg.Column(colBoard),
+        sg.Column(colListBox)],
         [sg.Text("")],
         [sg.Text("Tus fichas:"), sg.Column(colPlayer),
         sg.B("Comprobar", key="-check-", size=(10, 1)
@@ -180,6 +190,7 @@ def CargarTablero(tablero, board, datos):
     tablero['-pCPU-'].Update(('Puntaje CPU: ' +
                         str(datos['puntosIA'])).format())                          
     tablero['-dif-'].Update(('Dificultad: ' + datos['dif']).format())
+    tablero.Element('-lista-').update(values=datos['palabras'])
     if(datos['cambios'] == 0):
         tablero['-cambiar-'].update("Pasar")
     ActualizarAtril(tablero, datos['atrilJ'].get_atril_array())
@@ -277,10 +288,11 @@ def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
 
 
 def puntos(dif, coor, letras, board, Jug=True):
+    palabra = ''
     if(Jug):
-        v = validez(dif, coor, letras)
+        v,palabra = validez(dif, coor, letras)
         if v in (-100, -200):
-            return v
+            return v,''
 
     pt, pp = 0, 1
     for i in range(len(coor)):
@@ -300,7 +312,7 @@ def puntos(dif, coor, letras, board, Jug=True):
             elif bonus == "-5" :
                 pl -= 5
         pt += pl
-    return pt*pp
+    return pt*pp,palabra
 
 #habilita las casillas que tenian fichas y las libera para ser reutilizadas
 def DevolverFichas(tablero, coord, board):
@@ -389,7 +401,7 @@ def Jugar(settings, event):
         PrimeraJugada = False
     else:
         # sino datos tendra los settings que elijio el jugador o los por defecto
-        datos = {"tablero": None, 'cambios': 3}
+        datos = {"tablero": None, 'cambios': 3,'palabras': []}
         datos.update(settings)
         # añado los atriles generados a partir de la bolsa que esta al crear el diccionario
         datos.update({'atrilJ': Letras.Atril(
@@ -434,9 +446,11 @@ def Jugar(settings, event):
             if(PrimeraJugada):
                 datos,backT,clock,turnoPC = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)
             else:     
-                letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
+                palabra,letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
                 coor = []
-            
+                if(palabra != ''):
+                    datos['palabras'].append(palabra)
+                    tablero.Element('-lista-').update(values=datos['palabras'])
                 if(len(letras)<1):
                     for i in datos['atrilCPU'].get_atril_array():
                             datos['atrilCPU'].usar(i)
@@ -451,7 +465,7 @@ def Jugar(settings, event):
                 print(coor,'\n')
 
                 #calcular puntos en base a las coordenadas y las letras
-                punt = puntos(datos['pal'], coor, letras, backT, False)
+                punt,palabra = puntos(datos['pal'], coor, letras, backT, False)
                 datos['puntosIA'] += punt
                 #CPU-puntos++
                 tablero["-comment-"].update(("La palabra de la CPU vale " + str(punt) + " puntos").format())
@@ -486,7 +500,7 @@ def Jugar(settings, event):
                 ActualizarAtril(
                     tablero, datos['atrilJ'].get_atril_array())
             else:
-                punt = puntos(datos['pal'], listCoord, listLetra, backT)
+                punt,palabra = puntos(datos['pal'], listCoord, listLetra, backT)
                 if(punt <= -100):
                     if(punt == -200):
                         tablero["-comment-"].update(
@@ -499,6 +513,8 @@ def Jugar(settings, event):
                         tablero, datos['atrilJ'].get_atril_array())    
                 else:
                     datos['puntosJ'] += punt
+                    datos['palabras'].append(palabra)
+                    tablero.Element('-lista-').update(values=datos['palabras'])
                     if datos['puntosJ'] < 0:
                         datos['puntosJ'] = 0
                     tablero["-comment-"].update(("Tu palabra tiene un valor de " +
