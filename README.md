@@ -32,6 +32,8 @@ Guia para descargar y utilizar la aplicacion
 
 -Visitar la pagina: https://github.com/fedemarques01/ScrabbleAR3.14 -Ir a la pestaña "Code" -Descargar el ZIP -Ir a la carpeta Descargas -Dar click derecho sobre el archivo .zip -Extraer aqui -Copiar el nuevo archivo y colocarlo en la ubicacion deseada -Abrir la consola de comandos "cmd" o Terminal en Linux -Navegar a la carpeta deseada usando el comando cd "NombredeCarpeta" -Escribir el comando: python ScrabbleAR.py
 
+-Ocurrio un error al cargar los archivos: Este error puede darse porque en la carpeta Tablero los archivos se encuentran dañados o borrados, la solucion a este error es bajar del link de github la carpeta tablero con los archivos dentro.
+
 Uso de la aplicación
 
 Al abrir la aplicacion se mostrará la pantalla inicial, el jugador puede elegir si configurar el juego a su gusto (letras, dificultad,etc).
