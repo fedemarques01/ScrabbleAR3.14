@@ -41,7 +41,7 @@ def modBolsa():
     lista = []
     while True:
         event, values = window.read()
-        print(values)
+        print('a',values)
         
         if event == 'Añadir':
             aux = list(values.values())
@@ -64,11 +64,13 @@ def modBolsa():
             elif aux[2] not in range(1,13):#se revisa que el puntaje este dentro de los terminos
                 ps.popup('Por favor ingrese un puntaje entre 1 y 12')
                 continue
+            print('paso')
             lista.append(aux)
             window[0].update('')
             window[1].update('')
             window[2].update('')
         elif event == '-save-':
+            ps.popup('se guardaron los cambios')
             break                    
         elif event in(None,'-Exit-'):
             if(event == '-Exit-'):
@@ -86,7 +88,7 @@ def modBolsa():
 def aplicarCambios(bolsa,lista):
     dic = Letras.valoresLetras
     for aux in lista:
-        bolsa.quitar_letra(aux[0])        #retiro la letra de la bolsa
+        bolsa.quitar_bolsa(aux[0])        #retiro la letra de la bolsa
         bolsa.agregar_bolsa(aux[0],aux[1])#añado la cantidad indicada por el jugador
         dic[aux[0]] = aux[2]              #le asigno el valor que eligio el jugador
     bolsa.mezclar_bolsa()
@@ -111,6 +113,7 @@ def ajustes(config): #main de configuraciones
             else:
                 config['dif']=d
                 config['time']=time
+                ps.popup('se guardaron los cambios')
         elif eve == '-bag-': #en caso de seleccionar el modificar bolsa se abre la ventana para modificar la bolsa
             lista = modBolsa()
         elif eve in (None, "-exit"):

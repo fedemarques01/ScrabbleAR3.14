@@ -360,6 +360,13 @@ def actualizarTimer(tablero,current_time,inicio):
     tablero['-timer-'].update('{:02d}:{:02d}'.format(mins, secs))
     return boolean
 
+def dificulty(dif):
+    if(dif=='Easy'):
+        sg.popup('todas las palabras son validas')
+    elif dif in ('Medium','Hard'):
+        sg.popup('solo verbos y adjetivos son validos')
+    pass
+
 #Se encarga de hacer posible el jugar una partida de scrabble, utiliza todas las funciones previas
 def Jugar(settings, event):
     claveA = []
@@ -405,11 +412,12 @@ def Jugar(settings, event):
             datos,backT,clock,turnoPC = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)   
         else:    
             sg.popup('Empiezas tu!')
+    dificulty(settings['dif'])
     listLetra = []
     listCoord = []
     aux = ""
     #en caso de errores coloque aqui el primer while de abajo    
-    
+
     listLetra = []
     listCoord = []
     while True:
