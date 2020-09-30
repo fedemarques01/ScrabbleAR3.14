@@ -8,7 +8,7 @@ from Funciones import Letras
 from Ventanas.GuardarPuntos import Guardar as Gp
 import Funciones.IA as CPU
 
-#Guarda todos los datos de la partida en el archivo guardado.json
+'''Guarda todos los datos de la partida en el archivo guardado.json'''
 def GuardarPartida(datos):
     datos['bolsa'] = datos['bolsa'].get_bolsa()
     datos['atrilJ'] = datos['atrilJ'].get_atril_array()
@@ -17,9 +17,9 @@ def GuardarPartida(datos):
         json.dump(datos, arch)
     exit()
 
-#se encarga de terminar la partida y decidir el ganador actualizando las puntuaciones
+'''se encarga de terminar la partida y decidir el ganador actualizando las puntuaciones'''
 def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU,Pletras):  
-    # resta los puntos y llama a guardar.py
+    '''resta los puntos y llama a guardar.py'''
     try:
         for i in range(0, 7):
             tablero['-'+str(i)].update(atrilCPU[i])
@@ -43,7 +43,7 @@ def Terminar(letras, dif, puntos, puntia, tablero, atrilCPU,Pletras):
         Gp(dif, puntos)
     exit()
 
-#maneja la primer jugada de la pc de la partida, basicamente, el que la palabra vaya al ST
+'''maneja la primer jugada de la pc de la partida, basicamente, el que la palabra vaya al ST'''
 def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
                 
     palabra,letras = CPU.CPUmain(datos['atrilCPU'].get_atril_array(), datos['pal'])
@@ -115,7 +115,7 @@ def casillasCPU(lentra, board):
     #print('da',coor)
     return coor
 
-#Todo el setup de la intefaz del juego, la creacion de la ventana tablero en su maximo esplendor
+'''Todo el setup de la intefaz del juego, la creacion de la ventana tablero en su maximo esplendor'''
 def crearTablero():
     col = fil = 15
     """
@@ -126,7 +126,7 @@ def crearTablero():
 
     fichas = 7
     backT = [["" for i in range(col)] for i in range(fil)]
-    # ColM es la columna donde se encuentra la informacion de la partida junto a otros comentarios y los botones para terminar y guardar la partida
+    ''' ColM es la columna donde se encuentra la informacion de la partida junto a otros comentarios y los botones para terminar y guardar la partida'''
     colM = [
         [sg.B("Guardar", size=(13, 1), key="-save-")],
         [sg.B("Terminar", size=(13, 1), key="Exit")],
@@ -139,7 +139,7 @@ def crearTablero():
         [sg.Text(text="Puntaje CPU: 0", size=(13, 1), key="-pCPU-")]
     ]
 
-    # col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra
+    ''' col board es la columna donde esta el atril del cpu y el tablero, generados de esta forma para que quede una columna al lado de la otra'''
     colBoard = [[sg.Text("CPU:"), sg.Text(font=("Times New Roman", 17),
                                         text="                            S C R A B B L E A R ", justification="right")]]
 
@@ -151,17 +151,17 @@ def crearTablero():
     colBoard += [[sg.B("", size=(3, 1), key=(m, n), pad=(0, 0))
                 for m in range(col)] for n in range(fil)]
 
-    # ColPlayer es la columna donde estan las fichas del jugador
+    ''' ColPlayer es la columna donde estan las fichas del jugador'''
     colPlayer = [[sg.B("", size=(3, 1), key=str(k), pad=(0, 0))
                 for k in range(fichas)]for l in range(1)]
-    #muestra el historial de palabras
+    '''muestra el historial de palabras'''
     colListBox = [
         [sg.Text("")],
         [sg.Text("")],
         [sg.Frame(layout=[[sg.Listbox(values=([]),key='-lista-',size=(13,20),no_scrollbar=True,background_color="#190901")]]
         ,title='Palabras',title_color='Yellow',background_color='Black')]
         ]
-    # layout del tablero, junta todas las columnas y añade el resto de los botones
+    ''' layout del tablero, junta todas las columnas y añade el resto de los botones'''
     frontT = [
         [sg.Column(colM),
         sg.Column(colBoard),
@@ -177,14 +177,14 @@ def crearTablero():
 
     return tablero,backT
 
-#Muestra las nuevas fichas del jugador o las habilita en caso de que puedan ser usadas de nuevo
+'''Muestra las nuevas fichas del jugador o las habilita en caso de que puedan ser usadas de nuevo'''
 def ActualizarAtril(tablero, lista):
     for i in range(0, len(lista)):
         tablero[str(i)].update(lista[i], disabled=False)
 
-#Carga todos los datos de una partida ya sea una anterior o una nueva
+'''Carga todos los datos de una partida ya sea una anterior o una nueva'''
 def CargarTablero(tablero, board, datos):
-    # si es None, no hay partida guardada entonces carga la lista de tuplas por cada casilla especial
+    ''' si es None, no hay partida guardada entonces carga la lista de tuplas por cada casilla especial'''
     tabla = datos['tablero']
     tablero['-pJug-'].Update(('Tu puntaje: ' + str(datos['puntosJ'])).format())
     tablero['-pCPU-'].Update(('Puntaje CPU: ' +
@@ -196,16 +196,19 @@ def CargarTablero(tablero, board, datos):
     ActualizarAtril(tablero, datos['atrilJ'].get_atril_array())
     if(tabla == None):
         #se lee un .json con las coordenadas de las casillas de especiales segun la dificultad
-        if(datos['dif'] == 'Easy'):
-            with open('Tablero\TableroFacil.json','r') as arch:
-                dic = json.load(arch)
-        elif datos['dif'] == 'Medium':
-            with open('Tablero\TableroNormal.json','r') as arch:
-                dic = json.load(arch)
-        elif datos['dif'] == 'Hard':
-            with open('Tablero\TableroDificil.json','r') as arch:
-                dic = json.load(arch)        
-        print(dic['tripleL'])
+        try:
+            if(datos['dif'] == 'Easy'):
+                with open('Tablero/TableroFacil.json','r') as arch:
+                    dic = json.load(arch)
+            elif datos['dif'] == 'Medium':
+                with open('Tablero/TableroNormal.json','r') as arch:
+                    dic = json.load(arch)
+            elif datos['dif'] == 'Hard':
+                with open('Tablero/TableroDificil.json','r') as arch:
+                    dic = json.load(arch)
+        except Exception:
+            sg.popup('Ocurrio un error al cargar los tableros, consulte el readme para mas informacion')
+            exit()        
         for x in dic['tripleL']:
             tablero[(x[0],x[1])].Update(
                 "Lx3", button_color=("#e8c204", "#13866c"))
@@ -234,7 +237,7 @@ def CargarTablero(tablero, board, datos):
             "St", button_color=("#e8c204", "#000000"))
         board[7][7] = "St"
 
-    # caso contrario, recorre el tablero guardado y actualiza en base a eso
+    '''caso contrario, recorre el tablero guardado y actualiza en base a eso'''
     else:
 
         board = tabla
@@ -263,11 +266,11 @@ def CargarTablero(tablero, board, datos):
                 else:
                     tablero[(i, j)].Update(tabla[i][j],button_color=(
                         "#FCFF41", "#870303"),disabled_button_color=(
-                        "#FCFF41", "#870303"),disabled=True)  # color y valor de la letra que ya estaba
+                        "#FCFF41", "#870303"),disabled=True)  '''color y valor de la letra que ya estaba'''
 
     return board
 
-#modifica el contenido del tablero de juego al verificar una palabra o devolver las fichas
+'''modifica el contenido del tablero de juego al verificar una palabra o devolver las fichas'''
 def modificarTablero(tablero, board, Atril, letras, coord, Jug=True):
     for i in range(0, len(coord)):
         board[coord[i][0]][coord[i][1]] = letras[i]
@@ -314,12 +317,12 @@ def puntos(dif, coor, letras, board, Jug=True):
         pt += pl
     return pt*pp,palabra
 
-#habilita las casillas que tenian fichas y las libera para ser reutilizadas
+'''habilita las casillas que tenian fichas y las libera para ser reutilizadas'''
 def DevolverFichas(tablero, coord, board):
     for i in coord:
         tablero[i].update(board[i[0]][i[1]], disabled=False)
 
-#Todas las operaciones que se efectuan para que el jugador cambie una o mas fichas
+'''Todas las operaciones que se efectuan para que el jugador cambie una o mas fichas'''
 def cambiar(tablero, atril,current_time,inicio):
     tablero['-comment-'].update(
         'Seleccione las fichas que desea cambiar y pulse comprobar para cambiarlas o deshacer para volver una ficha atras o cancelar'.format())
@@ -359,7 +362,7 @@ def cambiar(tablero, atril,current_time,inicio):
     tablero['-cambiar-'].update(disabled=False)
     return atril,booleano,clock
 
-#Actualiza el tiempo restante
+'''Actualiza el tiempo restante'''
 def actualizarTimer(tablero,current_time,inicio):
     boolean = True
     current_time = current_time + inicio - int(time.time())
@@ -379,7 +382,7 @@ def dificulty(dif):
         sg.popup('solo verbos y adjetivos son validos')
     pass
 
-#Se encarga de hacer posible el jugar una partida de scrabble, utiliza todas las funciones previas
+'''Se encarga de hacer posible el jugar una partida de scrabble, utiliza todas las funciones previas'''
 def Jugar(settings, event):
     claveA = []
     for i in range(7):
