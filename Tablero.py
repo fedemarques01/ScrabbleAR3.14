@@ -237,7 +237,7 @@ def CargarTablero(tablero, board, datos):
             "St", button_color=("#e8c204", "#000000"))
         board[7][7] = "St"
 
-    '''caso contrario, recorre el tablero guardado y actualiza en base a eso'''
+    #caso contrario, recorre el tablero guardado y actualiza en base a eso
     else:
 
         board = tabla
@@ -266,7 +266,7 @@ def CargarTablero(tablero, board, datos):
                 else:
                     tablero[(i, j)].Update(tabla[i][j],button_color=(
                         "#FCFF41", "#870303"),disabled_button_color=(
-                        "#FCFF41", "#870303"),disabled=True)  '''color y valor de la letra que ya estaba'''
+                        "#FCFF41", "#870303"),disabled=True)  #color y valor de la letra que ya estaba
 
     return board
 
