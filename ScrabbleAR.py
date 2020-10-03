@@ -33,7 +33,7 @@ def Crearmenu():
         sg.B("Salir", size=(17, 1), key="exit")],[sg.B("¿Como jugar?", key="-info-", size=(36, 1))]]
         
 
-    window = sg.Window("ScrabbleAR - Menu", layoutM)
+    window = sg.Window("ScrabbleAR - Menu", layoutM,finalize=True)
 
     return window
 

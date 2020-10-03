@@ -63,11 +63,11 @@ def PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio):
     if(getrandbits(1)):
         for i in range(len(letras)):
             coor.append((7, 7+i))
-            print(coor, letras)
+            #print(coor, letras)
     else:
         for i in range(len(letras)):
             coor.append((7+i, 7))
-            print(coor, letras)
+            #print(coor, letras)
     punt,palabra = puntos(datos['pal'], coor, letras, backT, False)
     datos['puntosIA'] += punt
     tablero["-comment-"].update(("La palabra de la CPU vale " +
@@ -354,7 +354,7 @@ def cambiar(tablero, atril,current_time,inicio):
         for i in letras:
             atril.usar(i)
         atril.cambiar_Fichas(letras)
-        print(atril.get_atril_array())
+        #print(atril.get_atril_array())
         booleano = True
     ActualizarAtril(tablero, atril.get_atril_array())    
     tablero['-save-'].update(disabled=False)
@@ -461,11 +461,11 @@ def Jugar(settings, event):
                     tablero["-comment-"].update(("La CPU ha decidido pasar su turno").format())
                     turnoPC = False
                     continue
-                print('\n',letras)
+                #print('\n',letras)
 
                 #alpha para darle las coor a la palabra
                 coor= casillasCPU(len(letras), backT)
-                print(coor,'\n')
+                #print(coor,'\n')
 
                 #calcular puntos en base a las coordenadas y las letras
                 punt,palabra = puntos(datos['pal'], coor, letras, backT, False)
@@ -526,7 +526,7 @@ def Jugar(settings, event):
                                         str(datos['puntosJ'])).format())
                     backT, datos['atrilJ'] = modificarTablero(
                         tablero, backT, datos['atrilJ'], listLetra, listCoord, "#E94E00")
-                    print(datos['puntosJ'])
+                    #print(datos['puntosJ'])
                     turnoPC = True
                     sg.popup_auto_close(auto_close_duration=0.00000001)
                     time.sleep(2)
