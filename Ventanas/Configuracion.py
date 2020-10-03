@@ -41,7 +41,7 @@ def modBolsa():
     lista = []
     while True:
         event, values = window.read()
-        print('a',values)
+        #print('a',values)
         
         if event == 'Añadir':
             aux = list(values.values())
@@ -64,7 +64,7 @@ def modBolsa():
             elif aux[2] not in range(1,13):#se revisa que el puntaje este dentro de los terminos
                 ps.popup('Por favor ingrese un puntaje entre 1 y 12')
                 continue
-            print('paso')
+            #print('paso')
             lista.append(aux)
             window[0].update('')
             window[1].update('')
@@ -104,7 +104,7 @@ def ajustes(config): #main de configuraciones
         if eve == "-save": #en caso de seleccionar "guardar" se verifica que los valores sean validos
             try:
                 d,time=verif(val[0],val[1]) #verificador de dificultad y timer
-                print(d,config['dif'],time,config['time'])
+                #print(d,config['dif'],time,config['time'])
                 if(d==None): #en caso de no ser validos
                     ps.popup("ingrese valores validos") 
                     continue
