@@ -562,9 +562,9 @@ def Jugar(settings, event):
                 #if(PrimeraJugada):
                 #   datos,backT,clock,turnoPC = PrimerJugadaPC(tablero,datos,backT,clock,current_time,inicio)
 
-
-
-    tablero.close()
+    #Termina el programa
+    exit()
+    #tablero.close()
 
 
 if __name__ == "__main__":
