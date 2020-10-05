@@ -16,7 +16,7 @@ def CPUformarPalabra(letras): #junta la lista de caracteres en 1 solo string par
 def CPUverificar(letras,dif): #comprueba si la palabra es valida
     s=CPUformarPalabra(letras)
     if(esValida(s,*dif)):
-        print('a',s)
+        #print('a',s)
         return True
 
     else:
@@ -78,4 +78,4 @@ if __name__ == "__main__": #main para testeos
     #print(letras[0:])
     #print(CPUigual(*letras))
     #print(CPUarmar(letras,1,4,5)
-    print('resultado: ',CPUmain(letras,['NN', 'JJ', 'VB']))
+    #print('resultado: ',CPUmain(letras,['NN', 'JJ', 'VB']))

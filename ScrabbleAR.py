@@ -61,7 +61,7 @@ def Menu():
     while True:
         menu.un_hide()
         event, _ = menu.read()
-        print(event)
+        #print(event)
         if event in ("inicio", "continue"):
             if(event == 'inicio' and os.path.isfile('Guardado.json')):
                 #crea una ventana en un par de lineas de codigo para determinar si se quiere o no descartar la partida guardada
@@ -81,7 +81,7 @@ def Menu():
         elif event == "config":
             menu.hide()
             config = ajustes(config)#muestra los ajustes(ver Configuraciones.py)
-            #print(config['bolsa'])
+            ##print(config['bolsa'])
         elif event =="-info-":
             info()
         elif event in (None, "exit"):
